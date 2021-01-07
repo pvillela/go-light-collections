@@ -4,62 +4,75 @@ package collections
 type List interface {
 	Length() int
 	Contains(elem AnyT0) bool
-	ContainsAll(elems SliceAny0) bool
+	ContainsAll(elems SliceT0) bool
 	Get(index int) AnyT0
 	IndexOf(elem AnyT0) int
 	IsEmpty() bool
 	LastIndexOf(elem AnyT0) int
-	SubSlice(fromIndex int, toIndex int) SliceAny0
+	SubSlice(fromIndex int, toIndex int) SliceT0
 	All(pred func(AnyT0) bool) bool
 	Any(pred func(AnyT0) bool) bool
 	Count(pred func(AnyT0) bool) int
-	Drop(n int) SliceAny0
-	DropLast(n int) SliceAny0
-	DropLastWhile(pred func(AnyT0) bool) SliceAny0
-	DropWhile(pred func(AnyT0) bool) SliceAny0
-	Filter(pred func(AnyT0) bool) SliceAny0
-	FilterNot(pred func(AnyT0) bool) SliceAny0
+	Drop(n int) SliceT0
+	DropLast(n int) SliceT0
+	DropLastWhile(pred func(AnyT0) bool) SliceT0
+	DropWhile(pred func(AnyT0) bool) SliceT0
+	Filter(pred func(AnyT0) bool) SliceT0
+	FilterNot(pred func(AnyT0) bool) SliceT0
 	Find(elem AnyT0) AnyT0
 	// // FindLast(elem Any) Any
 	First() AnyT0
-	// // FlatMap -- no clean implementation without generics
+	FlatMap(func(AnyT0) []AnyT1) []AnyT1
 	// // Flatten -- defined in interface ListOfList
-	Fold(z AnyT0, op func(AnyT0, AnyT0) AnyT0) AnyT0
+	Fold(z AnyT1, op func(AnyT1, AnyT0) AnyT1) AnyT1
 	ForEach(f func(AnyT0))
-	GroupBy(keySelector func(AnyT0) AnyT0) map[AnyT0]SliceAny0
+	GroupBy(keySelector func(AnyT0) AnyT1) map[AnyT0][]AnyT1
 	IndexOfFirst(pred func(AnyT0) bool) int
 	IndexOfLast(pred func(AnyT0) bool) int
 	// IsNotEmpty() bool
 	Last() AnyT0
-	Map(f func(AnyT0) AnyT0) SliceAny0
+	Map(f func(AnyT0) AnyT1) []AnyT1
 	MaxWithOrNil(comparator func(AnyT0, AnyT0) int) AnyT0
-	Minus(other SliceAny0) SliceAny0
-	MinusElement(elem AnyT0) SliceAny0
+	Minus(other SliceT0) SliceT0
+	MinusElement(elem AnyT0) SliceT0
 	MinWithOrNil(comparator func(AnyT0, AnyT0) int) AnyT0
-	Partition(pred func(AnyT0) bool) (SliceAny0, SliceAny0)
-	Plus(other SliceAny0) SliceAny0
-	PlusElement(elem AnyT0) SliceAny0
+	Partition(pred func(AnyT0) bool) (SliceT0, SliceT0)
+	Plus(other SliceT0) SliceT0
+	PlusElement(elem AnyT0) SliceT0
 	// Reduce(op func(AnyT, AnyT) AnyT) AnyT
 	ReduceOrNil(op func(AnyT0, AnyT0) AnyT0) AnyT0
-	Reversed() SliceAny0
+	Reversed() SliceT0
 	// // RunningFold(z Any, op FuncAnyAnyAny) SliceAny
 	// // RunningReduce(op FuncAnyAnyAny) SliceAny
-	SortedWith(comparator func(AnyT0, AnyT0) int) SliceAny0
-	Take(n int) SliceAny0
-	TakeLast(n int) SliceAny0
-	// TakeLastWhile(pred func(AnyT) bool) SliceAny
-	// TakeWhile(pred func(AnyT) bool) SliceAny
-	// ToSlice() SliceAny
-	// // ToMap() Map
+	SortedWith(comparator func(AnyT0, AnyT0) int) SliceT0
+	Take(n int) SliceT0
+	TakeLast(n int) SliceT0
+	TakeLastWhile(pred func(AnyT0) bool) SliceT0
+	TakeWhile(pred func(AnyT0) bool) SliceT0
+	ToSlice() SliceT0
 	// // ToSet() Set
-	// Zip(other SliceAny) SliceAny
+	Zip(other SliceT1) SliceTPair01
 }
 
 type ListOfList interface {
-	Flatten() SliceAny0
+	Flatten() SliceT0
 }
 
-func validateInterface(s SliceAny0) {
+type ListOfPair interface {
+	ToMap() map[AnyT0]AnyT1
+}
+
+func validateListInterface(s SliceT0) {
 	f := func(itf List) {}
+	f(s)
+}
+
+func validateListOfListInterface(s Slice2T0) {
+	f := func(itf ListOfList) {}
+	f(s)
+}
+
+func validateListOfPairInterface(s SliceTPair01) {
+	f := func(itf ListOfPair) {}
 	f(s)
 }
