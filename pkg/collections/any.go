@@ -1,4 +1,4 @@
-package pseudogenerics
+package collections
 
 // AnyT0 is a type alias (a wrapper for interface{} behaves as an alias).
 type AnyT0 interface{}

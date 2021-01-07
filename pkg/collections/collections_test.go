@@ -1,9 +1,9 @@
-package pseudogenerics_test
+package collections_test
 
 import (
 	"fmt"
 
-	pg "github.com/pvillela/GoSimpleCollections/pkg/pseudogenerics"
+	pg "github.com/pvillela/GoSimpleCollections/pkg/collections"
 )
 
 func ExampleMap_Get() {

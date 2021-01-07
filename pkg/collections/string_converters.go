@@ -1,4 +1,4 @@
-package pseudogenerics
+package collections
 
 // SliceString is a wrapper type to enable extension methods.
 type SliceString []string

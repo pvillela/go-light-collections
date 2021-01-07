@@ -1,10 +1,10 @@
-package pseudogenerics_test
+package collections_test
 
 import (
 	"strconv"
 	"testing"
 
-	pg "github.com/pvillela/GoSimpleCollections/pkg/pseudogenerics"
+	pg "github.com/pvillela/GoSimpleCollections/pkg/collections"
 	"github.com/stretchr/testify/assert"
 )
 

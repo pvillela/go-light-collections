@@ -1,4 +1,4 @@
-package pseudogenerics
+package collections
 
 // SliceInt is a wrapper type to enable extension methods.
 type SliceInt []int

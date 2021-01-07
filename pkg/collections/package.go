@@ -23,4 +23,4 @@
 //
 // The pattern exemplified in this package can be applied more broadly, beyond the functions
 // and examples herein.
-package pseudogenerics
+package collections

@@ -1,4 +1,4 @@
-package pseudogenerics
+package collections
 
 // MapAnyAny is a type wrapper, implements Map interface.
 type MapAnyAny map[AnyT0]AnyT0

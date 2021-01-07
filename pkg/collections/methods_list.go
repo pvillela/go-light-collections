@@ -1,4 +1,4 @@
-package pseudogenerics
+package collections
 
 // methods is just an inventory of the methods of SliceAny.
 type methods interface {

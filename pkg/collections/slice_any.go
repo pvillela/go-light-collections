@@ -1,4 +1,4 @@
-package pseudogenerics
+package collections
 
 import (
 	"reflect"

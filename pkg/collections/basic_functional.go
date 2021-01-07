@@ -1,4 +1,4 @@
-package pseudogenerics
+package collections
 
 // MapSlice returns a new slice resulting from the application of a given function to
 // each element of a given slice.
