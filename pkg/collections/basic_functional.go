@@ -2,9 +2,9 @@ package collections
 
 // MapSlice returns a new slice resulting from the application of a given function to
 // each element of a given slice.
-func MapSlice(sc ConvertibleToSliceAny, f FuncAnyAny) SliceAny {
+func MapSlice(sc ConvertibleToSliceAny, f FuncAnyAny) SliceAny0 {
 	s := sc.ToSliceAny()
-	output := make(SliceAny, len(s))
+	output := make(SliceAny0, len(s))
 	for i, a := range s {
 		output[i] = f(a)
 	}
@@ -13,9 +13,9 @@ func MapSlice(sc ConvertibleToSliceAny, f FuncAnyAny) SliceAny {
 
 // FilterSlice returns a new slice containing only the elements in the given slice for which
 // the application of the function pred returns true.
-func FilterSlice(sc ConvertibleToSliceAny, pred FuncAnyBool) SliceAny {
+func FilterSlice(sc ConvertibleToSliceAny, pred FuncAnyBool) SliceAny0 {
 	s := sc.ToSliceAny()
-	output := make(SliceAny, 0)
+	output := make(SliceAny0, 0)
 	for i, a := range s {
 		if pred(s[i]) {
 			output = append(output, a)

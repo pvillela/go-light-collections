@@ -7,8 +7,8 @@ type SliceInt []int
 func (s SliceInt) Und() []int { return s }
 
 // ToSliceAny is defined to implement ConvertibleToSliceAny.
-func (s SliceInt) ToSliceAny() SliceAny {
-	r := make(SliceAny, len(s))
+func (s SliceInt) ToSliceAny() SliceAny0 {
+	r := make(SliceAny0, len(s))
 	for i, x := range s {
 		r[i] = x
 	}
@@ -16,7 +16,7 @@ func (s SliceInt) ToSliceAny() SliceAny {
 }
 
 // ToSliceInt is a conversion function.
-func ToSliceInt(s SliceAny) SliceInt {
+func ToSliceInt(s SliceAny0) SliceInt {
 	r := make(SliceInt, len(s))
 	for i, x := range s {
 		r[i] = x.(int)

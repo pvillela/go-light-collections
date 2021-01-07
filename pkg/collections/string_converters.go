@@ -7,8 +7,8 @@ type SliceString []string
 func (s SliceString) Und() []string { return s }
 
 // ToSliceAny is defined to implement ConvertibleToSliceAny.
-func (s SliceString) ToSliceAny() SliceAny {
-	r := make(SliceAny, len(s))
+func (s SliceString) ToSliceAny() SliceAny0 {
+	r := make(SliceAny0, len(s))
 	for i, x := range s {
 		r[i] = x
 	}
@@ -16,7 +16,7 @@ func (s SliceString) ToSliceAny() SliceAny {
 }
 
 // ToSliceString is a conversion function.
-func ToSliceString(s SliceAny) SliceString {
+func ToSliceString(s SliceAny0) SliceString {
 	r := make(SliceString, len(s))
 	for i, x := range s {
 		r[i] = x.(string)
