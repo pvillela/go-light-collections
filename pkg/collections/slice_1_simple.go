@@ -1,5 +1,8 @@
 package collections
 
+/////////////////////
+// Simple names of methods without mangling.
+
 func (s SliceT0) FlatMap(f func(AnyT0) []AnyT1) []AnyT1 {
 	r := make([]AnyT1, 0)
 	for _, x := range s {

@@ -1,7 +1,7 @@
 package collections
 
-// AnyT is a type alias.
-type AnyT = interface{}
+// Any is a type alias.
+type Any = interface{}
 
 // AnyT0 is a type alias.
 // Used to clarify method signatures and facilitate replacement for code generation.
@@ -12,11 +12,10 @@ type AnyT0 = interface{}
 type AnyT1 = interface{}
 
 // SliceT0 is a type wrapper, implements List interface.
-// Used to clarify method signatures and facilitate replacement for code generation.
 type SliceT0 []AnyT0
 
-// SliceT is a type alias.
-type SliceT = SliceT0
+// SliceAny is a type alias.
+type SliceAny = SliceT0
 
 // SliceT1 is a type alias.
 // Used to clarify method signatures and facilitate replacement for code generation.
@@ -31,8 +30,8 @@ type PairT01 struct {
 	x2 AnyT1
 }
 
-// PairT is a type alias.
-type PairT = PairT01
+// PairAnyAny is a type alias.
+type PairAnyAny = PairT01
 
 // SliceTPair01 is a type wrapper.
 type SliceTPair01 []PairT01
@@ -40,22 +39,16 @@ type SliceTPair01 []PairT01
 // MapT01 is a type wrapper, implements Map interface.
 type MapT01 map[AnyT0]AnyT1
 
-// MapT is a type alias.
-type MapT = MapT01
+// MapAnyAny is a type alias.
+type MapAnyAny = MapT01
 
 // ConvertibleToSliceAny is used as a type for slice parameters in pseudo-polymorphic functions.
 type ConvertibleToSliceAny interface {
 	ToSliceAny() SliceT0
 }
 
-// FuncAnyAny is a type alias.
-type FuncAnyAny = func(AnyT0) AnyT0
+// SetT0 is a type wrapper, implements Set interface.
+type SetT0 map[AnyT0]bool
 
-// FuncAnyBool is a type alias.
-type FuncAnyBool = func(AnyT0) bool
-
-// FuncAnyAnyAny is a type alias.
-type FuncAnyAnyAny = func(AnyT0, AnyT0) AnyT0
-
-// FuncAnyVoid is a type alias.
-type FuncAnyVoid = func(AnyT0)
+// SetAny is a type alias.
+type SetAny = SetT0

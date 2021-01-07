@@ -42,8 +42,8 @@ type List interface {
 	// Reduce(op func(AnyT, AnyT) AnyT) AnyT
 	ReduceOrNil(op func(AnyT0, AnyT0) AnyT0) AnyT0
 	Reversed() SliceT0
-	// // RunningFold(z Any, op FuncAnyAnyAny) SliceAny
-	// // RunningReduce(op FuncAnyAnyAny) SliceAny
+	// // RunningFold(z Any, op func(AnyT0, AnyT1) AnyT1) SliceAny
+	// // RunningReduce(op func(AnyT0, AnyT1) AnyT1) SliceAny
 	SortedWith(comparator func(AnyT0, AnyT0) int) SliceT0
 	Take(n int) SliceT0
 	TakeLast(n int) SliceT0

@@ -92,7 +92,7 @@ func (s SliceT0) DropLast(n int) SliceT0 {
 	return s[:len(s)-n]
 }
 
-func (s SliceT0) DropLastWhile(pred FuncAnyBool) SliceT0 {
+func (s SliceT0) DropLastWhile(pred func(AnyT0) bool) SliceT0 {
 	last := len(s)
 	for i := len(s) - 1; i >= 0 && pred(s[i]); i-- {
 		last = i
@@ -100,7 +100,7 @@ func (s SliceT0) DropLastWhile(pred FuncAnyBool) SliceT0 {
 	return s[:last]
 }
 
-func (s SliceT0) DropWhile(pred FuncAnyBool) SliceT0 {
+func (s SliceT0) DropWhile(pred func(AnyT0) bool) SliceT0 {
 	first := 0
 	for i := 0; i < len(s) && pred(s[i]); i++ {
 		first = i + 1
