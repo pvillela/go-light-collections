@@ -3,8 +3,8 @@ package collections_test
 import (
 	"fmt"
 
-	c "github.com/pvillela/GoSimpleCollections/pkg/collections"
-	"github.com/pvillela/GoSimpleCollections/pkg/util/assert"
+	c "github.com/pvillela/go-light-collections/pkg/collections"
+	"github.com/pvillela/go-light-collections/pkg/util/assert"
 )
 
 /////////////////////

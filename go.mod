@@ -1,4 +1,4 @@
-module github.com/pvillela/GoSimpleCollections
+module github.com/pvillela/go-light-collections
 
 go 1.15
 

@@ -3,7 +3,7 @@ package collections_test
 import (
 	"fmt"
 
-	c "github.com/pvillela/GoSimpleCollections/pkg/collections"
+	c "github.com/pvillela/go-light-collections/pkg/collections"
 )
 
 func ExampleMap_Get() {

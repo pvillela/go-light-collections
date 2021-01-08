@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"testing"
 
-	c "github.com/pvillela/GoSimpleCollections/pkg/collections"
+	c "github.com/pvillela/go-light-collections/pkg/collections"
 	"github.com/stretchr/testify/assert"
 )
 
