@@ -111,7 +111,7 @@ func (s SliceT0) DropWhile(pred func(AnyT0) bool) SliceT0 {
 // Filter returns a new slice containing only the elements in the given slice for which
 // the application of the function pred returns true.
 func (s SliceT0) Filter(pred func(AnyT0) bool) SliceT0 {
-	output := make(SliceT0, 0)
+	output := make(SliceT0, 0, len(s)/2) // optimizing for speed vs space
 	for i, a := range s {
 		if pred(s[i]) {
 			output = append(output, a)
@@ -195,8 +195,8 @@ func (s SliceT0) MinWithOrNil(comparator func(AnyT0, AnyT0) int) AnyT0 {
 }
 
 func (s SliceT0) Partition(pred func(AnyT0) bool) (SliceT0, SliceT0) {
-	output1 := make(SliceT0, 0)
-	output2 := make(SliceT0, 0)
+	output1 := make(SliceT0, 0, len(s)/2) // optimizing for speed vs space
+	output2 := make(SliceT0, 0, len(s)/2) // optimizing for speed vs space
 	for i, a := range s {
 		if pred(s[i]) {
 			output1 = append(output1, a)
