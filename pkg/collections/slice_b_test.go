@@ -150,22 +150,22 @@ func (s SlicePBar) toV() []Bar {
 
 // vars used as inputs to functions below
 
-var xin = []Foo{{1, "w1"}, {22, "w22"}, {333, "w333"}}
+var xin SliceFoo = []Foo{{1, "w1"}, {22, "w22"}, {333, "w333"}}
 
-var xinP = SliceFoo(xin).toP()
+var xinP SlicePFoo = xin.toP()
 
 // Definition and use of specific map function from Foo to int.
 
-func mapSliceFooToInt(s []Foo, f func(Foo) int) []int {
-	sa := SliceFoo(s)
-	fa := func(a pg.AnyT0) pg.AnyT0 { return f(a.(Foo)) }
-	ra := pg.MapSlice(sa, fa)
+func (s SliceFoo) MapInt(f func(Foo) int) []int {
+	sa := s.ToSliceAny()
+	fa := func(a pg.Any) pg.Any { return f(a.(Foo)) }
+	ra := sa.Map(fa)
 	return pg.ToSliceInt(ra)
 }
 
-func example_MapSlice_fooToInt() {
+func example_SliceFoo_MapInt() {
 	f := func(i Foo) int { return i.v + len(i.w) }
-	rslt := mapSliceFooToInt(xin, f)
+	rslt := xin.MapInt(f)
 
 	want := []int{3, 25, 337}
 	assert.Equal(rslt, want)
@@ -173,16 +173,16 @@ func example_MapSlice_fooToInt() {
 
 // Definition and use of specific map function from Foo to Bar.
 
-func mapSliceFooToBar(s []Foo, f func(Foo) Bar) []Bar {
-	sa := SliceFoo(s)
-	fa := func(a pg.AnyT0) pg.AnyT0 { return f(a.(Foo)) }
-	ra := pg.MapSlice(sa, fa)
+func (s SliceFoo) MapBar(f func(Foo) Bar) []Bar {
+	sa := s.ToSliceAny()
+	fa := func(a pg.Any) pg.Any { return f(a.(Foo)) }
+	ra := sa.Map(fa)
 	return ToSliceBar(ra)
 }
 
-func example_MapSlice_fooToBar() {
+func example_SliceFoo_MapBar() {
 	f := func(i Foo) Bar { return Bar{i.v + 1} }
-	rslt := mapSliceFooToBar(xin, f)
+	rslt := xin.MapBar(f)
 
 	want := []Bar{{2}, {23}, {334}}
 	assert.Equal(rslt, want)
@@ -190,16 +190,16 @@ func example_MapSlice_fooToBar() {
 
 // Definition and use of specific map function from *Foo to *Bar.
 
-func mapSlicePFooToPBar(s []*Foo, f func(*Foo) *Bar) []*Bar {
-	sa := SlicePFoo(s)
-	fa := func(a pg.AnyT0) pg.AnyT0 { return f(a.(*Foo)) }
-	ra := pg.MapSlice(sa, fa)
+func (s SlicePFoo) MapPBar(f func(*Foo) *Bar) []*Bar {
+	sa := s.ToSliceAny()
+	fa := func(a pg.Any) pg.Any { return f(a.(*Foo)) }
+	ra := sa.Map(fa)
 	return ToSlicePBar(ra)
 }
 
-func example_MapSlice_fooToBar_withPointers() {
+func example_SlicePFoo_MapPBar() {
 	f := func(p *Foo) *Bar { return &Bar{(*p).v + 1} }
-	rslt := mapSlicePFooToPBar(xinP, f)
+	rslt := xinP.MapPBar(f)
 
 	rsltV := SlicePBar(rslt).toV()
 
@@ -209,33 +209,33 @@ func example_MapSlice_fooToBar_withPointers() {
 
 // Definition and use of specific filter function.
 
-func filterSliceFoo(s []Foo, pred func(Foo) bool) []Foo {
-	sa := SliceFoo(s)
-	preda := func(a pg.AnyT0) bool { return pred(a.(Foo)) }
-	ra := pg.FilterSlice(sa, preda)
+func (s SliceFoo) Filter(pred func(Foo) bool) SliceFoo {
+	sa := s.ToSliceAny()
+	preda := func(a pg.Any) bool { return pred(a.(Foo)) }
+	ra := sa.Filter(preda)
 	return ToSliceFoo(ra)
 }
 
-func example_FilterSlice_foo() {
+func example_SliceFoo_Filter() {
 	pred := func(i Foo) bool { return i.v%2 != 0 }
-	rslt := filterSliceFoo(xin, pred)
+	rslt := xin.Filter(pred)
 
-	want := []Foo{{1, "w1"}, {333, "w333"}}
+	var want SliceFoo = []Foo{{1, "w1"}, {333, "w333"}}
 	assert.Equal(rslt, want)
 }
 
 // Definition and use of specific fold function.
 
-func foldLeftSliceIntFoo(s []Foo, z int, op func(int, Foo) int) int {
-	sa := SliceFoo(s)
-	opa := func(z pg.AnyT0, a pg.AnyT0) pg.AnyT0 { return op(z.(int), a.(Foo)) }
-	ra := pg.FoldLeftSlice(sa, z, opa)
+func (s SliceFoo) FoldInt(z int, op func(int, Foo) int) int {
+	sa := s.ToSliceAny()
+	opa := func(z pg.Any, a pg.Any) pg.Any { return op(z.(int), a.(Foo)) }
+	ra := sa.Fold(z, opa)
 	return ra.(int)
 }
 
-func exampleFoldLeftSlice_intFoo() {
+func example_SliceFoo_FoldInt() {
 	op := func(z int, x Foo) int { return z + x.v }
-	rslt := foldLeftSliceIntFoo(xin, 0, op)
+	rslt := xin.FoldInt(0, op)
 
 	want := 356
 	assert.Equal(rslt, want)
@@ -243,11 +243,11 @@ func exampleFoldLeftSlice_intFoo() {
 
 // Run examples.
 func Example() {
-	example_MapSlice_fooToInt()
-	example_MapSlice_fooToBar()
-	example_MapSlice_fooToBar_withPointers()
-	example_FilterSlice_foo()
-	exampleFoldLeftSlice_intFoo()
+	example_SliceFoo_MapInt()
+	example_SliceFoo_MapBar()
+	example_SlicePFoo_MapPBar()
+	example_SliceFoo_Filter()
+	example_SliceFoo_FoldInt()
 	fmt.Println("End of Example")
 	// Output: End of Example
 }

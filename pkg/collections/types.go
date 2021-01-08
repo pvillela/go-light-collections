@@ -42,11 +42,6 @@ type MapT01 map[AnyT0]AnyT1
 // MapAnyAny is a type alias.
 type MapAnyAny = MapT01
 
-// ConvertibleToSliceAny is used as a type for slice parameters in pseudo-polymorphic functions.
-type ConvertibleToSliceAny interface {
-	ToSliceAny() SliceT0
-}
-
 // SetT0 is a type wrapper, implements Set interface.
 type SetT0 map[AnyT0]bool
 
