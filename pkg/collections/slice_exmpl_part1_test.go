@@ -1,0 +1,1 @@
+/home/pvillela/DEV/go-mysrc/go-light-collections/pkg/collections_test/slice_exmpl_part1_test.go

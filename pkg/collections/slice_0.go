@@ -17,7 +17,8 @@ func (s SliceT0) Contains(elem AnyT0) bool {
 }
 
 func (s SliceT0) ContainsAll(elems SliceT0) bool {
-	for _, e := range elems {
+	for i := range elems {
+		e := elems[i]
 		if !s.Contains(e) {
 			return false
 		}

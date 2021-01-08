@@ -23,9 +23,9 @@ type SliceFoo []Foo
 // Und converts to the underlying type.
 func (s SliceFoo) Und() []Foo { return s }
 
-// ToSliceAny is defined to implement c.ConvertibleToSliceAny.
-func (s SliceFoo) ToSliceAny() c.SliceT0 {
-	r := make(c.SliceT0, len(s))
+// ToSliceAny converts to SliceAny.
+func (s SliceFoo) ToSliceAny() c.SliceAny {
+	r := make(c.SliceAny, len(s))
 	for i, x := range s {
 		r[i] = x
 	}
@@ -33,7 +33,7 @@ func (s SliceFoo) ToSliceAny() c.SliceT0 {
 }
 
 // ToSliceFoo is a conversion function.
-func ToSliceFoo(s c.SliceT0) SliceFoo {
+func ToSliceFoo(s c.SliceAny) SliceFoo {
 	r := make(SliceFoo, len(s))
 	for i, x := range s {
 		r[i] = x.(Foo)
@@ -48,9 +48,9 @@ type SlicePFoo []*Foo
 // Und converts to the underlying type.
 func (s SlicePFoo) Und() []*Foo { return s }
 
-// ToSliceAny is defined to implement c.ConvertibleToSliceAny.
-func (s SlicePFoo) ToSliceAny() c.SliceT0 {
-	r := make(c.SliceT0, len(s))
+// ToSliceAny converts to SliceAny.
+func (s SlicePFoo) ToSliceAny() c.SliceAny {
+	r := make(c.SliceAny, len(s))
 	for i, x := range s {
 		r[i] = x
 	}
@@ -58,7 +58,7 @@ func (s SlicePFoo) ToSliceAny() c.SliceT0 {
 }
 
 // ToSlicePFoo is a conversion function.
-func ToSlicePFoo(s c.SliceT0) SlicePFoo {
+func ToSlicePFoo(s c.SliceAny) SlicePFoo {
 	r := make(SlicePFoo, len(s))
 	for i, p := range s {
 		r[i] = p.(*Foo)
@@ -81,9 +81,9 @@ type SliceBar []Bar
 // Und converts to the underlying type.
 func (s SliceBar) Und() []Bar { return s }
 
-// ToSliceAny is defined to implement c.ConvertibleToSliceAny.
-func (s SliceBar) ToSliceAny() c.SliceT0 {
-	r := make(c.SliceT0, len(s))
+// ToSliceAny converts to SliceAny.
+func (s SliceBar) ToSliceAny() c.SliceAny {
+	r := make(c.SliceAny, len(s))
 	for i, x := range s {
 		r[i] = x
 	}
@@ -91,7 +91,7 @@ func (s SliceBar) ToSliceAny() c.SliceT0 {
 }
 
 // ToSliceBar is a conversion function.
-func ToSliceBar(s c.SliceT0) SliceBar {
+func ToSliceBar(s c.SliceAny) SliceBar {
 	r := make(SliceBar, len(s))
 	for i, x := range s {
 		r[i] = x.(Bar)
@@ -106,9 +106,9 @@ type SlicePBar []*Bar
 // Und converts to the underlying type.
 func (s SlicePBar) Und() []*Bar { return s }
 
-// ToSliceAny is defined to implement c.ConvertibleToSliceAny.
-func (s SlicePBar) ToSliceAny() c.SliceT0 {
-	r := make(c.SliceT0, len(s))
+// ToSliceAny converts to SliceAny.
+func (s SlicePBar) ToSliceAny() c.SliceAny {
+	r := make(c.SliceAny, len(s))
 	for i, x := range s {
 		r[i] = x
 	}
@@ -116,7 +116,7 @@ func (s SlicePBar) ToSliceAny() c.SliceT0 {
 }
 
 // ToSlicePBar is a conversion function.
-func ToSlicePBar(s c.SliceT0) SlicePBar {
+func ToSlicePBar(s c.SliceAny) SlicePBar {
 	r := make(SlicePBar, len(s))
 	for i, p := range s {
 		r[i] = p.(*Bar)
@@ -242,7 +242,7 @@ func example_SliceFoo_FoldInt() {
 }
 
 // Run examples.
-func Example() {
+func ExampleSliceAny() {
 	example_SliceFoo_MapInt()
 	example_SliceFoo_MapBar()
 	example_SlicePFoo_MapPBar()
