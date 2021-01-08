@@ -3,7 +3,7 @@ package collections_test
 import (
 	"fmt"
 
-	pg "github.com/pvillela/GoSimpleCollections/pkg/collections"
+	c "github.com/pvillela/GoSimpleCollections/pkg/collections"
 	"github.com/pvillela/GoSimpleCollections/pkg/util/assert"
 )
 
@@ -23,9 +23,9 @@ type SliceFoo []Foo
 // Und converts to the underlying type.
 func (s SliceFoo) Und() []Foo { return s }
 
-// ToSliceAny is defined to implement pg.ConvertibleToSliceAny.
-func (s SliceFoo) ToSliceAny() pg.SliceT0 {
-	r := make(pg.SliceT0, len(s))
+// ToSliceAny is defined to implement c.ConvertibleToSliceAny.
+func (s SliceFoo) ToSliceAny() c.SliceT0 {
+	r := make(c.SliceT0, len(s))
 	for i, x := range s {
 		r[i] = x
 	}
@@ -33,7 +33,7 @@ func (s SliceFoo) ToSliceAny() pg.SliceT0 {
 }
 
 // ToSliceFoo is a conversion function.
-func ToSliceFoo(s pg.SliceT0) SliceFoo {
+func ToSliceFoo(s c.SliceT0) SliceFoo {
 	r := make(SliceFoo, len(s))
 	for i, x := range s {
 		r[i] = x.(Foo)
@@ -48,9 +48,9 @@ type SlicePFoo []*Foo
 // Und converts to the underlying type.
 func (s SlicePFoo) Und() []*Foo { return s }
 
-// ToSliceAny is defined to implement pg.ConvertibleToSliceAny.
-func (s SlicePFoo) ToSliceAny() pg.SliceT0 {
-	r := make(pg.SliceT0, len(s))
+// ToSliceAny is defined to implement c.ConvertibleToSliceAny.
+func (s SlicePFoo) ToSliceAny() c.SliceT0 {
+	r := make(c.SliceT0, len(s))
 	for i, x := range s {
 		r[i] = x
 	}
@@ -58,7 +58,7 @@ func (s SlicePFoo) ToSliceAny() pg.SliceT0 {
 }
 
 // ToSlicePFoo is a conversion function.
-func ToSlicePFoo(s pg.SliceT0) SlicePFoo {
+func ToSlicePFoo(s c.SliceT0) SlicePFoo {
 	r := make(SlicePFoo, len(s))
 	for i, p := range s {
 		r[i] = p.(*Foo)
@@ -81,9 +81,9 @@ type SliceBar []Bar
 // Und converts to the underlying type.
 func (s SliceBar) Und() []Bar { return s }
 
-// ToSliceAny is defined to implement pg.ConvertibleToSliceAny.
-func (s SliceBar) ToSliceAny() pg.SliceT0 {
-	r := make(pg.SliceT0, len(s))
+// ToSliceAny is defined to implement c.ConvertibleToSliceAny.
+func (s SliceBar) ToSliceAny() c.SliceT0 {
+	r := make(c.SliceT0, len(s))
 	for i, x := range s {
 		r[i] = x
 	}
@@ -91,7 +91,7 @@ func (s SliceBar) ToSliceAny() pg.SliceT0 {
 }
 
 // ToSliceBar is a conversion function.
-func ToSliceBar(s pg.SliceT0) SliceBar {
+func ToSliceBar(s c.SliceT0) SliceBar {
 	r := make(SliceBar, len(s))
 	for i, x := range s {
 		r[i] = x.(Bar)
@@ -106,9 +106,9 @@ type SlicePBar []*Bar
 // Und converts to the underlying type.
 func (s SlicePBar) Und() []*Bar { return s }
 
-// ToSliceAny is defined to implement pg.ConvertibleToSliceAny.
-func (s SlicePBar) ToSliceAny() pg.SliceT0 {
-	r := make(pg.SliceT0, len(s))
+// ToSliceAny is defined to implement c.ConvertibleToSliceAny.
+func (s SlicePBar) ToSliceAny() c.SliceT0 {
+	r := make(c.SliceT0, len(s))
 	for i, x := range s {
 		r[i] = x
 	}
@@ -116,7 +116,7 @@ func (s SlicePBar) ToSliceAny() pg.SliceT0 {
 }
 
 // ToSlicePBar is a conversion function.
-func ToSlicePBar(s pg.SliceT0) SlicePBar {
+func ToSlicePBar(s c.SliceT0) SlicePBar {
 	r := make(SlicePBar, len(s))
 	for i, p := range s {
 		r[i] = p.(*Bar)
@@ -158,9 +158,9 @@ var xinP SlicePFoo = xin.toP()
 
 func (s SliceFoo) MapInt(f func(Foo) int) []int {
 	sa := s.ToSliceAny()
-	fa := func(a pg.Any) pg.Any { return f(a.(Foo)) }
+	fa := func(a c.Any) c.Any { return f(a.(Foo)) }
 	ra := sa.Map(fa)
-	return pg.ToSliceInt(ra)
+	return c.ToSliceInt(ra)
 }
 
 func example_SliceFoo_MapInt() {
@@ -175,7 +175,7 @@ func example_SliceFoo_MapInt() {
 
 func (s SliceFoo) MapBar(f func(Foo) Bar) []Bar {
 	sa := s.ToSliceAny()
-	fa := func(a pg.Any) pg.Any { return f(a.(Foo)) }
+	fa := func(a c.Any) c.Any { return f(a.(Foo)) }
 	ra := sa.Map(fa)
 	return ToSliceBar(ra)
 }
@@ -192,7 +192,7 @@ func example_SliceFoo_MapBar() {
 
 func (s SlicePFoo) MapPBar(f func(*Foo) *Bar) []*Bar {
 	sa := s.ToSliceAny()
-	fa := func(a pg.Any) pg.Any { return f(a.(*Foo)) }
+	fa := func(a c.Any) c.Any { return f(a.(*Foo)) }
 	ra := sa.Map(fa)
 	return ToSlicePBar(ra)
 }
@@ -211,7 +211,7 @@ func example_SlicePFoo_MapPBar() {
 
 func (s SliceFoo) Filter(pred func(Foo) bool) SliceFoo {
 	sa := s.ToSliceAny()
-	preda := func(a pg.Any) bool { return pred(a.(Foo)) }
+	preda := func(a c.Any) bool { return pred(a.(Foo)) }
 	ra := sa.Filter(preda)
 	return ToSliceFoo(ra)
 }
@@ -228,7 +228,7 @@ func example_SliceFoo_Filter() {
 
 func (s SliceFoo) FoldInt(z int, op func(int, Foo) int) int {
 	sa := s.ToSliceAny()
-	opa := func(z pg.Any, a pg.Any) pg.Any { return op(z.(int), a.(Foo)) }
+	opa := func(z c.Any, a c.Any) c.Any { return op(z.(int), a.(Foo)) }
 	ra := sa.Fold(z, opa)
 	return ra.(int)
 }

@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"testing"
 
-	pg "github.com/pvillela/GoSimpleCollections/pkg/collections"
+	c "github.com/pvillela/GoSimpleCollections/pkg/collections"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -16,10 +16,10 @@ type SliceInt []int
 
 // Create a specific map function from the pseudo-generic one.
 func (s SliceInt) MapInt(f func(int) int) []int {
-	sa := pg.SliceInt(s).ToSliceAny()
-	fa := func(a pg.Any) pg.Any { return f(a.(int)) }
+	sa := c.SliceInt(s).ToSliceAny()
+	fa := func(a c.Any) c.Any { return f(a.(int)) }
 	ra := sa.Map(fa)
-	return pg.ToSliceInt(ra)
+	return c.ToSliceInt(ra)
 }
 
 // Use the specific map function
@@ -39,10 +39,10 @@ type SliceString []string
 
 // Create a specific filter function from the pseudo-generic cone.
 func (s SliceString) Filter(pred func(string) bool) SliceString {
-	sa := pg.SliceString(s).ToSliceAny()
-	preda := func(a pg.Any) bool { return pred(a.(string)) }
+	sa := c.SliceString(s).ToSliceAny()
+	preda := func(a c.Any) bool { return pred(a.(string)) }
 	ra := sa.Filter(preda)
-	return pg.ToSliceString(ra).Und()
+	return c.ToSliceString(ra).Und()
 }
 
 // Use the specific filter function
@@ -60,8 +60,8 @@ func TestSliceString_Filter(t *testing.T) {
 
 // Create a specific fold function from the pseudo-generic one.
 func (s SliceString) FoldInt(z int, op func(int, string) int) int {
-	sa := pg.SliceString(s).ToSliceAny()
-	opa := func(za pg.Any, a pg.Any) pg.Any { return op(za.(int), a.(string)) }
+	sa := c.SliceString(s).ToSliceAny()
+	opa := func(za c.Any, a c.Any) c.Any { return op(za.(int), a.(string)) }
 	ra := sa.Fold(z, opa)
 	return ra.(int)
 }
