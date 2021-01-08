@@ -8,4 +8,15 @@ Examples are provided to show how to write adapters to create type-safe collecti
 
 In addition, type aliases/wrappers are used to facilitate code generation with replacement of the pseudo-generic types with specific types.
 
-See the Godoc for additional details.
+See the package Godocs for additional details.
+
+## To-dos
+
+*   Update collections package documentation
+    -   Mention code generation option
+    -   Describe type name convention to support code generation
+*   Add missing godoc comments
+*   Add tests for all List methods
+*   Add Map methods
+*   Add Set methods
+*   Update code generation example
