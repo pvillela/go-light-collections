@@ -51,7 +51,7 @@ type List interface {
 	TakeWhile(pred func(AnyT0) bool) SliceT0
 	ToSlice() SliceT0
 	// // ToSet() Set
-	Zip(other SliceT1) SliceTPair01
+	Zip(other SliceT1) []PairT01
 }
 
 type ListOfList interface {

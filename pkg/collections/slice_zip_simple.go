@@ -3,7 +3,7 @@ package collections
 /////////////////////
 // Simple names of methods without mangling.
 
-func (s SliceT0) Zip(other SliceT1) SliceTPair01 {
+func (s SliceT0) Zip(other SliceT1) []PairT01 {
 	size := len(s)
 	if size > len(other) {
 		size = len(other)
