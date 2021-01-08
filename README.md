@@ -1,6 +1,6 @@
-# GoSimpleCollections
+# Go Light Collections
 
-Efficient and functionally rich implementation of List, Map, and Set for Golang, inspired on the Kotlin standard library.  The implementation uses Go's native slice and map as underlying data structures.
+Lightweight, efficient, and functionally rich implementation of List, Map, and Set for Golang, inspired by the Kotlin standard library.  The implementation uses Go's native slice and map as underlying data structures.
 
 Due to the lack of generics in Go, the implementation uses the type interface{}.  I call the implementations *pseudo-generic*.  
 
