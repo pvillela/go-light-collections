@@ -32,15 +32,15 @@ type List interface {
 	IsNotEmpty() bool
 	Last() AnyT0
 	Map(f func(AnyT0) AnyT1) []AnyT1
-	MaxWithOrNil(comparator func(AnyT0, AnyT0) int) AnyT0
+	MaxWith(comparator func(AnyT0, AnyT0) int) AnyT0
 	Minus(other SliceT0) SliceT0
 	MinusElement(elem AnyT0) SliceT0
-	MinWithOrNil(comparator func(AnyT0, AnyT0) int) AnyT0
+	MinWith(comparator func(AnyT0, AnyT0) int) AnyT0
 	Partition(pred func(AnyT0) bool) (SliceT0, SliceT0)
 	Plus(other SliceT0) SliceT0
 	PlusElement(elem AnyT0) SliceT0
 	// Reduce(op func(AnyT, AnyT) AnyT) AnyT
-	ReduceOrNil(op func(AnyT0, AnyT0) AnyT0) AnyT0
+	Reduce(op func(AnyT0, AnyT0) AnyT0) AnyT0
 	Reversed() SliceT0
 	// // RunningFold(z Any, op func(AnyT0, AnyT1) AnyT1) SliceAny
 	// // RunningReduce(op func(AnyT0, AnyT1) AnyT1) SliceAny

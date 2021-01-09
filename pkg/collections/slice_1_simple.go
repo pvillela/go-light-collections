@@ -14,6 +14,7 @@ func (s SliceT0) FlatMap(f func(AnyT0) []AnyT1) []AnyT1 {
 // Fold returns the accumulated value obtained by applying the operation op to z,
 // and the first element of the given slice, then applying op to the result of the first
 // operation and the second element of the given slice, and so on.
+// Returns z if the slice is empty.
 func (s SliceT0) Fold(z AnyT1, op func(AnyT1, AnyT0) AnyT1) AnyT1 {
 	result := z
 	for _, a := range s {

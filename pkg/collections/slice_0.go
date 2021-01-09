@@ -168,35 +168,46 @@ func (s SliceT0) Last() AnyT0 {
 	return s[len(s)]
 }
 
-func (s SliceT0) MaxWithOrNil(comparator func(AnyT0, AnyT0) int) AnyT0 {
-	if len(s) == 0 {
-		return nil
-	} else {
-		max := s[0]
-		for i := 1; i < len(s); i++ {
-			if comparator(max, s[i]) < 0 {
-				max = s[i]
-			}
+// MaxWith returns the first element in the slice with maximum value, using a comparator function.
+// Panics if the slice is empty.
+func (s SliceT0) MaxWith(comparator func(AnyT0, AnyT0) int) AnyT0 {
+	max := s[0]
+	for i := 1; i < len(s); i++ {
+		if comparator(max, s[i]) < 0 {
+			max = s[i]
 		}
-		return max
 	}
+	return max
+}
+
+func (s SliceT0) minusAllElement(elem AnyT0) SliceT0 {
+	return s.FilterNot(func(a AnyT0) bool { return reflect.DeepEqual(a, elem) })
 }
 
 func (s SliceT0) Minus(other SliceT0) SliceT0 {
 	r := s
 	for _, x := range other {
-		r = r.MinusElement(x)
+		r = r.minusAllElement(x)
 	}
 	return r
 }
 
+// MinusElement -- if the element passed as an argument is present in the receiver, this
+// function returns a slice with the contents of the receiver minus the first occurrence of
+// that element.  Otherwise, it returns the original slice.
 func (s SliceT0) MinusElement(elem AnyT0) SliceT0 {
-	return s.Filter(func(a AnyT0) bool { return reflect.DeepEqual(a, elem) })
+	index := s.IndexOfFirst(func(a AnyT0) bool { return reflect.DeepEqual(a, elem) })
+	if index == -1 {
+		return s
+	}
+	return append(s[:index], s[index+1:]...)
 }
 
-func (s SliceT0) MinWithOrNil(comparator func(AnyT0, AnyT0) int) AnyT0 {
+// MinWith returns the first element in the slice with minimum value, using a comparator function.
+// Panics if the slice is empty.
+func (s SliceT0) MinWith(comparator func(AnyT0, AnyT0) int) AnyT0 {
 	reverseComp := func(a1 AnyT0, a2 AnyT0) int { return -comparator(a1, a2) }
-	return s.MaxWithOrNil(reverseComp)
+	return s.MaxWith(reverseComp)
 }
 
 func (s SliceT0) Partition(pred func(AnyT0) bool) (SliceT0, SliceT0) {
@@ -226,11 +237,15 @@ func (s SliceT0) fold0(z AnyT0, op0 func(AnyT0, AnyT0) AnyT0) AnyT0 {
 	return s.Fold(z.(AnyT1), op)
 }
 
-func (s SliceT0) ReduceOrNil(op func(AnyT0, AnyT0) AnyT0) AnyT0 {
-	if len(s) == 0 {
-		return nil
-	}
-	return s.fold0(s[0], op)
+// Reduce returns the accumulated value obtained by applying the operation op to the first
+// two elements of the given slice, then applying op to the result of the first
+// operation and the third element of the given slice, and so on.
+// If the slice has length 1, returns the only element in the slice.
+// It is a special case of Fold where the z value is the first element of the receiver and
+// the fold is executed on the original slice minus the first element.
+// Panics if the slice is empty.
+func (s SliceT0) Reduce(op func(AnyT0, AnyT0) AnyT0) AnyT0 {
+	return s.Drop(1).fold0(s[0], op)
 }
 
 func (s SliceT0) Reversed() SliceT0 {

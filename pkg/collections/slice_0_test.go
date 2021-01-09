@@ -20,9 +20,14 @@ func sFoo() c.SliceAny {
 	return s.ToSliceAny()
 }
 
-func sFooOther() c.SliceAny {
-	var s SliceFoo = []Foo{{0, "w"}, {22, "w22"}, {55555, "w55555"}}
+func sBar() c.SliceAny {
+	var s SliceBar = []Bar{{1, []string{"w1"}}, {22, []string{"w22"}}, {333, []string{"w333"}}, {4444, []string{"w4444"}}, {22, []string{"w22"}}}
 	return s.ToSliceAny()
+}
+
+func sInt() c.SliceAny {
+	var s c.SliceAny = []c.Any{1, 22, 333, 4444, 22}
+	return s
 }
 
 ////
@@ -46,32 +51,37 @@ func TestLength(t *testing.T) {
 
 func TestContains(t *testing.T) {
 	cases := []struct {
-		msg  string
-		arg  Foo
-		want bool
+		msg      string
+		receiver c.SliceAny
+		arg      Bar
+		want     bool
 	}{
-		{"Cotains: present", Foo{22, "w22"}, true},
-		{"Contains: absent", Foo{22, "xyz"}, false},
+		{"Cotains: present", sBar(), Bar{22, []string{"w22"}}, true},
+		{"Contains: absent", sBar(), Bar{22, []string{"xyz"}}, false},
+		{"Contains: empty slice", sEmpty(), Bar{22, []string{"w22"}}, false},
 	}
 
 	for _, cs := range cases {
-		got := sFoo().Contains(cs.arg)
+		got := cs.receiver.Contains(cs.arg)
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
 
 func TestContainsAll(t *testing.T) {
 	cases := []struct {
-		msg  string
-		arg  c.SliceAny
-		want bool
+		msg      string
+		receiver c.SliceAny
+		arg      c.SliceAny
+		want     bool
 	}{
-		{"ContainsAll: subset", append(sFoo()[2:2], sFoo()[1]), true},
-		{"ContainsAll: not subset", append(sFoo()[1:1], Foo{22, "xyz"}), false},
+		{"ContainsAll: subset", sBar(), append(sBar()[2:3], sBar()[1]), true},
+		{"ContainsAll: intersects", sBar(), append(sBar()[1:2], Bar{22, []string{"xyz"}}), false},
+		{"ContainsAll: disjoint", sBar(), append(sBar()[:0], Bar{22, []string{"xyz"}}, Bar{0, []string{"abc"}}), false},
+		{"ContainsAll: empty slice", sEmpty(), append(sBar()[2:3], sBar()[1]), false},
 	}
 
 	for _, cs := range cases {
-		got := sFoo().ContainsAll(cs.arg)
+		got := cs.receiver.ContainsAll(cs.arg)
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
@@ -79,18 +89,25 @@ func TestContainsAll(t *testing.T) {
 func TestGet(t *testing.T) {
 	size := len(sFoo())
 	cases := []struct {
-		msg  string
-		arg  int
-		want c.Any
+		msg      string
+		receiver c.SliceAny
+		arg      int
+		want     c.Any
 	}{
-		{"Get: from middle", 2, sFoo()[2]},
-		{"Get: from beginning", 0, sFoo()[0]},
-		{"Get: from end", size - 1, sFoo()[size-1]},
+		{"Get: from middle", sFoo(), 2, sFoo()[2]},
+		{"Get: from beginning", sFoo(), 0, sFoo()[0]},
+		{"Get: from end", sFoo(), size - 1, sFoo()[size-1]},
+		{"Get: empty slice", sEmpty(), 0, nil},
 	}
 
 	for _, cs := range cases {
-		got := sFoo().Get(cs.arg)
-		assert.Equal(t, cs.want, got, cs.msg)
+		if !cs.receiver.IsEmpty() {
+			got := cs.receiver.Get(cs.arg)
+			assert.Equal(t, cs.want, got, cs.msg)
+		} else {
+			var ptf assert.PanicTestFunc = func() { cs.receiver.Get(cs.arg) }
+			assert.Panics(t, ptf, cs.msg)
+		}
 	}
 }
 
@@ -479,47 +496,238 @@ func TestForEach(t *testing.T) {
 }
 
 func TestGroupBy(t *testing.T) {
+	f := func(a c.Any) c.Any { return a.(Foo).v1 % 2 }
 
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      func(c.Any) c.Any
+		want     map[c.Any][]c.Any
+	}{
+		{"GroupBy: non-empty receiver", sFoo(), f, map[c.Any][]c.Any{
+			0: []c.Any{Foo{22, "w22"}, Foo{4444, "w4444"}, Foo{22, "w22"}},
+			1: []c.Any{Foo{1, "w1"}, Foo{333, "w333"}},
+		}},
+		{"GroupBy: empty receiver", sEmpty(), f, map[c.Any][]c.Any{}},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.GroupBy(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestIndexOfFirst(t *testing.T) {
+	pred1 := func(a c.Any) bool { return a.(Foo).v1 > 0 }
+	pred2 := func(a c.Any) bool { return a.(Foo).v1%2 == 0 }
+	pred3 := func(a c.Any) bool { return a.(Foo).v1 < 0 }
 
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      func(c.Any) bool
+		want     int
+	}{
+		{"IndexOfFirst: match all", sFoo(), pred1, 0},
+		{"IndexOfFirst: match some", sFoo(), pred2, 1},
+		{"IndexOfFirst: match none", sFoo(), pred3, -1},
+		{"IndexOfFirst: empty", sEmpty(), pred1, -1},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.IndexOfFirst(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestIndexOfLast(t *testing.T) {
+	pred1 := func(a c.Any) bool { return a.(Foo).v1 > 0 }
+	pred2 := func(a c.Any) bool { return a.(Foo).v1%2 == 1 }
+	pred3 := func(a c.Any) bool { return a.(Foo).v1 < 0 }
 
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      func(c.Any) bool
+		want     int
+	}{
+		{"IndexOfLast: match all", sFoo(), pred1, 4},
+		{"IndexOfLast: match some", sFoo(), pred2, 2},
+		{"IndexOfLast: match none", sFoo(), pred3, -1},
+		{"IndexOfLast: empty", sEmpty(), pred1, -1},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.IndexOfLast(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestIsNotEmpty(t *testing.T) {
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		want     bool
+	}{
+		{"IsNotEmpty: non-empty", sFoo(), true},
+		{"IsNotEmpty: empty", sEmpty(), false},
+	}
 
+	for _, cs := range cases {
+		got := cs.receiver.IsNotEmpty()
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestLast(t *testing.T) {
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		want     c.Any
+	}{
+		{"Last: non-empty", sFoo(), Foo{22, "w22"}},
+		{"Last: empty", sEmpty(), nil},
+	}
 
+	for _, cs := range cases {
+		if !cs.receiver.IsEmpty() {
+			got := cs.receiver.Last()
+			assert.Equal(t, cs.want, got, cs.msg)
+		} else {
+			var ptf assert.PanicTestFunc = func() { cs.receiver.Last() }
+			assert.Panics(t, ptf, cs.msg)
+		}
+	}
 }
 
 func TestMap(t *testing.T) {
+	f := func(a c.Any) c.Any { return Bar{a.(Foo).v1 + 1, []string{a.(Foo).v2}} }
 
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      func(c.Any) c.Any
+		want     []c.Any
+	}{
+		{"Map: non-empty receiver", sFoo(), f, []c.Any{Bar{2, []string{"w1"}}, Bar{23, []string{"w22"}}, Bar{334, []string{"w333"}}, Bar{4445, []string{"w4444"}}, Bar{23, []string{"w22"}}}},
+		{"Map: empty receiver", sEmpty(), f, []c.Any{}},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.Map(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
-func TestMaxWithOrNil(t *testing.T) {
+func TestMaxWith(t *testing.T) {
+	comp := func(a1 c.Any, a2 c.Any) int { return a1.(Foo).v1 - a2.(Foo).v1 }
 
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      func(c.Any, c.Any) int
+		want     c.Any
+	}{
+		{"MaxWith: non-empty receiver", sFoo(), comp, Foo{4444, "w4444"}},
+		{"MaxWith: empty receiver", sEmpty(), comp, nil},
+	}
+
+	for _, cs := range cases {
+		if !cs.receiver.IsEmpty() {
+			got := cs.receiver.MaxWith(cs.arg)
+			assert.Equal(t, cs.want, got, cs.msg)
+		} else {
+			var ptf assert.PanicTestFunc = func() { cs.receiver.MaxWith(cs.arg) }
+			assert.Panics(t, ptf, cs.msg)
+		}
+	}
 }
 
+// []Foo{{1, "w1"}, {22, "w22"}, {333, "w333"}, {4444, "w4444"}, {22, "w22"}}
 func TestMinus(t *testing.T) {
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      c.SliceAny
+		want     c.SliceAny
+	}{
+		{"Minus: subset", sBar(), append(sBar()[3:4], sBar()[1]), append(sBar()[0:1], sBar()[2])},
+		{"Minus: intersects", sBar(), append(sBar()[1:2], Bar{22, []string{"xyz"}}), append(sBar()[0:1], sBar()[2], sBar()[3])},
+		{"Minus: disjoint", sBar(), append(sBar()[:0], Bar{22, []string{"xyz"}}, Bar{0, []string{"abc"}}), sBar()},
+		{"Minus: empty slice", sEmpty(), append(sBar()[2:2], sBar()[1]), sEmpty()},
+	}
 
+	for _, cs := range cases {
+		got := cs.receiver.Minus(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestMinusElement(t *testing.T) {
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      Bar
+		want     c.SliceAny
+	}{
+		{"MinusElement: present", sBar(), Bar{22, []string{"w22"}}, append(sBar()[0:1], sBar()[2:]...)},
+		{"MinusElement: absent", sBar(), Bar{22, []string{"xyz"}}, sBar()},
+		{"MinusElement: empty slice", sEmpty(), Bar{22, []string{"xyz"}}, sEmpty()},
+	}
 
+	for _, cs := range cases {
+		got := cs.receiver.MinusElement(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
-func TestMinWithOrNil(t *testing.T) {
+func TestMinWith(t *testing.T) {
+	comp := func(a1 c.Any, a2 c.Any) int { return -(a1.(Foo).v1 - a2.(Foo).v1) }
 
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      func(c.Any, c.Any) int
+		want     c.Any
+	}{
+		{"MinWith: non-empty receiver", sFoo(), comp, Foo{4444, "w4444"}},
+		{"MinWith: empty receiver", sEmpty(), comp, nil},
+	}
+
+	for _, cs := range cases {
+		if !cs.receiver.IsEmpty() {
+			got := cs.receiver.MinWith(cs.arg)
+			assert.Equal(t, cs.want, got, cs.msg)
+		} else {
+			var ptf assert.PanicTestFunc = func() { cs.receiver.MinWith(cs.arg) }
+			assert.Panics(t, ptf, cs.msg)
+		}
+	}
 }
 
 func TestPartition(t *testing.T) {
+	pred1 := func(a c.Any) bool { return a.(Foo).v1 > 0 }
+	pred2 := func(a c.Any) bool { return a.(Foo).v1%2 == 0 }
+	pred3 := func(a c.Any) bool { return a.(Foo).v1 < 0 }
 
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      func(c.Any) bool
+		want1    c.SliceAny
+		want2    c.SliceAny
+	}{
+		{"Partition: match all", sFoo(), pred1, sFoo(), sEmpty()},
+		{"Partition: match some", sFoo(), pred2, append(sFoo()[1:2], sFoo()[3], sFoo()[4]), append(sFoo()[0:1], sFoo()[2])},
+		{"Partition: match none", sFoo(), pred3, sEmpty(), sFoo()},
+		{"Partition: empty", sEmpty(), pred1, sEmpty(), sEmpty()},
+	}
+
+	for _, cs := range cases {
+		got1, got2 := cs.receiver.Partition(cs.arg)
+		assert.Equal(t, cs.want1, got1, cs.msg)
+		assert.Equal(t, cs.want2, got2, cs.msg)
+	}
 }
 
 func TestPlus(t *testing.T) {
