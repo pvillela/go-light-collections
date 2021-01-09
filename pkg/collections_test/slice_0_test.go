@@ -12,7 +12,7 @@ import (
 // in tests.
 
 func sAny() c.SliceAny {
-	var sFoo SliceFoo = []Foo{{1, "w1"}, {22, "w22"}, {333, "w333"}, {4444, "w4444"}}
+	var sFoo SliceFoo = []Foo{{1, "w1"}, {22, "w22"}, {333, "w333"}, {4444, "w4444"}, {22, "w22"}}
 	return sFoo.ToSliceAny()
 }
 
@@ -30,71 +30,166 @@ func sEmptyAny() c.SliceAny {
 // Tests
 
 func TestLength(t *testing.T) {
-	func() {
-		got := sAny().Length()
-		want := 4
-		assert.Equal(t, want, got, "Non-empty slice")
-	}()
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		want     int
+	}{
+		{"Length: non-empty slice", sAny(), 5},
+		{"Length: empty slice", sEmptyAny(), 0},
+	}
 
-	func() {
-		got := sEmptyAny().Length()
-		want := 0
-		assert.Equal(t, want, got, "Empty slice")
-	}()
+	for _, cs := range cases {
+		got := cs.receiver.Length()
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestContains(t *testing.T) {
-	func() {
-		got := sAny().Contains(Foo{22, "w22"})
-		want := true
-		assert.Equal(t, want, got, "Present")
-	}()
+	cases := []struct {
+		msg  string
+		arg  Foo
+		want bool
+	}{
+		{"Cotains: present", Foo{22, "w22"}, true},
+		{"Contains: absent", Foo{22, "xyz"}, false},
+	}
 
-	func() {
-		got := sAny().Contains(Foo{22, "xyz"})
-		want := false
-		assert.Equal(t, want, got, "Absent")
-	}()
+	for _, cs := range cases {
+		got := sAny().Contains(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestContainsAll(t *testing.T) {
-	func() {
-		other := append(sAny()[2:2], sAny()[1])
-		got := sAny().ContainsAll(other)
-		want := true
-		assert.Equal(t, want, got, "Subset")
-	}()
+	cases := []struct {
+		msg  string
+		arg  c.SliceAny
+		want bool
+	}{
+		{"ContainsAll: subset", append(sAny()[2:2], sAny()[1]), true},
+		{"ContainsAll: not subset", append(sAny()[1:1], Foo{22, "xyz"}), false},
+	}
 
-	func() {
-		other := append(sAny()[1:1], Foo{22, "xyz"})
-		got := sAny().ContainsAll(other)
-		want := false
-		assert.Equal(t, want, got, "Not subset")
-	}()
+	for _, cs := range cases {
+		got := sAny().ContainsAll(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestGet(t *testing.T) {
+	size := len(sAny())
+	cases := []struct {
+		msg  string
+		arg  int
+		want c.Any
+	}{
+		{"Get: from middle", 2, sAny()[2]},
+		{"Get: from beginning", 0, sAny()[0]},
+		{"Get: from end", size - 1, sAny()[size-1]},
+	}
 
+	for _, cs := range cases {
+		got := sAny().Get(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestIndexOf(t *testing.T) {
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      Foo
+		want     int
+	}{
+		{"IndexOf: non-empty, present", sAny(), Foo{22, "w22"}, 1},
+		{"IndexOf: non-empty, absent", sAny(), Foo{0, "xyz"}, -1},
+		{"IndexOf: empty", sEmptyAny(), Foo{0, "xyz"}, -1},
+	}
 
+	for _, cs := range cases {
+		got := cs.receiver.IndexOf(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestIsEmpty(t *testing.T) {
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		want     bool
+	}{
+		{"IsEmpty: non-empty", sAny(), false},
+		{"IsEmpty: empty", sEmptyAny(), true},
+	}
 
+	for _, cs := range cases {
+		got := cs.receiver.IsEmpty()
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestLastIndexOf(t *testing.T) {
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      Foo
+		want     int
+	}{
+		{"LastIndexOf: non-empty, present", sAny(), Foo{22, "w22"}, 4},
+		{"LastIndexOf: non-empty, absent", sAny(), Foo{0, "xyz"}, -1},
+		{"LastIndexOf: empty", sEmptyAny(), Foo{0, "xyz"}, -1},
+	}
 
+	for _, cs := range cases {
+		got := cs.receiver.LastIndexOf(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestSubSlice(t *testing.T) {
+	size := len(sAny())
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg1     int
+		arg2     int
+		want     c.SliceAny
+	}{
+		{"SubSlice: nonempty - from beginning", sAny(), 0, 2, sAny()[:2]},
+		{"SubSlice: nonempty - from middle", sAny(), 1, 3, sAny()[1:3]},
+		{"SubSlice: nonempty - from end", sAny(), size - 3, size, sAny()[size-3:]},
+		{"SubSlice: nonempty - empty sub-slice", sAny(), 2, 2, sAny()[2:2]},
+		{"SubSlice: empty - empty sub-slice", sEmptyAny(), 0, 0, sEmptyAny()[0:0]},
+	}
 
+	for _, cs := range cases {
+		got := cs.receiver.SubSlice(cs.arg1, cs.arg2)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestAll(t *testing.T) {
+	pred1 := func(a c.Any) bool { return a.(Foo).v > 0 }
+	pred2 := func(a c.Any) bool { return a.(Foo).v%2 == 0 }
+	pred3 := func(a c.Any) bool { return a.(Foo).v < 0 }
 
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      func(c.Any) bool
+		want     bool
+	}{
+		{"All: pred matches all", sAny(), pred1, true},
+		{"All: pred matches some", sAny(), pred2, false},
+		{"All: pred matches none", sAny(), pred3, false},
+		{"All: empty receiver", sEmptyAny(), pred2, true},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.All(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestAny(t *testing.T) {
