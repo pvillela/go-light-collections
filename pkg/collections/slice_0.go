@@ -122,7 +122,7 @@ func (s SliceT0) Filter(pred func(AnyT0) bool) SliceT0 {
 }
 
 func (s SliceT0) FilterNot(pred func(AnyT0) bool) SliceT0 {
-	return s.Filter(func(a AnyT0) bool { return pred(a) })
+	return s.Filter(func(a AnyT0) bool { return !pred(a) })
 }
 
 func (s SliceT0) Find(elem AnyT0) AnyT0 {

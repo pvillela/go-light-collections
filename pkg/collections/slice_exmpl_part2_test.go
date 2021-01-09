@@ -43,10 +43,10 @@ func (s SliceFoo) MapBar(f func(Foo) Bar) []Bar {
 }
 
 func example_SliceFoo_MapBar() {
-	f := func(i Foo) Bar { return Bar{i.v1 + 1} }
+	f := func(x Foo) Bar { return Bar{x.v1 + 1, []string{x.v2}} }
 	rslt := xin.MapBar(f)
 
-	want := []Bar{{2}, {23}, {334}}
+	want := []Bar{{2, []string{"w1"}}, {23, []string{"w22"}}, {334, []string{"w333"}}}
 	assert.Equal(rslt, want)
 }
 
@@ -60,12 +60,12 @@ func (s SlicePFoo) MapPBar(f func(*Foo) *Bar) []*Bar {
 }
 
 func example_SlicePFoo_MapPBar() {
-	f := func(p *Foo) *Bar { return &Bar{(*p).v1 + 1} }
+	f := func(p *Foo) *Bar { return &Bar{(*p).v1 + 1, []string{(*p).v2}} }
 	rslt := xinP.MapPBar(f)
 
 	rsltV := SlicePBar(rslt).toV()
 
-	want := []Bar{{2}, {23}, {334}}
+	want := []Bar{{2, []string{"w1"}}, {23, []string{"w22"}}, {334, []string{"w333"}}}
 	assert.Equal(rsltV, want)
 }
 

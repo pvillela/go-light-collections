@@ -6,7 +6,7 @@ package collections
 func (s SliceT0) FlatMap(f func(AnyT0) []AnyT1) []AnyT1 {
 	r := make([]AnyT1, 0, len(s)) // optimizing for speed vs space
 	for _, x := range s {
-		r = append(r, f(x))
+		r = append(r, f(x)...)
 	}
 	return r
 }

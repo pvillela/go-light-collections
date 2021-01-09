@@ -74,6 +74,7 @@ func ToSlicePFoo(s c.SliceAny) SlicePFoo {
 // Bar is another example data structure.
 type Bar struct {
 	w1 int
+	w2 []string
 }
 
 // SliceBar is a wrapper type to enable extension methods.

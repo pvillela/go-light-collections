@@ -11,18 +11,18 @@ import (
 // Slices used as inputs to functions below. Cloned each time to avoid nasty side-effects
 // in tests.
 
-func sEmptyAny() c.SliceAny {
+func sEmpty() c.SliceAny {
 	return []c.Any{}
 }
 
-func sFooAny() c.SliceAny {
-	var sFoo SliceFoo = []Foo{{1, "w1"}, {22, "w22"}, {333, "w333"}, {4444, "w4444"}, {22, "w22"}}
-	return sFoo.ToSliceAny()
+func sFoo() c.SliceAny {
+	var s SliceFoo = []Foo{{1, "w1"}, {22, "w22"}, {333, "w333"}, {4444, "w4444"}, {22, "w22"}}
+	return s.ToSliceAny()
 }
 
-func sFooAny1() c.SliceAny {
-	var sOtherFoo SliceFoo = []Foo{{0, "w"}, {22, "w22"}, {55555, "w55555"}}
-	return sOtherFoo.ToSliceAny()
+func sFooOther() c.SliceAny {
+	var s SliceFoo = []Foo{{0, "w"}, {22, "w22"}, {55555, "w55555"}}
+	return s.ToSliceAny()
 }
 
 ////
@@ -34,8 +34,8 @@ func TestLength(t *testing.T) {
 		receiver c.SliceAny
 		want     int
 	}{
-		{"Length: non-empty slice", sFooAny(), 5},
-		{"Length: empty slice", sEmptyAny(), 0},
+		{"Length: non-empty slice", sFoo(), 5},
+		{"Length: empty slice", sEmpty(), 0},
 	}
 
 	for _, cs := range cases {
@@ -55,7 +55,7 @@ func TestContains(t *testing.T) {
 	}
 
 	for _, cs := range cases {
-		got := sFooAny().Contains(cs.arg)
+		got := sFoo().Contains(cs.arg)
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
@@ -66,30 +66,30 @@ func TestContainsAll(t *testing.T) {
 		arg  c.SliceAny
 		want bool
 	}{
-		{"ContainsAll: subset", append(sFooAny()[2:2], sFooAny()[1]), true},
-		{"ContainsAll: not subset", append(sFooAny()[1:1], Foo{22, "xyz"}), false},
+		{"ContainsAll: subset", append(sFoo()[2:2], sFoo()[1]), true},
+		{"ContainsAll: not subset", append(sFoo()[1:1], Foo{22, "xyz"}), false},
 	}
 
 	for _, cs := range cases {
-		got := sFooAny().ContainsAll(cs.arg)
+		got := sFoo().ContainsAll(cs.arg)
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
 
 func TestGet(t *testing.T) {
-	size := len(sFooAny())
+	size := len(sFoo())
 	cases := []struct {
 		msg  string
 		arg  int
 		want c.Any
 	}{
-		{"Get: from middle", 2, sFooAny()[2]},
-		{"Get: from beginning", 0, sFooAny()[0]},
-		{"Get: from end", size - 1, sFooAny()[size-1]},
+		{"Get: from middle", 2, sFoo()[2]},
+		{"Get: from beginning", 0, sFoo()[0]},
+		{"Get: from end", size - 1, sFoo()[size-1]},
 	}
 
 	for _, cs := range cases {
-		got := sFooAny().Get(cs.arg)
+		got := sFoo().Get(cs.arg)
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
@@ -101,9 +101,9 @@ func TestIndexOf(t *testing.T) {
 		arg      Foo
 		want     int
 	}{
-		{"IndexOf: non-empty, present", sFooAny(), Foo{22, "w22"}, 1},
-		{"IndexOf: non-empty, absent", sFooAny(), Foo{0, "xyz"}, -1},
-		{"IndexOf: empty", sEmptyAny(), Foo{0, "xyz"}, -1},
+		{"IndexOf: non-empty, present", sFoo(), Foo{22, "w22"}, 1},
+		{"IndexOf: non-empty, absent", sFoo(), Foo{0, "xyz"}, -1},
+		{"IndexOf: empty", sEmpty(), Foo{0, "xyz"}, -1},
 	}
 
 	for _, cs := range cases {
@@ -118,8 +118,8 @@ func TestIsEmpty(t *testing.T) {
 		receiver c.SliceAny
 		want     bool
 	}{
-		{"IsEmpty: non-empty", sFooAny(), false},
-		{"IsEmpty: empty", sEmptyAny(), true},
+		{"IsEmpty: non-empty", sFoo(), false},
+		{"IsEmpty: empty", sEmpty(), true},
 	}
 
 	for _, cs := range cases {
@@ -135,9 +135,9 @@ func TestLastIndexOf(t *testing.T) {
 		arg      Foo
 		want     int
 	}{
-		{"LastIndexOf: non-empty, present", sFooAny(), Foo{22, "w22"}, 4},
-		{"LastIndexOf: non-empty, absent", sFooAny(), Foo{0, "xyz"}, -1},
-		{"LastIndexOf: empty", sEmptyAny(), Foo{0, "xyz"}, -1},
+		{"LastIndexOf: non-empty, present", sFoo(), Foo{22, "w22"}, 4},
+		{"LastIndexOf: non-empty, absent", sFoo(), Foo{0, "xyz"}, -1},
+		{"LastIndexOf: empty", sEmpty(), Foo{0, "xyz"}, -1},
 	}
 
 	for _, cs := range cases {
@@ -147,7 +147,7 @@ func TestLastIndexOf(t *testing.T) {
 }
 
 func TestSubSlice(t *testing.T) {
-	size := len(sFooAny())
+	size := len(sFoo())
 	cases := []struct {
 		msg      string
 		receiver c.SliceAny
@@ -155,11 +155,11 @@ func TestSubSlice(t *testing.T) {
 		arg2     int
 		want     c.SliceAny
 	}{
-		{"SubSlice: nonempty - from beginning", sFooAny(), 0, 2, sFooAny()[:2]},
-		{"SubSlice: nonempty - from middle", sFooAny(), 1, 3, sFooAny()[1:3]},
-		{"SubSlice: nonempty - from end", sFooAny(), size - 3, size, sFooAny()[size-3:]},
-		{"SubSlice: nonempty - empty sub-slice", sFooAny(), 2, 2, sFooAny()[2:2]},
-		{"SubSlice: empty - empty sub-slice", sEmptyAny(), 0, 0, sEmptyAny()[0:0]},
+		{"SubSlice: nonempty - from beginning", sFoo(), 0, 2, sFoo()[:2]},
+		{"SubSlice: nonempty - from middle", sFoo(), 1, 3, sFoo()[1:3]},
+		{"SubSlice: nonempty - from end", sFoo(), size - 3, size, sFoo()[size-3:]},
+		{"SubSlice: nonempty - empty sub-slice", sFoo(), 2, 2, sFoo()[2:2]},
+		{"SubSlice: empty - empty sub-slice", sEmpty(), 0, 0, sEmpty()[0:0]},
 	}
 
 	for _, cs := range cases {
@@ -179,10 +179,10 @@ func TestAll(t *testing.T) {
 		arg      func(c.Any) bool
 		want     bool
 	}{
-		{"All: pred matches all", sFooAny(), pred1, true},
-		{"All: pred matches some", sFooAny(), pred2, false},
-		{"All: pred matches none", sFooAny(), pred3, false},
-		{"All: empty receiver", sEmptyAny(), pred2, true},
+		{"All: pred matches all", sFoo(), pred1, true},
+		{"All: pred matches some", sFoo(), pred2, false},
+		{"All: pred matches none", sFoo(), pred3, false},
+		{"All: empty receiver", sEmpty(), pred2, true},
 	}
 
 	for _, cs := range cases {
@@ -202,14 +202,14 @@ func TestAny(t *testing.T) {
 		arg      func(c.Any) bool
 		want     bool
 	}{
-		{"Any: pred matches all", sFooAny(), pred1, true},
-		{"Any: pred matches some", sFooAny(), pred2, true},
-		{"Any: pred matches none", sFooAny(), pred3, false},
-		{"Any: empty receiver", sEmptyAny(), pred2, false},
+		{"Any: pred matches all", sFoo(), pred1, true},
+		{"Any: pred matches some", sFoo(), pred2, true},
+		{"Any: pred matches none", sFoo(), pred3, false},
+		{"Any: empty receiver", sEmpty(), pred2, false},
 	}
 
 	for _, cs := range cases {
-		got := cs.receiver.All(cs.arg)
+		got := cs.receiver.Any(cs.arg)
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
@@ -225,31 +225,31 @@ func TestCount(t *testing.T) {
 		arg      func(c.Any) bool
 		want     int
 	}{
-		{"Count: pred matches all", sFooAny(), pred1, len(sFooAny())},
-		{"Count: pred matches some", sFooAny(), pred2, 3},
-		{"Count: pred matches none", sFooAny(), pred3, 0},
-		{"Count: empty receiver", sEmptyAny(), pred2, 0},
+		{"Count: pred matches all", sFoo(), pred1, len(sFoo())},
+		{"Count: pred matches some", sFoo(), pred2, 3},
+		{"Count: pred matches none", sFoo(), pred3, 0},
+		{"Count: empty receiver", sEmpty(), pred2, 0},
 	}
 
 	for _, cs := range cases {
-		got := cs.receiver.All(cs.arg)
+		got := cs.receiver.Count(cs.arg)
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
 
 func TestDrop(t *testing.T) {
-	size := len(sFooAny())
+	size := len(sFoo())
 	cases := []struct {
 		msg      string
 		receiver c.SliceAny
 		arg      int
 		want     c.SliceAny
 	}{
-		{"Drop: some", sFooAny(), 2, sFooAny()[2:]},
-		{"Drop: all", sFooAny(), size, sEmptyAny()},
-		{"Drop: none", sFooAny(), 0, sFooAny()},
-		{"Drop: more than length", sFooAny(), size + 5, sEmptyAny()},
-		{"Drop: empty receiver", sEmptyAny(), 1, sEmptyAny()},
+		{"Drop: some", sFoo(), 2, sFoo()[2:]},
+		{"Drop: all", sFoo(), size, sEmpty()},
+		{"Drop: none", sFoo(), 0, sFoo()},
+		{"Drop: more than length", sFoo(), size + 5, sEmpty()},
+		{"Drop: empty receiver", sEmpty(), 1, sEmpty()},
 	}
 
 	for _, cs := range cases {
@@ -259,18 +259,18 @@ func TestDrop(t *testing.T) {
 }
 
 func TestDropLast(t *testing.T) {
-	size := len(sFooAny())
+	size := len(sFoo())
 	cases := []struct {
 		msg      string
 		receiver c.SliceAny
 		arg      int
 		want     c.SliceAny
 	}{
-		{"DropLast: some", sFooAny(), 2, sFooAny()[:size-2]},
-		{"DropLast: all", sFooAny(), size, sEmptyAny()},
-		{"DropLast: none", sFooAny(), 0, sFooAny()},
-		{"DropLast: more than length", sFooAny(), size + 5, sEmptyAny()},
-		{"DropLast: empty receiver", sEmptyAny(), 1, sEmptyAny()},
+		{"DropLast: some", sFoo(), 2, sFoo()[:size-2]},
+		{"DropLast: all", sFoo(), size, sEmpty()},
+		{"DropLast: none", sFoo(), 0, sFoo()},
+		{"DropLast: more than length", sFoo(), size + 5, sEmpty()},
+		{"DropLast: empty receiver", sEmpty(), 1, sEmpty()},
 	}
 
 	for _, cs := range cases {
@@ -290,10 +290,10 @@ func TestDropLastWhile(t *testing.T) {
 		arg      func(c.Any) bool
 		want     c.SliceAny
 	}{
-		{"DropLastWhile: pred matches all", sFooAny(), pred1, sEmptyAny()},
-		{"DropLastWhile: pred matches some", sFooAny(), pred2, SliceFoo([]Foo{{1, "w1"}, {22, "w22"}, {333, "w333"}}).ToSliceAny()},
-		{"DropLastWhile: pred matches none", sFooAny(), pred3, sFooAny()},
-		{"DropLastWhile: empty receiver", sEmptyAny(), pred2, sEmptyAny()},
+		{"DropLastWhile: pred matches all", sFoo(), pred1, sEmpty()},
+		{"DropLastWhile: pred matches some", sFoo(), pred2, SliceFoo([]Foo{{1, "w1"}, {22, "w22"}, {333, "w333"}}).ToSliceAny()},
+		{"DropLastWhile: pred matches none", sFoo(), pred3, sFoo()},
+		{"DropLastWhile: empty receiver", sEmpty(), pred2, sEmpty()},
 	}
 
 	for _, cs := range cases {
@@ -313,10 +313,10 @@ func TestDropWhile(t *testing.T) {
 		arg      func(c.Any) bool
 		want     c.SliceAny
 	}{
-		{"DropWhile: pred matches all", sFooAny(), pred1, sEmptyAny()},
-		{"DropWhile: pred matches some", sFooAny(), pred2, SliceFoo([]Foo{{22, "w22"}, {333, "w333"}, {4444, "w4444"}, {22, "w22"}}).ToSliceAny()},
-		{"DropWhile: pred matches none", sFooAny(), pred3, sFooAny()},
-		{"DropWhile: empty receiver", sEmptyAny(), pred2, sEmptyAny()},
+		{"DropWhile: pred matches all", sFoo(), pred1, sEmpty()},
+		{"DropWhile: pred matches some", sFoo(), pred2, SliceFoo([]Foo{{22, "w22"}, {333, "w333"}, {4444, "w4444"}, {22, "w22"}}).ToSliceAny()},
+		{"DropWhile: pred matches none", sFoo(), pred3, sFoo()},
+		{"DropWhile: empty receiver", sEmpty(), pred2, sEmpty()},
 	}
 
 	for _, cs := range cases {
@@ -336,10 +336,10 @@ func TestFilter(t *testing.T) {
 		arg      func(c.Any) bool
 		want     c.SliceAny
 	}{
-		{"Filter: pred matches all", sFooAny(), pred1, sFooAny()},
-		{"Filter: pred matches some", sFooAny(), pred2, SliceFoo([]Foo{{22, "w22"}, {4444, "w4444"}, {22, "w22"}}).ToSliceAny()},
-		{"Filter: pred matches none", sFooAny(), pred3, sEmptyAny()},
-		{"Filter: empty receiver", sEmptyAny(), pred2, sEmptyAny()},
+		{"Filter: pred matches all", sFoo(), pred1, sFoo()},
+		{"Filter: pred matches some", sFoo(), pred2, SliceFoo([]Foo{{22, "w22"}, {4444, "w4444"}, {22, "w22"}}).ToSliceAny()},
+		{"Filter: pred matches none", sFoo(), pred3, sEmpty()},
+		{"Filter: empty receiver", sEmpty(), pred2, sEmpty()},
 	}
 
 	for _, cs := range cases {
@@ -359,10 +359,10 @@ func TestFilterNot(t *testing.T) {
 		arg      func(c.Any) bool
 		want     c.SliceAny
 	}{
-		{"FilterNot: pred matches all", sFooAny(), pred1, sFooAny()},
-		{"FilterNot: pred matches some", sFooAny(), pred2, SliceFoo([]Foo{{22, "w22"}, {4444, "w4444"}, {22, "w22"}}).ToSliceAny()},
-		{"FilterNot: pred matches none", sFooAny(), pred3, sEmptyAny()},
-		{"FilterNot: empty receiver", sEmptyAny(), pred2, sEmptyAny()},
+		{"FilterNot: pred matches all", sFoo(), pred1, sEmpty()},
+		{"FilterNot: pred matches some", sFoo(), pred2, SliceFoo([]Foo{{22, "w22"}, {4444, "w4444"}, {22, "w22"}}).ToSliceAny()},
+		{"FilterNot: pred matches none", sFoo(), pred3, sFoo()},
+		{"FilterNot: empty receiver", sEmpty(), pred2, sEmpty()},
 	}
 
 	for _, cs := range cases {
@@ -378,9 +378,9 @@ func TestFind(t *testing.T) {
 		arg      c.Any
 		want     c.Any
 	}{
-		{"Find: present", sFooAny(), Foo{22, "w222"}, Foo{22, "w222"}},
-		{"Find: absent", sFooAny(), Foo{22, "xyz"}, nil},
-		{"Find: empty receiver", sEmptyAny(), Foo{22, "w222"}, nil},
+		{"Find: present", sFoo(), Foo{22, "w22"}, Foo{22, "w22"}},
+		{"Find: absent", sFoo(), Foo{22, "xyz"}, nil},
+		{"Find: empty receiver", sEmpty(), Foo{22, "w222"}, nil},
 	}
 
 	for _, cs := range cases {
@@ -395,8 +395,8 @@ func TestFirst(t *testing.T) {
 		receiver c.SliceAny
 		want     c.Any
 	}{
-		{"First: non-empty", sFooAny(), Foo{1, "w1"}},
-		{"First: empty", sEmptyAny(), nil},
+		{"First: non-empty", sFoo(), Foo{1, "w1"}},
+		{"First: empty", sEmpty(), nil},
 	}
 
 	for _, cs := range cases {
@@ -411,16 +411,71 @@ func TestFirst(t *testing.T) {
 }
 
 func TestFlatMap(t *testing.T) {
+	var sInt c.SliceInt = []int{1, 2, 3}
+	f := func(a c.Any) []c.Any {
+		n := a.(int)
+		s := make([]c.Any, n)
+		for i := range s {
+			s[i] = n
+		}
+		return s
+	}
 
-	// f := func(a )
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      func(c.Any) []c.Any
+		want     []c.Any
+	}{
+		{"FlatMap: non-empty receiver", sInt.ToSliceAny(), f, []c.Any{1, 2, 2, 3, 3, 3}},
+		{"FlatMap: empty receiver", sEmpty(), f, []c.Any{}},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.FlatMap(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestFold(t *testing.T) {
+	op := func(z c.Any, a c.Any) c.Any { return z.(int) + a.(Foo).v1 }
 
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg1     int
+		arg2     func(z c.Any, a c.Any) c.Any
+		want     c.Any
+	}{
+		{"Fold: non-empty receiver", sFoo(), 1, op, 1 + 1 + 22 + 333 + 4444 + 22},
+		{"Fold: empty receiver", sEmpty(), 42, op, 42},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.Fold(cs.arg1, cs.arg2)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestForEach(t *testing.T) {
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		want     []c.Any
+	}{
+		{"ForEach: non-empty receiver", sFoo(), []c.Any{1, 22, 333, 4444, 22}},
+		{"ForEach: empty receiver", sEmpty(), []c.Any{}},
+	}
 
+	for _, cs := range cases {
+		got := []c.Any{}
+		f := func(a c.Any) {
+			got = append(got, a.(Foo).v1)
+		}
+
+		cs.receiver.ForEach(f)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestGroupBy(t *testing.T) {
