@@ -29,7 +29,7 @@ type List interface {
 	GroupBy(keySelector func(AnyT0) AnyT1) map[AnyT0][]AnyT1
 	IndexOfFirst(pred func(AnyT0) bool) int
 	IndexOfLast(pred func(AnyT0) bool) int
-	// IsNotEmpty() bool
+	IsNotEmpty() bool
 	Last() AnyT0
 	Map(f func(AnyT0) AnyT1) []AnyT1
 	MaxWithOrNil(comparator func(AnyT0, AnyT0) int) AnyT0

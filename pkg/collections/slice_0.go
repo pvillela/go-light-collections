@@ -160,6 +160,10 @@ func (s SliceT0) IndexOfLast(pred func(AnyT0) bool) int {
 	return -1
 }
 
+func (s SliceT0) IsNotEmpty() bool {
+	return !s.IsEmpty()
+}
+
 func (s SliceT0) Last() AnyT0 {
 	return s[len(s)]
 }

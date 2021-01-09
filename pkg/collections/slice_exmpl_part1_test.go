@@ -14,8 +14,8 @@ import (
 
 // Foo is an example data structure.
 type Foo struct {
-	v int
-	w string
+	v1 int
+	v2 string
 }
 
 // SliceFoo is a wrapper type to enable extension methods.
@@ -73,7 +73,7 @@ func ToSlicePFoo(s c.SliceAny) SlicePFoo {
 
 // Bar is another example data structure.
 type Bar struct {
-	z int
+	w1 int
 }
 
 // SliceBar is a wrapper type to enable extension methods.

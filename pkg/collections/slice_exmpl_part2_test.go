@@ -26,7 +26,7 @@ func (s SliceFoo) MapInt(f func(Foo) int) []int {
 }
 
 func example_SliceFoo_MapInt() {
-	f := func(i Foo) int { return i.v + len(i.w) }
+	f := func(i Foo) int { return i.v1 + len(i.v2) }
 	rslt := xin.MapInt(f)
 
 	want := []int{3, 25, 337}
@@ -43,7 +43,7 @@ func (s SliceFoo) MapBar(f func(Foo) Bar) []Bar {
 }
 
 func example_SliceFoo_MapBar() {
-	f := func(i Foo) Bar { return Bar{i.v + 1} }
+	f := func(i Foo) Bar { return Bar{i.v1 + 1} }
 	rslt := xin.MapBar(f)
 
 	want := []Bar{{2}, {23}, {334}}
@@ -60,7 +60,7 @@ func (s SlicePFoo) MapPBar(f func(*Foo) *Bar) []*Bar {
 }
 
 func example_SlicePFoo_MapPBar() {
-	f := func(p *Foo) *Bar { return &Bar{(*p).v + 1} }
+	f := func(p *Foo) *Bar { return &Bar{(*p).v1 + 1} }
 	rslt := xinP.MapPBar(f)
 
 	rsltV := SlicePBar(rslt).toV()
@@ -79,7 +79,7 @@ func (s SliceFoo) Filter(pred func(Foo) bool) SliceFoo {
 }
 
 func example_SliceFoo_Filter() {
-	pred := func(i Foo) bool { return i.v%2 != 0 }
+	pred := func(i Foo) bool { return i.v1%2 != 0 }
 	rslt := xin.Filter(pred)
 
 	var want SliceFoo = []Foo{{1, "w1"}, {333, "w333"}}
@@ -96,7 +96,7 @@ func (s SliceFoo) FoldInt(z int, op func(int, Foo) int) int {
 }
 
 func example_SliceFoo_FoldInt() {
-	op := func(z int, x Foo) int { return z + x.v }
+	op := func(z int, x Foo) int { return z + x.v1 }
 	rslt := xin.FoldInt(0, op)
 
 	want := 356
