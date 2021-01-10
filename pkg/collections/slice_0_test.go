@@ -175,8 +175,8 @@ func TestSubSlice(t *testing.T) {
 		{"SubSlice: nonempty - from beginning", sFoo(), 0, 2, sFoo()[:2]},
 		{"SubSlice: nonempty - from middle", sFoo(), 1, 3, sFoo()[1:3]},
 		{"SubSlice: nonempty - from end", sFoo(), size - 3, size, sFoo()[size-3:]},
-		{"SubSlice: nonempty - empty sub-slice", sFoo(), 2, 2, sFoo()[2:2]},
-		{"SubSlice: empty - empty sub-slice", sEmpty(), 0, 0, sEmpty()[0:0]},
+		{"SubSlice: nonempty - empty sub-slice", sFoo(), 2, 2, sEmpty()},
+		{"SubSlice: empty - empty sub-slice", sEmpty(), 0, 0, sEmpty()},
 	}
 
 	for _, cs := range cases {
@@ -810,29 +810,152 @@ func TestReversed(t *testing.T) {
 }
 
 func TestSortedWith(t *testing.T) {
+	comp := func(a1 c.Any, a2 c.Any) int { return -(a1.(Foo).v1 - a2.(Foo).v1) }
 
+	var sorted SliceFoo = []Foo{{4444, "w4444"}, {333, "w333"}, {22, "w22"}, {22, "w22"}, {1, "w1"}}
+
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      func(c.Any, c.Any) int
+		want     c.SliceAny
+	}{
+		{"SortedWith: non-empty receiver", sFoo(), comp, sorted.ToSliceAny()},
+		{"SortedWith: empty receiver", sEmpty(), comp, sEmpty()},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.SortedWith(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestTake(t *testing.T) {
+	size := len(sFoo())
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      int
+		want     c.SliceAny
+	}{
+		{"Take: some", sFoo(), 2, sFoo()[:2]},
+		{"Take: all", sFoo(), size, sFoo()},
+		{"Take: none", sFoo(), 0, sEmpty()},
+		{"Take: more than length", sFoo(), size + 5, sFoo()},
+		{"Take: empty receiver", sEmpty(), 1, sEmpty()},
+	}
 
+	for _, cs := range cases {
+		got := cs.receiver.Take(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestTakeLast(t *testing.T) {
+	size := len(sFoo())
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      int
+		want     c.SliceAny
+	}{
+		{"TakeLast: some", sFoo(), 2, sFoo()[size-2:]},
+		{"TakeLast: all", sFoo(), size, sFoo()},
+		{"TakeLast: none", sFoo(), 0, sEmpty()},
+		{"TakeLast: more than length", sFoo(), size + 5, sFoo()},
+		{"TakeLast: empty receiver", sEmpty(), 1, sEmpty()},
+	}
 
+	for _, cs := range cases {
+		got := cs.receiver.TakeLast(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestTakeLastWhile(t *testing.T) {
+	pred1 := func(a c.Any) bool { return a.(Foo).v1 > 0 }
+	pred2 := func(a c.Any) bool { return a.(Foo).v1%2 == 0 }
+	pred3 := func(a c.Any) bool { return a.(Foo).v1 < 0 }
 
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      func(c.Any) bool
+		want     c.SliceAny
+	}{
+		{"TakeLastWhile: pred matches all", sFoo(), pred1, sFoo()},
+		{"TakeLastWhile: pred matches some", sFoo(), pred2, SliceFoo([]Foo{{4444, "w4444"}, {22, "w22"}}).ToSliceAny()},
+		{"TakeLastWhile: pred matches none", sFoo(), pred3, sEmpty()},
+		{"TakeLastWhile: empty receiver", sEmpty(), pred2, sEmpty()},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.TakeLastWhile(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestTakeWhile(t *testing.T) {
+	pred1 := func(a c.Any) bool { return a.(Foo).v1 > 0 }
+	pred2 := func(a c.Any) bool { return a.(Foo).v1%2 == 1 }
+	pred3 := func(a c.Any) bool { return a.(Foo).v1 < 0 }
 
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      func(c.Any) bool
+		want     c.SliceAny
+	}{
+		{"TakeWhile: pred matches all", sFoo(), pred1, sFoo()},
+		{"TakeWhile: pred matches some", sFoo(), pred2, SliceFoo([]Foo{{1, "w1"}}).ToSliceAny()},
+		{"TakeWhile: pred matches none", sFoo(), pred3, sEmpty()},
+		{"TakeWhile: empty receiver", sEmpty(), pred2, sEmpty()},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.TakeWhile(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestToSlice(t *testing.T) {
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		want     c.SliceAny
+	}{
+		{"ToSlice: non-empty", sFoo(), sFoo()},
+		{"ToSlice: empty", sEmpty(), []c.Any{}},
+	}
 
+	for _, cs := range cases {
+		got := cs.receiver.ToSlice()
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestZip(t *testing.T) {
+	var shorterOther c.SliceInt = []int{1, 2, 3}
+	var longerOther c.SliceInt = []int{1, 2, 3, 4, 5, 6, 7}
 
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      c.SliceAny
+		want     []c.PairAnyAny
+	}{
+		{"Zip: non-empty receiver, shorter other", sFoo(), shorterOther.ToSliceAny(),
+			[]c.PairAnyAny{{Foo{1, "w1"}, 1}, {Foo{22, "w22"}, 2}, {Foo{333, "w333"}, 3}}},
+		{"Zip: non-empty receiver, longer other", sFoo(), longerOther.ToSliceAny(),
+			[]c.PairAnyAny{{Foo{1, "w1"}, 1}, {Foo{22, "w22"}, 2}, {Foo{333, "w333"}, 3},
+				{Foo{4444, "w4444"}, 4}, {Foo{22, "w22"}, 5}}},
+		{"Zip: non-empty receiver, empty other", sFoo(), sEmpty(), []c.PairAnyAny{}},
+		{"Zip: empty receiver, non-empty other", sEmpty(), sFoo(), []c.PairAnyAny{}},
+		{"Zip: empty receiver, empty other", sEmpty(), sEmpty(), []c.PairAnyAny{}},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.Zip(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }

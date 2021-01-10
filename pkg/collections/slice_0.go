@@ -268,6 +268,7 @@ func (x sortable) Swap(i int, j int)      { x.slice[i], x.slice[j] = x.slice[j],
 
 func (s SliceT0) SortedWith(comparator func(AnyT0, AnyT0) int) SliceT0 {
 	r := make(SliceT0, len(s))
+	copy(r, s)
 	srt := sortable{comparator: comparator, slice: r}
 	sort.Sort(srt)
 	return r
@@ -297,7 +298,7 @@ func (s SliceT0) TakeLastWhile(pred func(AnyT0) bool) SliceT0 {
 
 func (s SliceT0) TakeWhile(pred func(AnyT0) bool) SliceT0 {
 	last := 0
-	for i := 0; i < len(s) && pred(s[i]); i-- {
+	for i := 0; i < len(s) && pred(s[i]); i++ {
 		last = i + 1
 	}
 	return s[:last]

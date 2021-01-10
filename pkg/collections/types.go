@@ -26,8 +26,8 @@ type Slice2T0 [][]AnyT0
 
 // PairT01 defines a pseudo-generic pair.
 type PairT01 struct {
-	x1 AnyT0
-	x2 AnyT1
+	X1 AnyT0
+	X2 AnyT1
 }
 
 // PairAnyAny is a type alias.
