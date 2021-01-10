@@ -505,8 +505,8 @@ func TestGroupBy(t *testing.T) {
 		want     map[c.Any][]c.Any
 	}{
 		{"GroupBy: non-empty receiver", sFoo(), f, map[c.Any][]c.Any{
-			0: []c.Any{Foo{22, "w22"}, Foo{4444, "w4444"}, Foo{22, "w22"}},
-			1: []c.Any{Foo{1, "w1"}, Foo{333, "w333"}},
+			0: {Foo{22, "w22"}, Foo{4444, "w4444"}, Foo{22, "w22"}},
+			1: {Foo{1, "w1"}, Foo{333, "w333"}},
 		}},
 		{"GroupBy: empty receiver", sEmpty(), f, map[c.Any][]c.Any{}},
 	}
@@ -731,19 +731,82 @@ func TestPartition(t *testing.T) {
 }
 
 func TestPlus(t *testing.T) {
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      c.SliceAny
+		want     c.SliceAny
+	}{
+		{"Plus: non-empty + non-empty", sFoo()[:3], sFoo()[3:], sFoo()},
+		{"Plus: non-empty + empty", sFoo()[:3], sEmpty(), sFoo()[:3]},
+		{"Plus: empty + non-empty", sEmpty(), sFoo()[3:], sFoo()[3:]},
+		{"Plus: empty + empty", sEmpty(), sEmpty(), sEmpty()},
+	}
 
+	for _, cs := range cases {
+		got := cs.receiver.Plus(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestPlusElement(t *testing.T) {
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      c.Any
+		want     c.SliceAny
+	}{
+		{"PlusElement: non-empty", sFoo()[:4], sFoo()[4], sFoo()},
+		{"PlusElement: empty", sEmpty(), sFoo()[4], sFoo()[4:5]},
+	}
 
+	for _, cs := range cases {
+		got := cs.receiver.PlusElement(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
-func TestReduceOrNil(t *testing.T) {
+func TestReduce(t *testing.T) {
+	op := func(a1 c.Any, a2 c.Any) c.Any { return Foo{a1.(Foo).v1 + a2.(Foo).v1, a1.(Foo).v2 + a2.(Foo).v2} }
 
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		arg      func(c.Any, c.Any) c.Any
+		want     c.Any
+	}{
+		{"Reduce: receiver length > 1", sFoo(), op, Foo{1 + 22 + 333 + 4444 + 22, "w1w22w333w4444w22"}},
+		{"Reduce: receiver length = 1", sFoo()[2:3], op, sFoo()[2]},
+		{"Reduce: empty receiver", sEmpty(), op, nil},
+	}
+
+	for _, cs := range cases {
+		if !cs.receiver.IsEmpty() {
+			got := cs.receiver.Reduce(cs.arg)
+			assert.Equal(t, cs.want, got, cs.msg)
+		} else {
+			var ptf assert.PanicTestFunc = func() { cs.receiver.Reduce(cs.arg) }
+			assert.Panics(t, ptf, cs.msg)
+		}
+	}
 }
 
 func TestReversed(t *testing.T) {
+	rev := []Foo{{22, "w22"}, {4444, "w4444"}, {333, "w333"}, {22, "w22"}, {1, "w1"}}
 
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+		want     c.SliceAny
+	}{
+		{"Reversed: non-empty slice", sFoo(), SliceFoo(rev).ToSliceAny()},
+		{"Reversed: empty slice", sEmpty(), sEmpty()},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.Reversed()
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
 }
 
 func TestSortedWith(t *testing.T) {

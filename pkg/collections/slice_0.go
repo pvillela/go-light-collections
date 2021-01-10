@@ -165,7 +165,7 @@ func (s SliceT0) IsNotEmpty() bool {
 }
 
 func (s SliceT0) Last() AnyT0 {
-	return s[len(s)]
+	return s[len(s)-1]
 }
 
 // MaxWith returns the first element in the slice with maximum value, using a comparator function.

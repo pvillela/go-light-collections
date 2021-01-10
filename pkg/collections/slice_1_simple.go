@@ -29,10 +29,10 @@ func (s SliceT0) GroupBy(keySelector func(AnyT0) AnyT1) map[AnyT0][]AnyT1 {
 		k := keySelector(x)
 		lst, ok := m[k]
 		if !ok {
-			lst = make(SliceT1, 1)
-			m[k] = lst
+			lst = make(SliceT1, 0, 1)
 		}
 		lst = append(lst, x)
+		m[k] = lst
 	}
 	return m
 }
