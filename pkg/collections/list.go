@@ -1,7 +1,7 @@
 package collections
 
-// List (obviously) defines the methods to be implemented by List implementations.
-type List interface {
+// ListAnyT0 (obviously) defines the methods to be implemented by ListAnyT0 implementations.
+type ListAnyT0 interface {
 	Length() int
 	Contains(elem AnyT0) bool
 	ContainsAll(elems SliceT0) bool
@@ -22,16 +22,16 @@ type List interface {
 	Find(elem AnyT0) AnyT0
 	// // FindLast(elem Any) Any
 	First() AnyT0
-	FlatMap(func(AnyT0) []AnyT1) []AnyT1
+	// FlatMap(func(AnyT0) []AnyT1) []AnyT1
 	// // Flatten -- defined in interface ListOfList
-	Fold(z AnyT1, op func(AnyT1, AnyT0) AnyT1) AnyT1
+	// Fold(z AnyT1, op func(AnyT1, AnyT0) AnyT1) AnyT1
 	ForEach(f func(AnyT0))
-	GroupBy(keySelector func(AnyT0) AnyT1) map[AnyT0][]AnyT1
+	// GroupBy(keySelector func(AnyT0) AnyT1) map[AnyT0][]AnyT1
 	IndexOfFirst(pred func(AnyT0) bool) int
 	IndexOfLast(pred func(AnyT0) bool) int
 	IsNotEmpty() bool
 	Last() AnyT0
-	Map(f func(AnyT0) AnyT1) []AnyT1
+	// Map(f func(AnyT0) AnyT1) []AnyT1
 	MaxWith(comparator func(AnyT0, AnyT0) int) AnyT0
 	Minus(other SliceT0) SliceT0
 	MinusElement(elem AnyT0) SliceT0
@@ -51,28 +51,38 @@ type List interface {
 	TakeWhile(pred func(AnyT0) bool) SliceT0
 	ToSlice() SliceT0
 	// // ToSet() Set
-	Zip(other SliceT1) []PairT01
+	// Zip(other SliceT1) []PairT01
 }
 
-type ListOfList interface {
+type ListAnyT0AnyT1 interface {
+	FlatMapAnyT1(func(AnyT0) []AnyT1) []AnyT1
+	FoldAnyT1(z AnyT1, op func(AnyT1, AnyT0) AnyT1) AnyT1
+	GroupByAnyT1(keySelector func(AnyT0) AnyT1) map[AnyT0][]AnyT1
+	MapAnyT1(f func(AnyT0) AnyT1) []AnyT1
+	ZipAnyT1(other SliceT1) []PairT01
+}
+
+type List2AnyT0 interface {
 	Flatten() SliceT0
 }
 
-type ListOfPair interface {
+type ListOfPairAnyT0AnyT1 interface {
 	ToMap() map[AnyT0]AnyT1
 }
 
 func validateListInterface(s SliceT0) {
-	f := func(itf List) {}
+	f := func(itf ListAnyT0) {}
 	f(s)
+	g := func(itf ListAnyT0AnyT1) {}
+	g(s)
 }
 
 func validateListOfListInterface(s Slice2T0) {
-	f := func(itf ListOfList) {}
+	f := func(itf List2AnyT0) {}
 	f(s)
 }
 
 func validateListOfPairInterface(s SliceTPair01) {
-	f := func(itf ListOfPair) {}
+	f := func(itf ListOfPairAnyT0AnyT1) {}
 	f(s)
 }

@@ -427,53 +427,6 @@ func TestFirst(t *testing.T) {
 	}
 }
 
-func TestFlatMap(t *testing.T) {
-	var sInt c.SliceInt = []int{1, 2, 3}
-	f := func(a c.Any) []c.Any {
-		n := a.(int)
-		s := make([]c.Any, n)
-		for i := range s {
-			s[i] = n
-		}
-		return s
-	}
-
-	cases := []struct {
-		msg      string
-		receiver c.SliceAny
-		arg      func(c.Any) []c.Any
-		want     []c.Any
-	}{
-		{"FlatMap: non-empty receiver", sInt.ToSliceAny(), f, []c.Any{1, 2, 2, 3, 3, 3}},
-		{"FlatMap: empty receiver", sEmpty(), f, []c.Any{}},
-	}
-
-	for _, cs := range cases {
-		got := cs.receiver.FlatMap(cs.arg)
-		assert.Equal(t, cs.want, got, cs.msg)
-	}
-}
-
-func TestFold(t *testing.T) {
-	op := func(z c.Any, a c.Any) c.Any { return z.(int) + a.(Foo).v1 }
-
-	cases := []struct {
-		msg      string
-		receiver c.SliceAny
-		arg1     int
-		arg2     func(z c.Any, a c.Any) c.Any
-		want     c.Any
-	}{
-		{"Fold: non-empty receiver", sFoo(), 1, op, 1 + 1 + 22 + 333 + 4444 + 22},
-		{"Fold: empty receiver", sEmpty(), 42, op, 42},
-	}
-
-	for _, cs := range cases {
-		got := cs.receiver.Fold(cs.arg1, cs.arg2)
-		assert.Equal(t, cs.want, got, cs.msg)
-	}
-}
-
 func TestForEach(t *testing.T) {
 	cases := []struct {
 		msg      string
@@ -491,28 +444,6 @@ func TestForEach(t *testing.T) {
 		}
 
 		cs.receiver.ForEach(f)
-		assert.Equal(t, cs.want, got, cs.msg)
-	}
-}
-
-func TestGroupBy(t *testing.T) {
-	f := func(a c.Any) c.Any { return a.(Foo).v1 % 2 }
-
-	cases := []struct {
-		msg      string
-		receiver c.SliceAny
-		arg      func(c.Any) c.Any
-		want     map[c.Any][]c.Any
-	}{
-		{"GroupBy: non-empty receiver", sFoo(), f, map[c.Any][]c.Any{
-			0: {Foo{22, "w22"}, Foo{4444, "w4444"}, Foo{22, "w22"}},
-			1: {Foo{1, "w1"}, Foo{333, "w333"}},
-		}},
-		{"GroupBy: empty receiver", sEmpty(), f, map[c.Any][]c.Any{}},
-	}
-
-	for _, cs := range cases {
-		got := cs.receiver.GroupBy(cs.arg)
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
@@ -597,25 +528,6 @@ func TestLast(t *testing.T) {
 			var ptf assert.PanicTestFunc = func() { cs.receiver.Last() }
 			assert.Panics(t, ptf, cs.msg)
 		}
-	}
-}
-
-func TestMap(t *testing.T) {
-	f := func(a c.Any) c.Any { return Bar{a.(Foo).v1 + 1, []string{a.(Foo).v2}} }
-
-	cases := []struct {
-		msg      string
-		receiver c.SliceAny
-		arg      func(c.Any) c.Any
-		want     []c.Any
-	}{
-		{"Map: non-empty receiver", sFoo(), f, []c.Any{Bar{2, []string{"w1"}}, Bar{23, []string{"w22"}}, Bar{334, []string{"w333"}}, Bar{4445, []string{"w4444"}}, Bar{23, []string{"w22"}}}},
-		{"Map: empty receiver", sEmpty(), f, []c.Any{}},
-	}
-
-	for _, cs := range cases {
-		got := cs.receiver.Map(cs.arg)
-		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
 
@@ -930,32 +842,6 @@ func TestToSlice(t *testing.T) {
 
 	for _, cs := range cases {
 		got := cs.receiver.ToSlice()
-		assert.Equal(t, cs.want, got, cs.msg)
-	}
-}
-
-func TestZip(t *testing.T) {
-	var shorterOther c.SliceInt = []int{1, 2, 3}
-	var longerOther c.SliceInt = []int{1, 2, 3, 4, 5, 6, 7}
-
-	cases := []struct {
-		msg      string
-		receiver c.SliceAny
-		arg      c.SliceAny
-		want     []c.PairAnyAny
-	}{
-		{"Zip: non-empty receiver, shorter other", sFoo(), shorterOther.ToSliceAny(),
-			[]c.PairAnyAny{{Foo{1, "w1"}, 1}, {Foo{22, "w22"}, 2}, {Foo{333, "w333"}, 3}}},
-		{"Zip: non-empty receiver, longer other", sFoo(), longerOther.ToSliceAny(),
-			[]c.PairAnyAny{{Foo{1, "w1"}, 1}, {Foo{22, "w22"}, 2}, {Foo{333, "w333"}, 3},
-				{Foo{4444, "w4444"}, 4}, {Foo{22, "w22"}, 5}}},
-		{"Zip: non-empty receiver, empty other", sFoo(), sEmpty(), []c.PairAnyAny{}},
-		{"Zip: empty receiver, non-empty other", sEmpty(), sFoo(), []c.PairAnyAny{}},
-		{"Zip: empty receiver, empty other", sEmpty(), sEmpty(), []c.PairAnyAny{}},
-	}
-
-	for _, cs := range cases {
-		got := cs.receiver.Zip(cs.arg)
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }

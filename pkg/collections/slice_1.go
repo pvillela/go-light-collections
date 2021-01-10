@@ -18,6 +18,6 @@ func (s SliceT0) GroupByAnyT1(keySelector func(AnyT0) AnyT1) map[AnyT0][]AnyT1 {
 
 // MapAnyT0AnyT1 returns a new slice resulting from the application of a given function to
 // each element of a given slice.
-func (s SliceT0) MapAnyT0AnyT1(f func(AnyT0) AnyT1) []AnyT1 {
+func (s SliceT0) MapAnyT1(f func(AnyT0) AnyT1) []AnyT1 {
 	return s.Map(f)
 }
