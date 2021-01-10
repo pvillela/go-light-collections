@@ -46,11 +46,11 @@ type ISliceT0 interface {
 }
 
 type ISliceT0T1 interface {
-	FlatMapAnyT1(func(T0) []T1) []T1
-	FoldAnyT1(z T1, op func(T1, T0) T1) T1
-	GroupByAnyT1(keySelector func(T0) T1) map[T0][]T1
-	MapAnyT1(f func(T0) T1) []T1
-	ZipAnyT1(other SliceT1) []PairT0T1
+	FlatMapT1(func(T0) []T1) []T1
+	FoldT1(z T1, op func(T1, T0) T1) T1
+	GroupByT1(keySelector func(T0) T1) map[T0][]T1
+	MapT1(f func(T0) T1) []T1
+	ZipT1(other SliceT1) []PairT0T1
 }
 
 type ISlice2T0 interface {
