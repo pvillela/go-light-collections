@@ -1,4 +1,11 @@
-package collections
+package internal
+
+import . "github.com/pvillela/go-light-collections/pkg/collections"
+
+/////////////////////
+// This file is used to define the intended methods to be implemented by certain
+// SliceX types and to check that the implementations conform to the intention.
+// Nothing here is exported.
 
 // ISliceT0 defines the methods to be implemented by the concrete type SliceT0 that only
 // depend on type T0.
@@ -46,11 +53,11 @@ type ISliceT0 interface {
 }
 
 type ISliceT0T1 interface {
-	FlatMapT1(func(T0) []T1) []T1
+	FlatMapT1(func(T0) SliceT1) SliceT1
 	FoldT1(z T1, op func(T1, T0) T1) T1
-	GroupByT1(keySelector func(T0) T1) map[T0][]T1
-	MapT1(f func(T0) T1) []T1
-	ZipT1(other SliceT1) []PairT0T1
+	GroupByT1(keySelector func(T0) T1) MapT0SliceT1
+	MapT1(f func(T0) T1) SliceT1
+	ZipT1(other SliceT1) SliceOfPairT0T1
 }
 
 type ISlice2T0 interface {
@@ -58,7 +65,7 @@ type ISlice2T0 interface {
 }
 
 type ISliceOfPairT0T1 interface {
-	ToMap() map[T0]T1
+	ToMap() MapT0T1
 }
 
 func validateListInterface(s SliceT0) {

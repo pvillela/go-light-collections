@@ -26,8 +26,8 @@ type SliceFoo []Foo
 func (s SliceFoo) Und() []Foo { return s }
 
 // ToSliceAny converts to SliceAny.
-func (s SliceFoo) ToSliceAny() c.Slice {
-	r := make(c.Slice, len(s))
+func (s SliceFoo) ToSliceAny() c.SliceAny {
+	r := make(c.SliceAny, len(s))
 	for i, x := range s {
 		r[i] = x
 	}
@@ -35,7 +35,7 @@ func (s SliceFoo) ToSliceAny() c.Slice {
 }
 
 // ToSliceFoo is a conversion function.
-func ToSliceFoo(s c.Slice) SliceFoo {
+func ToSliceFoo(s c.SliceAny) SliceFoo {
 	r := make(SliceFoo, len(s))
 	for i, x := range s {
 		r[i] = x.(Foo)
@@ -51,8 +51,8 @@ type SlicePFoo []*Foo
 func (s SlicePFoo) Und() []*Foo { return s }
 
 // ToSliceAny converts to SliceAny.
-func (s SlicePFoo) ToSliceAny() c.Slice {
-	r := make(c.Slice, len(s))
+func (s SlicePFoo) ToSliceAny() c.SliceAny {
+	r := make(c.SliceAny, len(s))
 	for i, x := range s {
 		r[i] = x
 	}
@@ -60,7 +60,7 @@ func (s SlicePFoo) ToSliceAny() c.Slice {
 }
 
 // ToSlicePFoo is a conversion function.
-func ToSlicePFoo(s c.Slice) SlicePFoo {
+func ToSlicePFoo(s c.SliceAny) SlicePFoo {
 	r := make(SlicePFoo, len(s))
 	for i, p := range s {
 		r[i] = p.(*Foo)
@@ -85,8 +85,8 @@ type SliceBar []Bar
 func (s SliceBar) Und() []Bar { return s }
 
 // ToSliceAny converts to SliceAny.
-func (s SliceBar) ToSliceAny() c.Slice {
-	r := make(c.Slice, len(s))
+func (s SliceBar) ToSliceAny() c.SliceAny {
+	r := make(c.SliceAny, len(s))
 	for i, x := range s {
 		r[i] = x
 	}
@@ -94,7 +94,7 @@ func (s SliceBar) ToSliceAny() c.Slice {
 }
 
 // ToSliceBar is a conversion function.
-func ToSliceBar(s c.Slice) SliceBar {
+func ToSliceBar(s c.SliceAny) SliceBar {
 	r := make(SliceBar, len(s))
 	for i, x := range s {
 		r[i] = x.(Bar)
@@ -110,8 +110,8 @@ type SlicePBar []*Bar
 func (s SlicePBar) Und() []*Bar { return s }
 
 // ToSliceAny converts to SliceAny.
-func (s SlicePBar) ToSliceAny() c.Slice {
-	r := make(c.Slice, len(s))
+func (s SlicePBar) ToSliceAny() c.SliceAny {
+	r := make(c.SliceAny, len(s))
 	for i, x := range s {
 		r[i] = x
 	}
@@ -119,7 +119,7 @@ func (s SlicePBar) ToSliceAny() c.Slice {
 }
 
 // ToSlicePBar is a conversion function.
-func ToSlicePBar(s c.Slice) SlicePBar {
+func ToSlicePBar(s c.SliceAny) SlicePBar {
 	r := make(SlicePBar, len(s))
 	for i, p := range s {
 		r[i] = p.(*Bar)
