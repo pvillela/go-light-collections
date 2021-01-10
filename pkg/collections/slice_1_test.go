@@ -20,7 +20,7 @@ func TestFlatMapAnyT1(t *testing.T) {
 
 	cases := []struct {
 		msg      string
-		receiver c.SliceAny
+		receiver c.Slice
 		arg      func(c.Any) []c.Any
 		want     []c.Any
 	}{
@@ -39,7 +39,7 @@ func TestFoldAnyT1(t *testing.T) {
 
 	cases := []struct {
 		msg      string
-		receiver c.SliceAny
+		receiver c.Slice
 		arg1     int
 		arg2     func(z c.Any, a c.Any) c.Any
 		want     c.Any
@@ -59,7 +59,7 @@ func TestGroupByAnyT1(t *testing.T) {
 
 	cases := []struct {
 		msg      string
-		receiver c.SliceAny
+		receiver c.Slice
 		arg      func(c.Any) c.Any
 		want     map[c.Any][]c.Any
 	}{
@@ -81,7 +81,7 @@ func TestMapAnyT1(t *testing.T) {
 
 	cases := []struct {
 		msg      string
-		receiver c.SliceAny
+		receiver c.Slice
 		arg      func(c.Any) c.Any
 		want     []c.Any
 	}{
@@ -101,18 +101,18 @@ func TestZipAnyT1(t *testing.T) {
 
 	cases := []struct {
 		msg      string
-		receiver c.SliceAny
-		arg      c.SliceAny
-		want     []c.PairAnyAny
+		receiver c.Slice
+		arg      c.Slice
+		want     []c.Pair
 	}{
 		{"ZipAnyT1: non-empty receiver, shorter other", sFoo(), shorterOther.ToSliceAny(),
-			[]c.PairAnyAny{{Foo{1, "w1"}, 1}, {Foo{22, "w22"}, 2}, {Foo{333, "w333"}, 3}}},
+			[]c.Pair{{Foo{1, "w1"}, 1}, {Foo{22, "w22"}, 2}, {Foo{333, "w333"}, 3}}},
 		{"ZipAnyT1: non-empty receiver, longer other", sFoo(), longerOther.ToSliceAny(),
-			[]c.PairAnyAny{{Foo{1, "w1"}, 1}, {Foo{22, "w22"}, 2}, {Foo{333, "w333"}, 3},
+			[]c.Pair{{Foo{1, "w1"}, 1}, {Foo{22, "w22"}, 2}, {Foo{333, "w333"}, 3},
 				{Foo{4444, "w4444"}, 4}, {Foo{22, "w22"}, 5}}},
-		{"ZipAnyT1: non-empty receiver, empty other", sFoo(), sEmpty(), []c.PairAnyAny{}},
-		{"ZipAnyT1: empty receiver, non-empty other", sEmpty(), sFoo(), []c.PairAnyAny{}},
-		{"ZipAnyT1: empty receiver, empty other", sEmpty(), sEmpty(), []c.PairAnyAny{}},
+		{"ZipAnyT1: non-empty receiver, empty other", sFoo(), sEmpty(), []c.Pair{}},
+		{"ZipAnyT1: empty receiver, non-empty other", sEmpty(), sFoo(), []c.Pair{}},
+		{"ZipAnyT1: empty receiver, empty other", sEmpty(), sEmpty(), []c.Pair{}},
 	}
 
 	for _, cs := range cases {
