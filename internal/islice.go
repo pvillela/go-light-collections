@@ -52,6 +52,8 @@ type ISliceT0 interface {
 	// ToSet() Set
 }
 
+// ISliceT0T1 defines the methods to be implemented by the concrete type SliceT0 that
+// depend on type T1.
 type ISliceT0T1 interface {
 	FlatMapT1(func(T0) SliceT1) SliceT1
 	FoldT1(z T1, op func(T1, T0) T1) T1
@@ -60,14 +62,17 @@ type ISliceT0T1 interface {
 	ZipT1(other SliceT1) SliceOfPairT0T1
 }
 
+// ISlice2T0 defines the methods to be implemented by the concrete type Slice2T0.
 type ISlice2T0 interface {
 	Flatten() SliceT0
 }
 
+// ISliceOfPairT0T1 defines the methods to be implemented by the concrete type ISliceOfPairT0T1.
 type ISliceOfPairT0T1 interface {
 	ToMap() MapT0T1
 }
 
+// Check that the concrete type satisfies the interfaces.
 func validateListInterface(s SliceT0) {
 	f := func(itf ISliceT0) {}
 	f(s)
@@ -75,11 +80,13 @@ func validateListInterface(s SliceT0) {
 	g(s)
 }
 
+// Check that the concrete type satisfies the interface.
 func validateListOfListInterface(s Slice2T0) {
 	f := func(itf ISlice2T0) {}
 	f(s)
 }
 
+// Check that the concrete type satisfies the interface.
 func validateListOfPairInterface(s SliceOfPairT0T1) {
 	f := func(itf ISliceOfPairT0T1) {}
 	f(s)
