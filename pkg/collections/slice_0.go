@@ -66,17 +66,14 @@ func (s SliceT0) Any(pred func(T0) bool) bool {
 	return false
 }
 
-func countOp(pred func(T0) bool) func(T1, T0) T1 {
-	return func(n T1, a T0) T1 {
-		if pred(a) {
-			return n.(int) + 1
-		}
-		return n.(int)
-	}
-}
-
 func (s SliceT0) Count(pred func(T0) bool) int {
-	return s.Fold(0, countOp(pred)).(int)
+	count := 0
+	for _, x := range s {
+		if pred(x) {
+			count++
+		}
+	}
+	return count
 }
 
 func (s SliceT0) Drop(n int) SliceT0 {
@@ -231,12 +228,6 @@ func (s SliceT0) PlusElement(elem T0) SliceT0 {
 	return append(s, elem)
 }
 
-// fold0 is used to support Reduce
-func (s SliceT0) fold0(z T0, op0 func(T0, T0) T0) T0 {
-	op := func(a1 T1, a0 T0) T1 { return op0(a1.(T0), a0) }
-	return s.Fold(z.(T1), op)
-}
-
 // Reduce returns the accumulated value obtained by applying the operation op to the first
 // two elements of the given slice, then applying op to the result of the first
 // operation and the third element of the given slice, and so on.
@@ -245,7 +236,11 @@ func (s SliceT0) fold0(z T0, op0 func(T0, T0) T0) T0 {
 // the fold is executed on the original slice minus the first element.
 // Panics if the slice is empty.
 func (s SliceT0) Reduce(op func(T0, T0) T0) T0 {
-	return s.Drop(1).fold0(s[0], op)
+	z := s[0]
+	for i := 1; i < len(s); i++ {
+		z = op(z, s[i])
+	}
+	return z
 }
 
 func (s SliceT0) Reversed() SliceT0 {

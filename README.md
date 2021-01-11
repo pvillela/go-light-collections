@@ -16,7 +16,6 @@ See the package Godocs for additional details.
     -   Mention code generation option
     -   Describe type name convention to support code generation
 *   Add missing godoc comments
-*   Add tests for all List methods
 *   Add Map methods
 *   Add Set methods
 *   Update code generation example
