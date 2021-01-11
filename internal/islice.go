@@ -1,79 +1,79 @@
 package internal
 
-import . "github.com/pvillela/go-light-collections/pkg/collections"
+import c "github.com/pvillela/go-light-collections/pkg/collections"
 
 /////////////////////
 // This file is used to define the intended methods to be implemented by certain
 // SliceX types and to check that the implementations conform to the intention.
 // Nothing here is exported.
 
-// ISliceT0 defines the methods to be implemented by the concrete type SliceT0 that only
-// depend on type T0.
+// ISliceT0 defines the methods to be implemented by the concrete type c.SliceT0 that only
+// depend on type c.T0.
 type ISliceT0 interface {
 	Length() int
-	Contains(elem T0) bool
-	ContainsAll(elems SliceT0) bool
-	Get(index int) T0
-	IndexOf(elem T0) int
+	Contains(elem c.T0) bool
+	ContainsAll(elems c.SliceT0) bool
+	Get(index int) c.T0
+	IndexOf(elem c.T0) int
 	IsEmpty() bool
-	LastIndexOf(elem T0) int
-	SubSlice(fromIndex int, toIndex int) SliceT0
-	All(pred func(T0) bool) bool
-	Any(pred func(T0) bool) bool
-	Count(pred func(T0) bool) int
-	Drop(n int) SliceT0
-	DropLast(n int) SliceT0
-	DropLastWhile(pred func(T0) bool) SliceT0
-	DropWhile(pred func(T0) bool) SliceT0
-	Filter(pred func(T0) bool) SliceT0
-	FilterNot(pred func(T0) bool) SliceT0
-	Find(elem T0) T0
-	First() T0
-	ForEach(f func(T0))
-	IndexOfFirst(pred func(T0) bool) int
-	IndexOfLast(pred func(T0) bool) int
+	LastIndexOf(elem c.T0) int
+	SubSlice(fromIndex int, toIndex int) c.SliceT0
+	All(pred func(c.T0) bool) bool
+	Any(pred func(c.T0) bool) bool
+	Count(pred func(c.T0) bool) int
+	Drop(n int) c.SliceT0
+	DropLast(n int) c.SliceT0
+	DropLastWhile(pred func(c.T0) bool) c.SliceT0
+	DropWhile(pred func(c.T0) bool) c.SliceT0
+	Filter(pred func(c.T0) bool) c.SliceT0
+	FilterNot(pred func(c.T0) bool) c.SliceT0
+	Find(elem c.T0) c.T0
+	First() c.T0
+	ForEach(f func(c.T0))
+	IndexOfFirst(pred func(c.T0) bool) int
+	IndexOfLast(pred func(c.T0) bool) int
 	IsNotEmpty() bool
-	Last() T0
-	MaxWith(comparator func(T0, T0) int) T0
-	Minus(other SliceT0) SliceT0
-	MinusElement(elem T0) SliceT0
-	MinWith(comparator func(T0, T0) int) T0
-	Partition(pred func(T0) bool) (SliceT0, SliceT0)
-	Plus(other SliceT0) SliceT0
-	PlusElement(elem T0) SliceT0
-	Reduce(op func(T0, T0) T0) T0
-	Reversed() SliceT0
-	SortedWith(comparator func(T0, T0) int) SliceT0
-	Take(n int) SliceT0
-	TakeLast(n int) SliceT0
-	TakeLastWhile(pred func(T0) bool) SliceT0
-	TakeWhile(pred func(T0) bool) SliceT0
-	ToSlice() SliceT0
+	Last() c.T0
+	MaxWith(comparator func(c.T0, c.T0) int) c.T0
+	Minus(other c.SliceT0) c.SliceT0
+	MinusElement(elem c.T0) c.SliceT0
+	MinWith(comparator func(c.T0, c.T0) int) c.T0
+	Partition(pred func(c.T0) bool) (c.SliceT0, c.SliceT0)
+	Plus(other c.SliceT0) c.SliceT0
+	PlusElement(elem c.T0) c.SliceT0
+	Reduce(op func(c.T0, c.T0) c.T0) c.T0
+	Reversed() c.SliceT0
+	SortedWith(comparator func(c.T0, c.T0) int) c.SliceT0
+	Take(n int) c.SliceT0
+	TakeLast(n int) c.SliceT0
+	TakeLastWhile(pred func(c.T0) bool) c.SliceT0
+	TakeWhile(pred func(c.T0) bool) c.SliceT0
+	ToSlice() c.SliceT0
 	// ToSet() Set
 }
 
-// ISliceT0T1 defines the methods to be implemented by the concrete type SliceT0 that
+// ISliceT0T1 defines the methods to be implemented by the concrete type c.SliceT0 that
 // depend on type T1.
 type ISliceT0T1 interface {
-	FlatMapT1(func(T0) SliceT1) SliceT1
-	FoldT1(z T1, op func(T1, T0) T1) T1
-	GroupByT1(keySelector func(T0) T1) MapT0SliceT1
-	MapT1(f func(T0) T1) SliceT1
-	ZipT1(other SliceT1) SliceOfPairT0T1
+	FlatMapT1(func(c.T0) c.SliceT1) c.SliceT1
+	FoldT1(z c.T1, op func(c.T1, c.T0) c.T1) c.T1
+	GroupByT1(keySelector func(c.T0) c.T1) c.MapT0SliceT1
+	MapT1(f func(c.T0) c.T1) c.SliceT1
+	ZipT1(other c.SliceT1) c.SliceOfPairT0T1
 }
 
 // ISlice2T0 defines the methods to be implemented by the concrete type Slice2T0.
 type ISlice2T0 interface {
-	Flatten() SliceT0
+	Flatten() c.SliceT0
 }
 
 // ISliceOfPairT0T1 defines the methods to be implemented by the concrete type ISliceOfPairT0T1.
 type ISliceOfPairT0T1 interface {
-	ToMap() MapT0T1
+	ToMap() c.MapT0T1
 }
 
 // Check that the concrete type satisfies the interfaces.
-func validateListInterface(s SliceT0) {
+func validateListInterface(s c.SliceT0) {
 	f := func(itf ISliceT0) {}
 	f(s)
 	g := func(itf ISliceT0T1) {}
@@ -81,13 +81,13 @@ func validateListInterface(s SliceT0) {
 }
 
 // Check that the concrete type satisfies the interface.
-func validateListOfListInterface(s Slice2T0) {
+func validateListOfListInterface(s c.Slice2T0) {
 	f := func(itf ISlice2T0) {}
 	f(s)
 }
 
 // Check that the concrete type satisfies the interface.
-func validateListOfPairInterface(s SliceOfPairT0T1) {
+func validateListOfPairInterface(s c.SliceOfPairT0T1) {
 	f := func(itf ISliceOfPairT0T1) {}
 	f(s)
 }
