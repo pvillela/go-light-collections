@@ -30,7 +30,7 @@ func example_SliceFoo_MapInt() {
 	rslt := xin.MapInt(f)
 
 	want := []int{3, 25, 337}
-	assert.Equal(rslt, want)
+	assert.Equal(want, rslt)
 }
 
 // Definition and use of specific map function from Foo to Bar.
@@ -47,7 +47,7 @@ func example_SliceFoo_MapBar() {
 	rslt := xin.MapBar(f)
 
 	want := []Bar{{2, []string{"w1"}}, {23, []string{"w22"}}, {334, []string{"w333"}}}
-	assert.Equal(rslt, want)
+	assert.Equal(want, rslt)
 }
 
 // Definition and use of specific map function from *Foo to *Bar.
@@ -66,7 +66,7 @@ func example_SlicePFoo_MapPBar() {
 	rsltV := SlicePBar(rslt).toV()
 
 	want := []Bar{{2, []string{"w1"}}, {23, []string{"w22"}}, {334, []string{"w333"}}}
-	assert.Equal(rsltV, want)
+	assert.Equal(want, rsltV)
 }
 
 // Definition and use of specific filter function.
@@ -83,7 +83,7 @@ func example_SliceFoo_Filter() {
 	rslt := xin.Filter(pred)
 
 	var want SliceFoo = []Foo{{1, "w1"}, {333, "w333"}}
-	assert.Equal(rslt, want)
+	assert.Equal(want, rslt)
 }
 
 // Definition and use of specific fold function.
@@ -100,7 +100,7 @@ func example_SliceFoo_FoldInt() {
 	rslt := xin.FoldInt(0, op)
 
 	want := 356
-	assert.Equal(rslt, want)
+	assert.Equal(want, rslt)
 }
 
 // Run example.
