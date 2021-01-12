@@ -13,7 +13,7 @@ type ISliceT0 interface {
 	Length() int
 	Contains(elem c.T0) bool
 	ContainsAll(elems c.SliceT0) bool
-	Get(index int) c.T0
+	Get(index int) (c.T0, bool)
 	IndexOf(elem c.T0) int
 	IsEmpty() bool
 	LastIndexOf(elem c.T0) int
@@ -28,20 +28,20 @@ type ISliceT0 interface {
 	Filter(pred func(c.T0) bool) c.SliceT0
 	FilterNot(pred func(c.T0) bool) c.SliceT0
 	Find(elem c.T0) c.T0
-	First() c.T0
+	First() (c.T0, error)
 	ForEach(f func(c.T0))
 	IndexOfFirst(pred func(c.T0) bool) int
 	IndexOfLast(pred func(c.T0) bool) int
 	IsNotEmpty() bool
-	Last() c.T0
-	MaxWith(comparator func(c.T0, c.T0) int) c.T0
+	Last() (c.T0, error)
+	MaxWith(comparator func(c.T0, c.T0) int) (c.T0, error)
 	Minus(other c.SliceT0) c.SliceT0
 	MinusElement(elem c.T0) c.SliceT0
-	MinWith(comparator func(c.T0, c.T0) int) c.T0
+	MinWith(comparator func(c.T0, c.T0) int) (c.T0, error)
 	Partition(pred func(c.T0) bool) (c.SliceT0, c.SliceT0)
 	Plus(other c.SliceT0) c.SliceT0
 	PlusElement(elem c.T0) c.SliceT0
-	Reduce(op func(c.T0, c.T0) c.T0) c.T0
+	Reduce(op func(c.T0, c.T0) c.T0) (c.T0, error)
 	Reversed() c.SliceT0
 	SortedWith(comparator func(c.T0, c.T0) int) c.SliceT0
 	Take(n int) c.SliceT0

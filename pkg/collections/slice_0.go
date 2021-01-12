@@ -1,6 +1,7 @@
 package collections
 
 import (
+	"errors"
 	"reflect"
 	"sort"
 )
@@ -26,8 +27,12 @@ func (s SliceT0) ContainsAll(elems SliceT0) bool {
 	return true
 }
 
-func (s SliceT0) Get(index int) T0 {
-	return s[index]
+func (s SliceT0) Get(index int) (T0, bool) {
+	if 0 <= index && index < len(s) {
+		return s[index], true
+	}
+	var zero T0
+	return zero, false
 }
 
 func (s SliceT0) IndexOf(elem T0) int {
@@ -129,8 +134,12 @@ func (s SliceT0) Find(elem T0) T0 {
 	return nil
 }
 
-func (s SliceT0) First() T0 {
-	return s[0]
+func (s SliceT0) First() (T0, error) {
+	if len(s) == 0 {
+		var zero T0
+		return zero, errors.New("Empty slice.")
+	}
+	return s[0], nil
 }
 
 func (s SliceT0) ForEach(f func(T0)) {
@@ -161,20 +170,29 @@ func (s SliceT0) IsNotEmpty() bool {
 	return !s.IsEmpty()
 }
 
-func (s SliceT0) Last() T0 {
-	return s[len(s)-1]
+func (s SliceT0) Last() (T0, error) {
+	if len(s) == 0 {
+		var zero T0
+		return zero, errors.New("Empty slice.")
+	}
+	return s[len(s)-1], nil
 }
 
-// MaxWith returns the first element in the slice with maximum value, using a comparator function.
-// Panics if the slice is empty.
-func (s SliceT0) MaxWith(comparator func(T0, T0) int) T0 {
+// MaxWith uses a comparator function to determine the maximum value. If the slice is
+// non-empty, returns the first element in the slice with maximum value.
+// Otherwise, returns an error.
+func (s SliceT0) MaxWith(comparator func(T0, T0) int) (T0, error) {
+	if len(s) == 0 {
+		var zero T0
+		return zero, errors.New("Empty slice.")
+	}
 	max := s[0]
 	for i := 1; i < len(s); i++ {
 		if comparator(max, s[i]) < 0 {
 			max = s[i]
 		}
 	}
-	return max
+	return max, nil
 }
 
 func (s SliceT0) minusAllElement(elem T0) SliceT0 {
@@ -200,9 +218,10 @@ func (s SliceT0) MinusElement(elem T0) SliceT0 {
 	return append(s[:index], s[index+1:]...)
 }
 
-// MinWith returns the first element in the slice with minimum value, using a comparator function.
-// Panics if the slice is empty.
-func (s SliceT0) MinWith(comparator func(T0, T0) int) T0 {
+// MinWith uses a comparator function to determine the maximum value. If the slice is
+// non-empty, returns the first element in the slice with minimum value.
+// Returns an error is the slice is empty.
+func (s SliceT0) MinWith(comparator func(T0, T0) int) (T0, error) {
 	reverseComp := func(a1 T0, a2 T0) int { return -comparator(a1, a2) }
 	return s.MaxWith(reverseComp)
 }
@@ -234,13 +253,17 @@ func (s SliceT0) PlusElement(elem T0) SliceT0 {
 // If the slice has length 1, returns the only element in the slice.
 // It is a special case of Fold where the z value is the first element of the receiver and
 // the fold is executed on the original slice minus the first element.
-// Panics if the slice is empty.
-func (s SliceT0) Reduce(op func(T0, T0) T0) T0 {
+// If the slice is empty, returns an error.
+func (s SliceT0) Reduce(op func(T0, T0) T0) (T0, error) {
+	if len(s) == 0 {
+		var zero T0
+		return zero, errors.New("Empty slice.")
+	}
 	z := s[0]
 	for i := 1; i < len(s); i++ {
 		z = op(z, s[i])
 	}
-	return z
+	return z, nil
 }
 
 func (s SliceT0) Reversed() SliceT0 {
