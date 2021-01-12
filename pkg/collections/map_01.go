@@ -2,6 +2,18 @@ package collections
 
 import "errors"
 
+func (m MapT0T1) Copy() MapT0T1 {
+	if m == nil {
+		var zero MapT0T1
+		return zero
+	}
+	m1 := make(MapT0T1)
+	for k, v := range m {
+		m1[k] = v
+	}
+	return m1
+}
+
 func (m MapT0T1) Entries() SetOfPairT0T1 {
 	entries := map[PairT0T1]bool{}
 	for k, v := range m {
@@ -141,7 +153,7 @@ func (m MapT0T1) IsNotEmpty() bool {
 func (m MapT0T1) MaxWith(comparator func(PairT0T1, PairT0T1) int) (PairT0T1, error) {
 	var max PairT0T1
 	if len(m) == 0 {
-		return max, errors.New("Empty map.")
+		return max, errors.New("empty map")
 	}
 	for k, v := range m {
 		if pair := (PairT0T1{k, v}); comparator(max, pair) < 0 {
@@ -151,30 +163,59 @@ func (m MapT0T1) MaxWith(comparator func(PairT0T1, PairT0T1) int) (PairT0T1, err
 	return max, nil
 }
 
-func (m MapT0T1) MinusKey(T0) MapT0T1 {
-
+// MinusKey returns a new MapT0T1 without the entry associated with the given key. If the
+// key is not in the receiver then it returns a copy of the receiver.
+func (m MapT0T1) MinusKey(k T0) MapT0T1 {
+	m1 := m.Copy()
+	delete(m1, k)
+	return m1
 }
 
-func (m MapT0T1) Minus(SliceT0) MapT0T1 {
-
+func (m MapT0T1) MinusKeys(s SliceT0) MapT0T1 {
+	m1 := m.Copy()
+	for _, k := range s {
+		delete(m1, k)
+	}
+	return m1
 }
 
-func (m MapT0T1) MinWith(func(PairT0T1) int) MapT0T1 {
-
+func (m MapT0T1) MinWith(comparator func(PairT0T1, PairT0T1) int) (PairT0T1, error) {
+	var min PairT0T1
+	if len(m) == 0 {
+		return min, errors.New("empty map")
+	}
+	for k, v := range m {
+		if pair := (PairT0T1{k, v}); comparator(min, pair) > 0 {
+			min = pair
+		}
+	}
+	return min, nil
 }
 
-func (m MapT0T1) PlusEntry(PairT0T1) MapT0T1 {
-
+func (m MapT0T1) PlusEntry(entry PairT0T1) MapT0T1 {
+	m1 := m.Copy()
+	m1[entry.X1] = entry.X2
+	return m1
 }
 
-func (m MapT0T1) Plus(MapT0T1) MapT0T1 {
-
+func (m MapT0T1) Plus(other MapT0T1) MapT0T1 {
+	m1 := m.Copy()
+	for k, v := range other {
+		m1[k] = v
+	}
+	return m1
 }
 
-func (m MapT0T1) PlusSlice(SliceOfPairT0T1) MapT0T1 {
-
+func (m MapT0T1) PlusSlice(s SliceOfPairT0T1) MapT0T1 {
+	m1 := m.Copy()
+	for _, pair := range s {
+		m1[pair.X1] = pair.X2
+	}
+	return m1
 }
 
-func (m MapT0T1) Put(k T0, v T0) {
-
+func (m MapT0T1) Add(k T0, v T1) MapT0T1 {
+	m1 := m.Copy()
+	m1[k] = v
+	return m1
 }

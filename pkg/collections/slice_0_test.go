@@ -1,6 +1,7 @@
 package collections_test
 
 import (
+	"errors"
 	"testing"
 
 	c "github.com/pvillela/go-light-collections/pkg/collections"
@@ -32,6 +33,23 @@ func sInt() c.SliceAny {
 
 ////
 // Tests
+
+func TestSliceCopy(t *testing.T) {
+	cases := []struct {
+		msg      string
+		receiver c.SliceAny
+	}{
+		{"Copy: non-empty slice", sFoo()},
+		{"Copy: empty slice", sEmpty()},
+		{"Copy: nil slice", nil},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.Copy()
+		assert.Equal(t, cs.receiver, got, cs.msg)
+		assert.True(t, &cs.receiver != &got, cs.msg)
+	}
+}
 
 func TestLength(t *testing.T) {
 	cases := []struct {
@@ -93,21 +111,19 @@ func TestGet(t *testing.T) {
 		receiver c.SliceAny
 		arg      int
 		want     c.Any
+		wok      bool
 	}{
-		{"Get: from middle", sFoo(), 2, sFoo()[2]},
-		{"Get: from beginning", sFoo(), 0, sFoo()[0]},
-		{"Get: from end", sFoo(), size - 1, sFoo()[size-1]},
-		{"Get: empty slice", sEmpty(), 0, nil},
+		{"Get: from middle", sFoo(), 2, sFoo()[2], true},
+		{"Get: from beginning", sFoo(), 0, sFoo()[0], true},
+		{"Get: from end", sFoo(), size - 1, sFoo()[size-1], true},
+		{"Get: outside range", sFoo(), size, nil, false},
+		{"Get: empty slice", sEmpty(), 0, nil, false},
 	}
 
 	for _, cs := range cases {
-		if !cs.receiver.IsEmpty() {
-			got := cs.receiver.Get(cs.arg)
-			assert.Equal(t, cs.want, got, cs.msg)
-		} else {
-			var ptf assert.PanicTestFunc = func() { cs.receiver.Get(cs.arg) }
-			assert.Panics(t, ptf, cs.msg)
-		}
+		got, ok := cs.receiver.Get(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+		assert.Equal(t, cs.wok, ok, cs.msg)
 	}
 }
 
@@ -388,42 +404,21 @@ func TestFilterNot(t *testing.T) {
 	}
 }
 
-func TestFind(t *testing.T) {
-	cases := []struct {
-		msg      string
-		receiver c.SliceAny
-		arg      c.Any
-		want     c.Any
-	}{
-		{"Find: present", sFoo(), Foo{22, "w22"}, Foo{22, "w22"}},
-		{"Find: absent", sFoo(), Foo{22, "xyz"}, nil},
-		{"Find: empty receiver", sEmpty(), Foo{22, "w222"}, nil},
-	}
-
-	for _, cs := range cases {
-		got := cs.receiver.Find(cs.arg)
-		assert.Equal(t, cs.want, got, cs.msg)
-	}
-}
-
 func TestFirst(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver c.SliceAny
 		want     c.Any
+		werr     error
 	}{
-		{"First: non-empty", sFoo(), Foo{1, "w1"}},
-		{"First: empty", sEmpty(), nil},
+		{"First: non-empty", sFoo(), Foo{1, "w1"}, nil},
+		{"First: empty", sEmpty(), nil, errors.New("empty slice")},
 	}
 
 	for _, cs := range cases {
-		if !cs.receiver.IsEmpty() {
-			got := cs.receiver.First()
-			assert.Equal(t, cs.want, got, cs.msg)
-		} else {
-			var ptf assert.PanicTestFunc = func() { cs.receiver.First() }
-			assert.Panics(t, ptf, cs.msg)
-		}
+		got, err := cs.receiver.First()
+		assert.Equal(t, cs.want, got, cs.msg)
+		assert.Equal(t, cs.werr, err, cs.msg)
 	}
 }
 
@@ -515,19 +510,16 @@ func TestLast(t *testing.T) {
 		msg      string
 		receiver c.SliceAny
 		want     c.Any
+		werr     error
 	}{
-		{"Last: non-empty", sFoo(), Foo{22, "w22"}},
-		{"Last: empty", sEmpty(), nil},
+		{"Last: non-empty", sFoo(), Foo{22, "w22"}, nil},
+		{"Last: empty", sEmpty(), nil, errors.New("empty slice")},
 	}
 
 	for _, cs := range cases {
-		if !cs.receiver.IsEmpty() {
-			got := cs.receiver.Last()
-			assert.Equal(t, cs.want, got, cs.msg)
-		} else {
-			var ptf assert.PanicTestFunc = func() { cs.receiver.Last() }
-			assert.Panics(t, ptf, cs.msg)
-		}
+		got, err := cs.receiver.Last()
+		assert.Equal(t, cs.want, got, cs.msg)
+		assert.Equal(t, cs.werr, err, cs.msg)
 	}
 }
 
@@ -539,19 +531,16 @@ func TestMaxWith(t *testing.T) {
 		receiver c.SliceAny
 		arg      func(c.Any, c.Any) int
 		want     c.Any
+		werr     error
 	}{
-		{"MaxWith: non-empty receiver", sFoo(), comp, Foo{4444, "w4444"}},
-		{"MaxWith: empty receiver", sEmpty(), comp, nil},
+		{"MaxWith: non-empty receiver", sFoo(), comp, Foo{4444, "w4444"}, nil},
+		{"MaxWith: empty receiver", sEmpty(), comp, nil, errors.New("empty slice")},
 	}
 
 	for _, cs := range cases {
-		if !cs.receiver.IsEmpty() {
-			got := cs.receiver.MaxWith(cs.arg)
-			assert.Equal(t, cs.want, got, cs.msg)
-		} else {
-			var ptf assert.PanicTestFunc = func() { cs.receiver.MaxWith(cs.arg) }
-			assert.Panics(t, ptf, cs.msg)
-		}
+		got, err := cs.receiver.MaxWith(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+		assert.Equal(t, cs.werr, err, cs.msg)
 	}
 }
 
@@ -601,19 +590,16 @@ func TestMinWith(t *testing.T) {
 		receiver c.SliceAny
 		arg      func(c.Any, c.Any) int
 		want     c.Any
+		werr     error
 	}{
-		{"MinWith: non-empty receiver", sFoo(), comp, Foo{4444, "w4444"}},
-		{"MinWith: empty receiver", sEmpty(), comp, nil},
+		{"MinWith: non-empty receiver", sFoo(), comp, Foo{4444, "w4444"}, nil},
+		{"MinWith: empty receiver", sEmpty(), comp, nil, errors.New("empty slice")},
 	}
 
 	for _, cs := range cases {
-		if !cs.receiver.IsEmpty() {
-			got := cs.receiver.MinWith(cs.arg)
-			assert.Equal(t, cs.want, got, cs.msg)
-		} else {
-			var ptf assert.PanicTestFunc = func() { cs.receiver.MinWith(cs.arg) }
-			assert.Panics(t, ptf, cs.msg)
-		}
+		got, err := cs.receiver.MinWith(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+		assert.Equal(t, cs.werr, err, cs.msg)
 	}
 }
 
@@ -686,20 +672,18 @@ func TestReduce(t *testing.T) {
 		receiver c.SliceAny
 		arg      func(c.Any, c.Any) c.Any
 		want     c.Any
+		werr     error
 	}{
-		{"Reduce: receiver length > 1", sFoo(), op, Foo{1 + 22 + 333 + 4444 + 22, "w1w22w333w4444w22"}},
-		{"Reduce: receiver length = 1", sFoo()[2:3], op, sFoo()[2]},
-		{"Reduce: empty receiver", sEmpty(), op, nil},
+		{"Reduce: receiver length > 1", sFoo(), op,
+			Foo{1 + 22 + 333 + 4444 + 22, "w1w22w333w4444w22"}, nil},
+		{"Reduce: receiver length = 1", sFoo()[2:3], op, sFoo()[2], nil},
+		{"Reduce: empty receiver", sEmpty(), op, nil, errors.New("empty slice")},
 	}
 
 	for _, cs := range cases {
-		if !cs.receiver.IsEmpty() {
-			got := cs.receiver.Reduce(cs.arg)
-			assert.Equal(t, cs.want, got, cs.msg)
-		} else {
-			var ptf assert.PanicTestFunc = func() { cs.receiver.Reduce(cs.arg) }
-			assert.Panics(t, ptf, cs.msg)
-		}
+		got, err := cs.receiver.Reduce(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+		assert.Equal(t, cs.werr, err, cs.msg)
 	}
 }
 

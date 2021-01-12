@@ -10,13 +10,14 @@ import c "github.com/pvillela/go-light-collections/pkg/collections"
 // IMapT0T1 defines the methods to be implemented by the concrete type c.MapT0T1 that only
 // depend on types c.T0 and c.T1.
 type IMapT0T1 interface {
+	Copy() c.MapT0T1
 	Entries() c.SetOfPairT0T1
 	Keys() c.SetT0
 	Count() int
 	Values() c.SetT0
 	ContainsKey(c.T0) bool
 	ContainsValue(c.T1) bool
-	Get(k c.T0) c.T1
+	Get(k c.T0) (c.T1, bool)
 	IsEmpty() bool
 	All(func(c.PairT0T1) bool) bool
 	Any(func(c.PairT0T1) bool) bool
@@ -28,14 +29,14 @@ type IMapT0T1 interface {
 	ForEach(func(c.PairT0T1))
 	GetOrElse(c.T0, func() c.T1) c.T1
 	IsNotEmpty() bool
-	MaxWith(func(c.PairT0T1) int) c.PairT0T1
+	MaxWith(func(c.PairT0T1, c.PairT0T1) int) (c.PairT0T1, error)
 	MinusKey(c.T0) c.MapT0T1
-	Minus(c.SliceT0) c.MapT0T1
-	MinWith(func(c.PairT0T1) int) c.PairT0T1
+	MinusKeys(c.SliceT0) c.MapT0T1
+	MinWith(func(c.PairT0T1, c.PairT0T1) int) (c.PairT0T1, error)
 	PlusEntry(c.PairT0T1) c.MapT0T1
 	Plus(c.MapT0T1) c.MapT0T1
 	PlusSlice(c.SliceOfPairT0T1) c.MapT0T1
-	Put(k c.T0, v c.T0)
+	Add(k c.T0, v c.T1) c.MapT0T1
 }
 
 // IMapT0T1T2 defines the methods to be implemented by the concrete type c.MapT0T1 that also
@@ -45,4 +46,12 @@ type IMapT0T1T2 interface {
 	Map(func(c.PairT0T1) c.T2) c.SliceT2
 	MapKeys(func(c.T0) c.T2) c.MapT2T1
 	MapValues(func(c.T1) c.T2) c.MapT0T2
+}
+
+// Check that the concrete type satisfies the interfaces.
+func validateMapInterface(m c.MapT0T1) {
+	f := func(itf IMapT0T1) {}
+	f(m)
+	// g := func(itf IMapT0T1T2) {}
+	// g(m)
 }

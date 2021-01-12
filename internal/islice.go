@@ -10,6 +10,7 @@ import c "github.com/pvillela/go-light-collections/pkg/collections"
 // ISliceT0 defines the methods to be implemented by the concrete type c.SliceT0 that only
 // depend on type c.T0.
 type ISliceT0 interface {
+	Copy() c.SliceT0
 	Length() int
 	Contains(elem c.T0) bool
 	ContainsAll(elems c.SliceT0) bool
@@ -27,7 +28,6 @@ type ISliceT0 interface {
 	DropWhile(pred func(c.T0) bool) c.SliceT0
 	Filter(pred func(c.T0) bool) c.SliceT0
 	FilterNot(pred func(c.T0) bool) c.SliceT0
-	Find(elem c.T0) c.T0
 	First() (c.T0, error)
 	ForEach(f func(c.T0))
 	IndexOfFirst(pred func(c.T0) bool) int

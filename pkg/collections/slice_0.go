@@ -9,6 +9,17 @@ import (
 /////////////////////
 // Methods
 
+// Copy returns a copy fo the receiver.
+func (s SliceT0) Copy() SliceT0 {
+	if s == nil {
+		var zero SliceT0
+		return zero
+	}
+	s1 := make(SliceT0, len(s))
+	copy(s1, s)
+	return s1
+}
+
 func (s SliceT0) Length() int {
 	return len(s)
 }
@@ -27,6 +38,9 @@ func (s SliceT0) ContainsAll(elems SliceT0) bool {
 	return true
 }
 
+// Get returns the element at the specified index and true if index is within the bounds of
+// the slice.
+// Returns the T0 zero value and false if the index is outside the bounds of the slice.
 func (s SliceT0) Get(index int) (T0, bool) {
 	if 0 <= index && index < len(s) {
 		return s[index], true
@@ -49,8 +63,10 @@ func (s SliceT0) LastIndexOf(elem T0) int {
 	return s.IndexOfLast(pred)
 }
 
+// SubSlice returns a copy of the sub-slice of the receiver for the index arguments.
+// Panics if the index arguments do not form a valid sub-slice.
 func (s SliceT0) SubSlice(fromIndex int, toIndex int) SliceT0 {
-	return s[fromIndex:toIndex]
+	return s[fromIndex:toIndex].Copy()
 }
 
 func (s SliceT0) All(pred func(T0) bool) bool {
@@ -81,38 +97,46 @@ func (s SliceT0) Count(pred func(T0) bool) int {
 	return count
 }
 
+// Drop returns a copy of the receiver with the first n elements removed.  If n is greater
+// than the length of the receiver then the empty slice is returned.
 func (s SliceT0) Drop(n int) SliceT0 {
 	if n > len(s) {
-		return s[:0]
+		return s[:0].Copy()
 	}
-	return s[n:]
+	return s[n:].Copy()
 }
 
+// DropLast returns a copy of the receiver with the last n elements removed.  If n is greater
+// than the length of the receiver then the empty slice is returned.
 func (s SliceT0) DropLast(n int) SliceT0 {
 	if n > len(s) {
-		return s[:0]
+		return s[:0].Copy()
 	}
-	return s[:len(s)-n]
+	return s[:len(s)-n].Copy()
 }
 
+// DropLastWhile returns a copy of the receiver minus all the contiguous elements at the
+// end of the slice that satisfy the predicate.
 func (s SliceT0) DropLastWhile(pred func(T0) bool) SliceT0 {
 	last := len(s)
 	for i := len(s) - 1; i >= 0 && pred(s[i]); i-- {
 		last = i
 	}
-	return s[:last]
+	return s[:last].Copy()
 }
 
+// DropWhile returns a copy of the receiver minus all the contiguous elements at the
+// beginning of the slice that satisfy the predicate.
 func (s SliceT0) DropWhile(pred func(T0) bool) SliceT0 {
 	first := 0
 	for i := 0; i < len(s) && pred(s[i]); i++ {
 		first = i + 1
 	}
-	return s[first:]
+	return s[first:].Copy()
 }
 
-// Filter returns a new slice containing only the elements in the given slice for which
-// the application of the function pred returns true.
+// Filter returns a new slice containing only the elements in the receiver that
+// satisfy the predicate.
 func (s SliceT0) Filter(pred func(T0) bool) SliceT0 {
 	output := make(SliceT0, 0, len(s)/2) // optimizing for speed vs space
 	for i, a := range s {
@@ -123,21 +147,16 @@ func (s SliceT0) Filter(pred func(T0) bool) SliceT0 {
 	return output
 }
 
+// FilterNot returns a new slice containing only the elements in the receiver that
+// do not satisfy the predicate.
 func (s SliceT0) FilterNot(pred func(T0) bool) SliceT0 {
 	return s.Filter(func(a T0) bool { return !pred(a) })
-}
-
-func (s SliceT0) Find(elem T0) T0 {
-	if s.IndexOf(elem) != -1 {
-		return elem
-	}
-	return nil
 }
 
 func (s SliceT0) First() (T0, error) {
 	if len(s) == 0 {
 		var zero T0
-		return zero, errors.New("Empty slice.")
+		return zero, errors.New("empty slice")
 	}
 	return s[0], nil
 }
@@ -173,7 +192,7 @@ func (s SliceT0) IsNotEmpty() bool {
 func (s SliceT0) Last() (T0, error) {
 	if len(s) == 0 {
 		var zero T0
-		return zero, errors.New("Empty slice.")
+		return zero, errors.New("empty slice")
 	}
 	return s[len(s)-1], nil
 }
@@ -184,7 +203,7 @@ func (s SliceT0) Last() (T0, error) {
 func (s SliceT0) MaxWith(comparator func(T0, T0) int) (T0, error) {
 	if len(s) == 0 {
 		var zero T0
-		return zero, errors.New("Empty slice.")
+		return zero, errors.New("empty slice")
 	}
 	max := s[0]
 	for i := 1; i < len(s); i++ {
@@ -199,8 +218,13 @@ func (s SliceT0) minusAllElement(elem T0) SliceT0 {
 	return s.FilterNot(func(a T0) bool { return reflect.DeepEqual(a, elem) })
 }
 
+// Minus returns a new slice which contains the elements of the receiver except for all
+// instances of the elements of the other slice.
 func (s SliceT0) Minus(other SliceT0) SliceT0 {
-	r := s
+	if len(other) == 0 {
+		return s.Copy()
+	}
+	r := s // no need to copy because minusAllElements creates a copy already
 	for _, x := range other {
 		r = r.minusAllElement(x)
 	}
@@ -208,14 +232,14 @@ func (s SliceT0) Minus(other SliceT0) SliceT0 {
 }
 
 // MinusElement -- if the element passed as an argument is present in the receiver, this
-// function returns a slice with the contents of the receiver minus the first occurrence of
-// that element.  Otherwise, it returns the original slice.
+// function returns a new slice with the contents of the receiver minus the first occurrence of
+// that element.  Otherwise, it returns a copy of the original slice.
 func (s SliceT0) MinusElement(elem T0) SliceT0 {
 	index := s.IndexOfFirst(func(a T0) bool { return reflect.DeepEqual(a, elem) })
 	if index == -1 {
-		return s
+		return s.Copy()
 	}
-	return append(s[:index], s[index+1:]...)
+	return append(s[:index].Copy(), s[index+1:]...)
 }
 
 // MinWith uses a comparator function to determine the maximum value. If the slice is
@@ -239,12 +263,14 @@ func (s SliceT0) Partition(pred func(T0) bool) (SliceT0, SliceT0) {
 	return output1, output2
 }
 
+// Plus returns a copy of the receiver with the elements of the other slice appended to it.
 func (s SliceT0) Plus(other SliceT0) SliceT0 {
-	return append(s, other...)
+	return append(s.Copy(), other...)
 }
 
+// PlusElement returns a copy of the receiver with the element appended to it.
 func (s SliceT0) PlusElement(elem T0) SliceT0 {
-	return append(s, elem)
+	return append(s.Copy(), elem)
 }
 
 // Reduce returns the accumulated value obtained by applying the operation op to the first
@@ -257,7 +283,7 @@ func (s SliceT0) PlusElement(elem T0) SliceT0 {
 func (s SliceT0) Reduce(op func(T0, T0) T0) (T0, error) {
 	if len(s) == 0 {
 		var zero T0
-		return zero, errors.New("Empty slice.")
+		return zero, errors.New("empty slice")
 	}
 	z := s[0]
 	for i := 1; i < len(s); i++ {
@@ -266,6 +292,7 @@ func (s SliceT0) Reduce(op func(T0, T0) T0) (T0, error) {
 	return z, nil
 }
 
+// Reversed returns a copy of the receiver with the elements in reverse sequence.
 func (s SliceT0) Reversed() SliceT0 {
 	r := make(SliceT0, len(s))
 	size := len(s)
@@ -284,44 +311,54 @@ func (x sortable) Len() int               { return len(x.slice) }
 func (x sortable) Less(i int, j int) bool { return x.comparator(x.slice[i], x.slice[j]) < 0 }
 func (x sortable) Swap(i int, j int)      { x.slice[i], x.slice[j] = x.slice[j], x.slice[i] }
 
+// SortedWith returns a copy of the receiver with its elements sorted in increasing order
+// based on the comparator argument.
 func (s SliceT0) SortedWith(comparator func(T0, T0) int) SliceT0 {
-	r := make(SliceT0, len(s))
-	copy(r, s)
+	r := s.Copy()
 	srt := sortable{comparator: comparator, slice: r}
 	sort.Sort(srt)
 	return r
 }
 
+// Take returns a copy of the receiver containing the first n elements. If n is greater
+// than the length of the receiver then a copy of the receiver is returned.
 func (s SliceT0) Take(n int) SliceT0 {
 	if n > len(s) {
-		return s
+		return s.Copy()
 	}
-	return s[:n]
+	return s[:n].Copy()
 }
 
+// TakeLast returns a copy of the receiver containing the last n elements. If n is greater
+// than the length of the receiver then a copy of the receiver is returned.
 func (s SliceT0) TakeLast(n int) SliceT0 {
 	if n > len(s) {
-		return s
+		return s.Copy()
 	}
-	return s[len(s)-n:]
+	return s[len(s)-n:].Copy()
 }
 
+// TakeLastWhile returns a copy of the receiver containing all the contiguous elements at the
+// end of the slice that satisfy the predicate.
 func (s SliceT0) TakeLastWhile(pred func(T0) bool) SliceT0 {
 	first := len(s)
 	for i := len(s) - 1; i >= 0 && pred(s[i]); i-- {
 		first = i
 	}
-	return s[first:]
+	return s[first:].Copy()
 }
 
+// TakeWhile returns a copy of the receiver containing all the contiguous elements at the
+// beginning of the slice that satisfy the predicate.
 func (s SliceT0) TakeWhile(pred func(T0) bool) SliceT0 {
 	last := 0
 	for i := 0; i < len(s) && pred(s[i]); i++ {
 		last = i + 1
 	}
-	return s[:last]
+	return s[:last].Copy()
 }
 
+// ToSlice returns the underlying native Go slice.
 func (s SliceT0) ToSlice() SliceT0 {
 	return s
 }
