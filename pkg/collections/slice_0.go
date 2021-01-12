@@ -20,14 +20,18 @@ func (s SliceT0) Copy() SliceT0 {
 	return s1
 }
 
+// Length returns the number of items in the receiver.
 func (s SliceT0) Length() int {
 	return len(s)
 }
 
+// Contains returns true if the element argment is in the receiver, false otherwise.
 func (s SliceT0) Contains(elem T0) bool {
 	return s.IndexOf(elem) >= 0
 }
 
+// ContainsAll returns true if all the elements in the argument slice are in the receiver,
+// false otherwise.
 func (s SliceT0) ContainsAll(elems SliceT0) bool {
 	for i := range elems {
 		e := elems[i]
@@ -49,15 +53,20 @@ func (s SliceT0) Get(index int) (T0, bool) {
 	return zero, false
 }
 
+// IndexOf -- if the argument element is in the receiver, this function returns the
+// first index with which the element appears in the slice; otherwise, returns -1.
 func (s SliceT0) IndexOf(elem T0) int {
 	pred := func(a T0) bool { return reflect.DeepEqual(elem, a) }
 	return s.IndexOfFirst(pred)
 }
 
+// IsEmpty returns true if the receiver is empty, false otherwise.
 func (s SliceT0) IsEmpty() bool {
 	return s == nil || len(s) == 0
 }
 
+// LastIndexOf -- if the argument element is in the receiver, this function returns the
+// first index with which the element appears in the slice; otherwise, returns -1.
 func (s SliceT0) LastIndexOf(elem T0) int {
 	pred := func(a T0) bool { return reflect.DeepEqual(elem, a) }
 	return s.IndexOfLast(pred)
@@ -69,6 +78,7 @@ func (s SliceT0) SubSlice(fromIndex int, toIndex int) SliceT0 {
 	return s[fromIndex:toIndex].Copy()
 }
 
+// All returns true if all elements in the receiver satisfy the predicate, false otherwise.
 func (s SliceT0) All(pred func(T0) bool) bool {
 	for _, x := range s {
 		if !pred(x) {
@@ -78,6 +88,7 @@ func (s SliceT0) All(pred func(T0) bool) bool {
 	return true
 }
 
+// Any returns true if at least one element in the receiver satisfy the predicate, false otherwise.
 func (s SliceT0) Any(pred func(T0) bool) bool {
 	for _, x := range s {
 		if pred(x) {
@@ -87,6 +98,7 @@ func (s SliceT0) Any(pred func(T0) bool) bool {
 	return false
 }
 
+// Count returns the number of items in the receiver that satisfy the predicate.
 func (s SliceT0) Count(pred func(T0) bool) int {
 	count := 0
 	for _, x := range s {
@@ -153,6 +165,7 @@ func (s SliceT0) FilterNot(pred func(T0) bool) SliceT0 {
 	return s.Filter(func(a T0) bool { return !pred(a) })
 }
 
+// First returns the first element in the slice, error if the slice is empty/nil.
 func (s SliceT0) First() (T0, error) {
 	if len(s) == 0 {
 		var zero T0
@@ -161,12 +174,15 @@ func (s SliceT0) First() (T0, error) {
 	return s[0], nil
 }
 
+// ForEach applies the argument function to each item in the receiver.
 func (s SliceT0) ForEach(f func(T0)) {
 	for _, x := range s {
 		f(x)
 	}
 }
 
+// IndexOfFirst -- if some item in the receiver satisfies the argument predicate then this
+// function returns the index of the first such item; otherwise, it returns -1.
 func (s SliceT0) IndexOfFirst(pred func(T0) bool) int {
 	for i, x := range s {
 		if pred(x) {
@@ -176,6 +192,8 @@ func (s SliceT0) IndexOfFirst(pred func(T0) bool) int {
 	return -1
 }
 
+// IndexOfLast -- if some item in the receiver satisfies the argument predicate then this
+// function returns the index of the last such item; otherwise, it returns -1.
 func (s SliceT0) IndexOfLast(pred func(T0) bool) int {
 	for i := len(s) - 1; i >= 0; i-- {
 		if pred(s[i]) {
@@ -185,10 +203,12 @@ func (s SliceT0) IndexOfLast(pred func(T0) bool) int {
 	return -1
 }
 
+// IsNotEmpty returns true if the receiver is not empty, false otherwise.
 func (s SliceT0) IsNotEmpty() bool {
 	return !s.IsEmpty()
 }
 
+// Last returns the last element in the slice, error if the slice is empty/nil.
 func (s SliceT0) Last() (T0, error) {
 	if len(s) == 0 {
 		var zero T0
@@ -250,6 +270,8 @@ func (s SliceT0) MinWith(comparator func(T0, T0) int) (T0, error) {
 	return s.MaxWith(reverseComp)
 }
 
+// Partition returns two slices, the first containing all items in the receiver that
+// satisfy the argument predicate and the second containing all other items in the receiver.
 func (s SliceT0) Partition(pred func(T0) bool) (SliceT0, SliceT0) {
 	output1 := make(SliceT0, 0, len(s)/2) // optimizing for speed vs space
 	output2 := make(SliceT0, 0, len(s)/2) // optimizing for speed vs space
