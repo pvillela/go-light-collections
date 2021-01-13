@@ -15,9 +15,6 @@ type T1 = Any
 // Used to clarify method signatures and facilitate replacement for code generation.
 type T2 = Any
 
-// SliceT0 is a type wrapper, implements List interface.
-type SliceT0 []T0
-
 // SliceAny is a type alias.
 type SliceAny = SliceT0
 
