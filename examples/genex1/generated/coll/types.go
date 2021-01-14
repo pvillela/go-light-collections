@@ -1,12 +1,9 @@
 package coll
 
-import "github.com/pvillela/go-light-collections/examples/genex1/otherdomain"
+import "github.com/pvillela/go-light-collections/examples/genex1/somepkg"
 
-// Foo is an example data structure.
-type Foo struct {
-	v1 int
-	v2 string
-}
+// Foo is a type alias.
+type Foo = somepkg.Foo
 
 // SliceFoo is a type wrapper.
 type SliceFoo []Foo
@@ -15,7 +12,7 @@ type SliceFoo []Foo
 type Sliceint []int
 
 // Slicestring is a type alias.
-type Slicestring = otherdomain.Slicestring
+type Slicestring = somepkg.Slicestring
 
 // MapintSliceFoo is a type wrapper.
 type MapintSliceFoo map[int]SliceFoo

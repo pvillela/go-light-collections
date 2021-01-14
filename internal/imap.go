@@ -42,16 +42,16 @@ type IMapT0T1 interface {
 // IMapT0T1T2 defines the methods to be implemented by the concrete type c.MapT0T1 that also
 // depend on type c.T2.
 type IMapT0T1T2 interface {
-	FlatMap(func(c.PairT0T1) c.SliceT2) c.SliceT2
-	Map(func(c.PairT0T1) c.T2) c.SliceT2
-	MapKeys(func(c.T0) c.T2) c.MapT2T1
-	MapValues(func(c.T1) c.T2) c.MapT0T2
+	FlatMapT2(func(c.T0, c.T1) c.SliceT2) c.SliceT2
+	MapT2(func(c.T0, c.T1) c.T2) c.SliceT2
+	MapKeysT2(func(c.T0, c.T1) c.T2) c.MapT2T1
+	MapValuesT2(func(c.T0, c.T1) c.T2) c.MapT0T2
 }
 
 // Check that the concrete type satisfies the interfaces.
 func validateMapInterface(m c.MapT0T1) {
 	f := func(itf IMapT0T1) {}
 	f(m)
-	// g := func(itf IMapT0T1T2) {}
-	// g(m)
+	g := func(itf IMapT0T1T2) {}
+	g(m)
 }
