@@ -57,7 +57,7 @@ type ISliceT0 interface {
 type ISliceT0T1 interface {
 	FlatMapT1(func(c.T0) c.SliceT1) c.SliceT1
 	FoldT1(z c.T1, op func(c.T1, c.T0) c.T1) c.T1
-	GroupByT1(keySelector func(c.T0) c.T1) c.MapT0SliceT1
+	GroupByT1(keySelector func(c.T0) c.T1) c.MapT1SliceT0
 	MapT1(f func(c.T0) c.T1) c.SliceT1
 	ZipT1(other c.SliceT1) c.SliceOfPairT0T1
 }

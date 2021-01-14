@@ -15,6 +15,9 @@ type T1 = Any
 // Used to clarify method signatures and facilitate replacement for code generation.
 type T2 = Any
 
+// SliceT0 is a type wrapper, implements List interface.
+type SliceT0 []T0
+
 // SliceAny is a type alias.
 type SliceAny = SliceT0
 
@@ -56,11 +59,11 @@ type MapT0T2 = MapT0T1
 // MapT2T1 is a alias.
 type MapT2T1 = MapT0T1
 
-// MapT0SliceT1 is a type wrapper.
-type MapT0SliceT1 map[T0]SliceT1
+// MapT1SliceT0 is a type wrapper.
+type MapT1SliceT0 map[T1]SliceT0
 
 // MapAnySliceAny is a type alias.
-type MapAnySliceAny = MapT0SliceT1
+type MapAnySliceAny = MapT1SliceT0
 
 // SetT0 is a type wrapper, implements Set interface.
 type SetT0 map[T0]bool

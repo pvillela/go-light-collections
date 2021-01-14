@@ -20,13 +20,13 @@ func (s SliceT0) FoldT1(z T1, op func(T1, T0) T1) T1 {
 	return result
 }
 
-func (s SliceT0) GroupByT1(keySelector func(T0) T1) MapT0SliceT1 {
-	var m MapT0SliceT1 = make(map[T0]SliceT1)
+func (s SliceT0) GroupByT1(keySelector func(T0) T1) MapT1SliceT0 {
+	m := make(MapT1SliceT0)
 	for _, x := range s {
 		k := keySelector(x)
 		lst, ok := m[k]
 		if !ok {
-			lst = make(SliceT1, 0, 1)
+			lst = make(SliceT0, 0, 1)
 		}
 		lst = append(lst, x)
 		m[k] = lst
