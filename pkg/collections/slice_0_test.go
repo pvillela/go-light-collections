@@ -51,19 +51,21 @@ func TestSliceCopy(t *testing.T) {
 	}
 }
 
-func TestLength(t *testing.T) {
+func TestLengthSize(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver c.SliceAny
 		want     int
 	}{
-		{"Length: non-empty slice", sFoo(), 5},
-		{"Length: empty slice", sEmpty(), 0},
+		{"Length and Size: non-empty slice", sFoo(), 5},
+		{"Length and Size: empty slice", sEmpty(), 0},
 	}
 
 	for _, cs := range cases {
-		got := cs.receiver.Length()
-		assert.Equal(t, cs.want, got, cs.msg)
+		got1 := cs.receiver.Length()
+		assert.Equal(t, cs.want, got1, cs.msg)
+		got2 := cs.receiver.Size()
+		assert.Equal(t, cs.want, got2, cs.msg)
 	}
 }
 
@@ -92,14 +94,14 @@ func TestContainsAll(t *testing.T) {
 		arg      c.SliceAny
 		want     bool
 	}{
-		{"ContainsAll: subset", sBar(), append(sBar()[2:3], sBar()[1]), true},
-		{"ContainsAll: intersects", sBar(), append(sBar()[1:2], Bar{22, []string{"xyz"}}), false},
-		{"ContainsAll: disjoint", sBar(), append(sBar()[:0], Bar{22, []string{"xyz"}}, Bar{0, []string{"abc"}}), false},
-		{"ContainsAll: empty slice", sEmpty(), append(sBar()[2:3], sBar()[1]), false},
+		{"ContainsSlice: subset", sBar(), append(sBar()[2:3], sBar()[1]), true},
+		{"ContainsSlice: intersects", sBar(), append(sBar()[1:2], Bar{22, []string{"xyz"}}), false},
+		{"ContainsSlice: disjoint", sBar(), append(sBar()[:0], Bar{22, []string{"xyz"}}, Bar{0, []string{"abc"}}), false},
+		{"ContainsSlice: empty slice", sEmpty(), append(sBar()[2:3], sBar()[1]), false},
 	}
 
 	for _, cs := range cases {
-		got := cs.receiver.ContainsAll(cs.arg)
+		got := cs.receiver.ContainsSlice(cs.arg)
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
@@ -635,14 +637,14 @@ func TestPlus(t *testing.T) {
 		arg      c.SliceAny
 		want     c.SliceAny
 	}{
-		{"Plus: non-empty + non-empty", sFoo()[:3], sFoo()[3:], sFoo()},
-		{"Plus: non-empty + empty", sFoo()[:3], sEmpty(), sFoo()[:3]},
-		{"Plus: empty + non-empty", sEmpty(), sFoo()[3:], sFoo()[3:]},
-		{"Plus: empty + empty", sEmpty(), sEmpty(), sEmpty()},
+		{"PlusMap: non-empty + non-empty", sFoo()[:3], sFoo()[3:], sFoo()},
+		{"PlusMap: non-empty + empty", sFoo()[:3], sEmpty(), sFoo()[:3]},
+		{"PlusMap: empty + non-empty", sEmpty(), sFoo()[3:], sFoo()[3:]},
+		{"PlusMap: empty + empty", sEmpty(), sEmpty(), sEmpty()},
 	}
 
 	for _, cs := range cases {
-		got := cs.receiver.Plus(cs.arg)
+		got := cs.receiver.PlusSlice(cs.arg)
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }

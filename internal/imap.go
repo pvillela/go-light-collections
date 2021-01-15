@@ -13,10 +13,11 @@ type IMapT0T1 interface {
 	Copy() c.MapT0T1
 	Entries() c.SetOfPairT0T1
 	Keys() c.SetT0
-	Count() int
+	Size() int
 	Values() c.SetT0
 	ContainsKey(c.T0) bool
 	ContainsValue(c.T1) bool
+	Count(func(c.PairT0T1) bool) int
 	Get(k c.T0) (c.T1, bool)
 	IsEmpty() bool
 	All(func(c.PairT0T1) bool) bool
@@ -34,7 +35,7 @@ type IMapT0T1 interface {
 	MinusKeys(c.SliceT0) c.MapT0T1
 	MinWith(func(c.PairT0T1, c.PairT0T1) int) (c.PairT0T1, error)
 	PlusEntry(c.PairT0T1) c.MapT0T1
-	Plus(c.MapT0T1) c.MapT0T1
+	PlusMap(c.MapT0T1) c.MapT0T1
 	PlusSlice(c.SliceOfPairT0T1) c.MapT0T1
 	Add(k c.T0, v c.T1) c.MapT0T1
 }
@@ -42,10 +43,10 @@ type IMapT0T1 interface {
 // IMapT0T1T2 defines the methods to be implemented by the concrete type c.MapT0T1 that also
 // depend on type c.T2.
 type IMapT0T1T2 interface {
-	FlatMapT2(func(c.T0, c.T1) c.SliceT2) c.SliceT2
-	MapT2(func(c.T0, c.T1) c.T2) c.SliceT2
-	MapKeysT2(func(c.T0, c.T1) c.T2) c.MapT2T1
-	MapValuesT2(func(c.T0, c.T1) c.T2) c.MapT0T2
+	FlatMapT2(func(c.PairT0T1) c.SliceT2) c.SliceT2
+	MapT2(func(c.PairT0T1) c.T2) c.SliceT2
+	MapKeysT2(func(c.PairT0T1) c.T2) c.MapT2T1
+	MapValuesT2(func(c.PairT0T1) c.T2) c.MapT0T2
 }
 
 // Check that the concrete type satisfies the interfaces.

@@ -30,7 +30,7 @@ func (m MapT0T1) Keys() SetT0 {
 	return keys
 }
 
-func (m MapT0T1) Count() int {
+func (m MapT0T1) Size() int {
 	return len(m)
 }
 
@@ -54,6 +54,17 @@ func (m MapT0T1) ContainsValue(v T1) bool {
 		}
 	}
 	return false
+}
+
+// Count returns the number of entries in the receiver that satisfy the predicate.
+func (m MapT0T1) Count(pred func(PairT0T1) bool) int {
+	count := 0
+	for k, v := range m {
+		if pred(PairT0T1{k, v}) {
+			count++
+		}
+	}
+	return count
 }
 
 func (m MapT0T1) Get(k T0) (T1, bool) {
@@ -198,7 +209,7 @@ func (m MapT0T1) PlusEntry(entry PairT0T1) MapT0T1 {
 	return m1
 }
 
-func (m MapT0T1) Plus(other MapT0T1) MapT0T1 {
+func (m MapT0T1) PlusMap(other MapT0T1) MapT0T1 {
 	m1 := m.Copy()
 	for k, v := range other {
 		m1[k] = v

@@ -75,6 +75,9 @@ type SetT0 map[T0]bool
 // SetAny is a type alias.
 type SetAny = SetT0
 
+// SetT1 is a type alias.
+type SetT1 = SetT0
+
 // SetOfPairT0T1 is a type wrapper, implements Set interface.
 type SetOfPairT0T1 map[PairT0T1]bool
 

@@ -27,6 +27,11 @@ func (s SliceFoo) Length() int {
 	return len(s)
 }
 
+// Size returns the number of items in the receiver. Same as Length.
+func (s SliceFoo) Size() int {
+	return len(s)
+}
+
 // Contains returns true if the element argment is in the receiver, false otherwise.
 func (s SliceFoo) Contains(elem Foo) bool {
 	return s.IndexOf(elem) >= 0
@@ -34,7 +39,7 @@ func (s SliceFoo) Contains(elem Foo) bool {
 
 // ContainsAll returns true if all the elements in the argument slice are in the receiver,
 // false otherwise.
-func (s SliceFoo) ContainsAll(elems SliceFoo) bool {
+func (s SliceFoo) ContainsSlice(elems SliceFoo) bool {
 	for i := range elems {
 		e := elems[i]
 		if !s.Contains(e) {
@@ -287,14 +292,14 @@ func (s SliceFoo) Partition(pred func(Foo) bool) (SliceFoo, SliceFoo) {
 	return output1, output2
 }
 
-// Plus returns a copy of the receiver with the elements of the other slice appended to it.
-func (s SliceFoo) Plus(other SliceFoo) SliceFoo {
-	return append(s.Copy(), other...)
-}
-
 // PlusElement returns a copy of the receiver with the element appended to it.
 func (s SliceFoo) PlusElement(elem Foo) SliceFoo {
 	return append(s.Copy(), elem)
+}
+
+// Plus returns a copy of the receiver with the elements of the other slice appended to it.
+func (s SliceFoo) PlusSlice(other SliceFoo) SliceFoo {
+	return append(s.Copy(), other...)
 }
 
 // Reduce returns the accumulated value obtained by applying the operation op to the first

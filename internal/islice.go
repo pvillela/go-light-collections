@@ -12,8 +12,9 @@ import c "github.com/pvillela/go-light-collections/pkg/collections"
 type ISliceT0 interface {
 	Copy() c.SliceT0
 	Length() int
+	Size() int
 	Contains(elem c.T0) bool
-	ContainsAll(elems c.SliceT0) bool
+	ContainsSlice(elems c.SliceT0) bool
 	Get(index int) (c.T0, bool)
 	IndexOf(elem c.T0) int
 	IsEmpty() bool
@@ -39,8 +40,8 @@ type ISliceT0 interface {
 	MinusElement(elem c.T0) c.SliceT0
 	MinWith(comparator func(c.T0, c.T0) int) (c.T0, error)
 	Partition(pred func(c.T0) bool) (c.SliceT0, c.SliceT0)
-	Plus(other c.SliceT0) c.SliceT0
 	PlusElement(elem c.T0) c.SliceT0
+	PlusSlice(other c.SliceT0) c.SliceT0
 	Reduce(op func(c.T0, c.T0) c.T0) (c.T0, error)
 	Reversed() c.SliceT0
 	SortedWith(comparator func(c.T0, c.T0) int) c.SliceT0
