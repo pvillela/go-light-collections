@@ -36,11 +36,10 @@ func (s SliceFoo) Contains(elem Foo) bool {
 	return s.IndexOf(elem) >= 0
 }
 
-// ContainsAll returns true if all the elements in the argument slice are in the receiver,
+// ContainsSlice returns true if all the elements in the argument slice are in the receiver,
 // false otherwise.
 func (s SliceFoo) ContainsSlice(elems SliceFoo) bool {
-	for i := range elems {
-		e := elems[i]
+	for _, e := range elems {
 		if !s.Contains(e) {
 			return false
 		}
@@ -246,7 +245,7 @@ func (s SliceFoo) minusAllElement(elem Foo) SliceFoo {
 
 // Minus returns a new slice which contains the elements of the receiver except for all
 // instances of the elements of the other slice.
-func (s SliceFoo) Minus(other SliceFoo) SliceFoo {
+func (s SliceFoo) MinusSlice(other SliceFoo) SliceFoo {
 	if len(other) == 0 {
 		return s.Copy()
 	}
@@ -330,20 +329,20 @@ func (s SliceFoo) Reversed() SliceFoo {
 	return r
 }
 
-type sortable_Foo struct {
+type sortableFoo struct {
 	comparator func(Foo, Foo) int
 	slice      SliceFoo
 }
 
-func (x sortable_Foo) Len() int               { return len(x.slice) }
-func (x sortable_Foo) Less(i int, j int) bool { return x.comparator(x.slice[i], x.slice[j]) < 0 }
-func (x sortable_Foo) Swap(i int, j int)      { x.slice[i], x.slice[j] = x.slice[j], x.slice[i] }
+func (x sortableFoo) Len() int               { return len(x.slice) }
+func (x sortableFoo) Less(i int, j int) bool { return x.comparator(x.slice[i], x.slice[j]) < 0 }
+func (x sortableFoo) Swap(i int, j int)      { x.slice[i], x.slice[j] = x.slice[j], x.slice[i] }
 
 // SortedWith returns a copy of the receiver with its elements sorted in increasing order
 // based on the comparator argument.
 func (s SliceFoo) SortedWith(comparator func(Foo, Foo) int) SliceFoo {
 	r := s.Copy()
-	srt := sortable_Foo{comparator: comparator, slice: r}
+	srt := sortableFoo{comparator: comparator, slice: r}
 	sort.Sort(srt)
 	return r
 }
@@ -384,9 +383,4 @@ func (s SliceFoo) TakeWhile(pred func(Foo) bool) SliceFoo {
 		last = i + 1
 	}
 	return s[:last].Copy()
-}
-
-// ToSlice returns the underlying native Go slice.
-func (s SliceFoo) ToSlice() SliceFoo {
-	return s
 }
