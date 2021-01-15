@@ -14,8 +14,7 @@ import (
 // Copy returns a copy fo the receiver.
 func (s Sliceint) Copy() Sliceint {
 	if s == nil {
-		var zero Sliceint
-		return zero
+		return nil
 	}
 	s1 := make(Sliceint, len(s))
 	copy(s1, s)
@@ -271,7 +270,7 @@ func (s Sliceint) MinusElement(elem int) Sliceint {
 
 // MinWith uses a comparator function to determine the maximum value. If the slice is
 // non-empty, returns the first element in the slice with minimum value.
-// Returns an error is the slice is empty.
+// Returns an error if the slice is empty.
 func (s Sliceint) MinWith(comparator func(int, int) int) (int, error) {
 	reverseComp := func(a1 int, a2 int) int { return -comparator(a1, a2) }
 	return s.MaxWith(reverseComp)

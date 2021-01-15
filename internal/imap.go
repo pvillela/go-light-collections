@@ -13,6 +13,7 @@ type IMapT0T1 interface {
 	Copy() c.MapT0T1
 	Entries() c.SetOfPairT0T1
 	Keys() c.SetT0
+	Length() int
 	Size() int
 	Values() c.SetT0
 	ContainsKey(c.T0) bool

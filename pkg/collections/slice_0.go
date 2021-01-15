@@ -12,8 +12,7 @@ import (
 // Copy returns a copy fo the receiver.
 func (s SliceT0) Copy() SliceT0 {
 	if s == nil {
-		var zero SliceT0
-		return zero
+		return nil
 	}
 	s1 := make(SliceT0, len(s))
 	copy(s1, s)
@@ -35,11 +34,10 @@ func (s SliceT0) Contains(elem T0) bool {
 	return s.IndexOf(elem) >= 0
 }
 
-// ContainsAll returns true if all the elements in the argument slice are in the receiver,
+// ContainsSlice returns true if all the elements in the argument slice are in the receiver,
 // false otherwise.
 func (s SliceT0) ContainsSlice(elems SliceT0) bool {
-	for i := range elems {
-		e := elems[i]
+	for _, e := range elems {
 		if !s.Contains(e) {
 			return false
 		}
@@ -245,7 +243,7 @@ func (s SliceT0) minusAllElement(elem T0) SliceT0 {
 
 // Minus returns a new slice which contains the elements of the receiver except for all
 // instances of the elements of the other slice.
-func (s SliceT0) Minus(other SliceT0) SliceT0 {
+func (s SliceT0) MinusSlice(other SliceT0) SliceT0 {
 	if len(other) == 0 {
 		return s.Copy()
 	}
@@ -269,7 +267,7 @@ func (s SliceT0) MinusElement(elem T0) SliceT0 {
 
 // MinWith uses a comparator function to determine the maximum value. If the slice is
 // non-empty, returns the first element in the slice with minimum value.
-// Returns an error is the slice is empty.
+// Returns an error if the slice is empty.
 func (s SliceT0) MinWith(comparator func(T0, T0) int) (T0, error) {
 	reverseComp := func(a1 T0, a2 T0) int { return -comparator(a1, a2) }
 	return s.MaxWith(reverseComp)
@@ -329,20 +327,20 @@ func (s SliceT0) Reversed() SliceT0 {
 	return r
 }
 
-type sortable_T0 struct {
+type sortableT0 struct {
 	comparator func(T0, T0) int
 	slice      SliceT0
 }
 
-func (x sortable_T0) Len() int               { return len(x.slice) }
-func (x sortable_T0) Less(i int, j int) bool { return x.comparator(x.slice[i], x.slice[j]) < 0 }
-func (x sortable_T0) Swap(i int, j int)      { x.slice[i], x.slice[j] = x.slice[j], x.slice[i] }
+func (x sortableT0) Len() int               { return len(x.slice) }
+func (x sortableT0) Less(i int, j int) bool { return x.comparator(x.slice[i], x.slice[j]) < 0 }
+func (x sortableT0) Swap(i int, j int)      { x.slice[i], x.slice[j] = x.slice[j], x.slice[i] }
 
 // SortedWith returns a copy of the receiver with its elements sorted in increasing order
 // based on the comparator argument.
 func (s SliceT0) SortedWith(comparator func(T0, T0) int) SliceT0 {
 	r := s.Copy()
-	srt := sortable_T0{comparator: comparator, slice: r}
+	srt := sortableT0{comparator: comparator, slice: r}
 	sort.Sort(srt)
 	return r
 }
@@ -383,9 +381,4 @@ func (s SliceT0) TakeWhile(pred func(T0) bool) SliceT0 {
 		last = i + 1
 	}
 	return s[:last].Copy()
-}
-
-// ToSlice returns the underlying native Go slice.
-func (s SliceT0) ToSlice() SliceT0 {
-	return s
 }

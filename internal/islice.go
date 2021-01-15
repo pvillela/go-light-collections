@@ -36,7 +36,7 @@ type ISliceT0 interface {
 	IsNotEmpty() bool
 	Last() (c.T0, error)
 	MaxWith(comparator func(c.T0, c.T0) int) (c.T0, error)
-	Minus(other c.SliceT0) c.SliceT0
+	MinusSlice(other c.SliceT0) c.SliceT0
 	MinusElement(elem c.T0) c.SliceT0
 	MinWith(comparator func(c.T0, c.T0) int) (c.T0, error)
 	Partition(pred func(c.T0) bool) (c.SliceT0, c.SliceT0)
@@ -49,8 +49,7 @@ type ISliceT0 interface {
 	TakeLast(n int) c.SliceT0
 	TakeLastWhile(pred func(c.T0) bool) c.SliceT0
 	TakeWhile(pred func(c.T0) bool) c.SliceT0
-	ToSlice() c.SliceT0
-	// ToSet() Set
+	ToSet() c.SetT0 // implemented in set_0.go
 }
 
 // ISliceT0T1 defines the methods to be implemented by the concrete type c.SliceT0 that

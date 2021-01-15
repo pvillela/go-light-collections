@@ -11,6 +11,7 @@ import c "github.com/pvillela/go-light-collections/pkg/collections"
 // depend on type c.T0.
 type ISetT0 interface {
 	Copy() c.SetT0
+	Length() int
 	Size() int
 	All(func(c.T0) bool) bool
 	Any(func(c.T0) bool) bool
@@ -18,8 +19,8 @@ type ISetT0 interface {
 	ContainsSet(c.SetT0) bool
 	ContainsSlice(c.SliceT0) bool
 	Count(func(c.T0) bool) int
-	Filter(func(c.PairT0T1) bool) c.SetT0
-	FilterNot(func(c.PairT0T1) bool) c.SetT0
+	Filter(func(c.T0) bool) c.SetT0
+	FilterNot(func(c.T0) bool) c.SetT0
 	ForEach(func(c.T0))
 	Intersect(c.SetT0) c.SetT0
 	IsEmpty() bool
@@ -31,8 +32,9 @@ type ISetT0 interface {
 	Partition(pred func(c.T0) bool) (c.SetT0, c.SetT0)
 	PlusElement(c.T0) c.SetT0
 	PlusSet(c.SetT0) c.SetT0
-	PlusSlice(c.SliceOfPairT0T1) c.SetT0
-	ToSlice() c.SliceOfPairT0T1
+	PlusSlice(c.SliceT0) c.SetT0
+	ToSlice() c.SliceT0
+	Put(c.T0)
 }
 
 // ISetT0T1 defines the methods to be implemented by the concrete type c.SetT0 that also
@@ -45,8 +47,8 @@ type ISetT0T1 interface {
 
 // Check that the concrete type satisfies the interfaces.
 func validateSetInterface(s c.SetT0) {
-	// f := func(itf ISetT0) {}
-	// f(m)
+	f := func(itf ISetT0) {}
+	f(s)
 	// g := func(itf ISetT0T1) {}
-	// g(m)
+	// g(s)
 }

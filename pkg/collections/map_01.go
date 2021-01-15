@@ -4,10 +4,9 @@ import "errors"
 
 func (m MapT0T1) Copy() MapT0T1 {
 	if m == nil {
-		var zero MapT0T1
-		return zero
+		return nil
 	}
-	m1 := make(MapT0T1)
+	m1 := make(MapT0T1, len(m))
 	for k, v := range m {
 		m1[k] = v
 	}
@@ -15,7 +14,7 @@ func (m MapT0T1) Copy() MapT0T1 {
 }
 
 func (m MapT0T1) Entries() SetOfPairT0T1 {
-	entries := map[PairT0T1]bool{}
+	entries := make(map[PairT0T1]bool, len(m))
 	for k, v := range m {
 		m[PairT0T1{k, v}] = true
 	}
@@ -23,19 +22,25 @@ func (m MapT0T1) Entries() SetOfPairT0T1 {
 }
 
 func (m MapT0T1) Keys() SetT0 {
-	keys := map[T0]bool{}
+	keys := make(map[T0]bool, len(m))
 	for k := range m {
 		keys[k] = true
 	}
 	return keys
 }
 
+// Length returns the number of items in the receiver.
+func (m MapT0T1) Length() int {
+	return len(m)
+}
+
+// Size returns the number of items in the receiver. Same as Length.
 func (m MapT0T1) Size() int {
 	return len(m)
 }
 
-func (m MapT0T1) Values() SetT0 {
-	values := map[T1]bool{}
+func (m MapT0T1) Values() SetT1 {
+	values := make(map[T1]bool, len(m))
 	for _, v := range m {
 		values[v] = true
 	}
@@ -163,10 +168,18 @@ func (m MapT0T1) IsNotEmpty() bool {
 // Returns an error if the map is empty.
 func (m MapT0T1) MaxWith(comparator func(PairT0T1, PairT0T1) int) (PairT0T1, error) {
 	var max PairT0T1
+
 	if len(m) == 0 {
 		return max, errors.New("empty map")
 	}
+
+	first := true
 	for k, v := range m {
+		if first {
+			max = PairT0T1{k, v}
+			first = false
+			continue
+		}
 		if pair := (PairT0T1{k, v}); comparator(max, pair) < 0 {
 			max = pair
 		}
@@ -191,16 +204,8 @@ func (m MapT0T1) MinusKeys(s SliceT0) MapT0T1 {
 }
 
 func (m MapT0T1) MinWith(comparator func(PairT0T1, PairT0T1) int) (PairT0T1, error) {
-	var min PairT0T1
-	if len(m) == 0 {
-		return min, errors.New("empty map")
-	}
-	for k, v := range m {
-		if pair := (PairT0T1{k, v}); comparator(min, pair) > 0 {
-			min = pair
-		}
-	}
-	return min, nil
+	reverseComp := func(p1 PairT0T1, p2 PairT0T1) int { return -comparator(p1, p2) }
+	return m.MaxWith(reverseComp)
 }
 
 func (m MapT0T1) PlusEntry(entry PairT0T1) MapT0T1 {

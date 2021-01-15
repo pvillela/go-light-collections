@@ -554,14 +554,14 @@ func TestMinus(t *testing.T) {
 		arg      c.SliceAny
 		want     c.SliceAny
 	}{
-		{"Minus: subset", sBar(), append(sBar()[3:4], sBar()[1]), append(sBar()[0:1], sBar()[2])},
-		{"Minus: intersects", sBar(), append(sBar()[1:2], Bar{22, []string{"xyz"}}), append(sBar()[0:1], sBar()[2], sBar()[3])},
-		{"Minus: disjoint", sBar(), append(sBar()[:0], Bar{22, []string{"xyz"}}, Bar{0, []string{"abc"}}), sBar()},
-		{"Minus: empty slice", sEmpty(), append(sBar()[2:2], sBar()[1]), sEmpty()},
+		{"MinusSlice: subset", sBar(), append(sBar()[3:4], sBar()[1]), append(sBar()[0:1], sBar()[2])},
+		{"MinusSlice: intersects", sBar(), append(sBar()[1:2], Bar{22, []string{"xyz"}}), append(sBar()[0:1], sBar()[2], sBar()[3])},
+		{"MinusSlice: disjoint", sBar(), append(sBar()[:0], Bar{22, []string{"xyz"}}, Bar{0, []string{"abc"}}), sBar()},
+		{"MinusSlice: empty slice", sEmpty(), append(sBar()[2:2], sBar()[1]), sEmpty()},
 	}
 
 	for _, cs := range cases {
-		got := cs.receiver.Minus(cs.arg)
+		got := cs.receiver.MinusSlice(cs.arg)
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
@@ -812,22 +812,6 @@ func TestTakeWhile(t *testing.T) {
 
 	for _, cs := range cases {
 		got := cs.receiver.TakeWhile(cs.arg)
-		assert.Equal(t, cs.want, got, cs.msg)
-	}
-}
-
-func TestToSlice(t *testing.T) {
-	cases := []struct {
-		msg      string
-		receiver c.SliceAny
-		want     c.SliceAny
-	}{
-		{"ToSlice: non-empty", sFoo(), sFoo()},
-		{"ToSlice: empty", sEmpty(), []c.Any{}},
-	}
-
-	for _, cs := range cases {
-		got := cs.receiver.ToSlice()
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
