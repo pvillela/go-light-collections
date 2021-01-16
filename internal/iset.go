@@ -40,15 +40,26 @@ type ISetT0 interface {
 // ISetT0T1 defines the methods to be implemented by the concrete type c.SetT0 that also
 // depend on type c.T1.
 type ISetT0T1 interface {
-	FlatMapT1(func(c.T0) c.SliceT1) c.SliceT1
+	FlatMapT1(func(c.T0) c.SetT1) c.SetT1
 	GroupByT1(keySelector func(c.T0) c.T1) c.MapT1SliceT0
 	MapT1(f func(c.T0) c.T1) c.SetT1
+}
+
+// ISetOfPairT0T1 defines the methods to be implemented by the concrete type ISliceOfPairT0T1.
+type ISetOfPairT0T1 interface {
+	ToMap() c.MapT0T1
 }
 
 // Check that the concrete type satisfies the interfaces.
 func validateSetInterface(s c.SetT0) {
 	f := func(itf ISetT0) {}
 	f(s)
-	// g := func(itf ISetT0T1) {}
-	// g(s)
+	g := func(itf ISetT0T1) {}
+	g(s)
+}
+
+// Check that the concrete type satisfies the interface.
+func validateSetOfPairInterface(s c.SetOfPairT0T1) {
+	f := func(itf ISetOfPairT0T1) {}
+	f(s)
 }

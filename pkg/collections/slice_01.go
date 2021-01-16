@@ -1,5 +1,7 @@
 package collections
 
+// FlatMapT1 returns the slice obtained by applying the argument f to each item in the
+// receiver and concatenating the results.
 func (s SliceT0) FlatMapT1(f func(T0) SliceT1) SliceT1 {
 	r := make([]T1, 0, len(s)) // optimizing for speed vs space
 	for _, x := range s {
@@ -20,6 +22,9 @@ func (s SliceT0) FoldT1(z T1, op func(T1, T0) T1) T1 {
 	return result
 }
 
+// GroupByT1 returns a map whose keys are outputs of the keySelector function applied to
+// the items in the receiver and whose values are slices containing the items in the
+// receiver that correspond to each key obtained with the keySelector function.
 func (s SliceT0) GroupByT1(keySelector func(T0) T1) MapT1SliceT0 {
 	m := make(MapT1SliceT0)
 	for _, x := range s {
