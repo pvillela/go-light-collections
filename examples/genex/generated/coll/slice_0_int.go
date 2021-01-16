@@ -384,3 +384,11 @@ func (s Sliceint) TakeWhile(pred func(int) bool) Sliceint {
 	}
 	return s[:last].Copy()
 }
+
+func (s Slice2int) Flatten() Sliceint {
+	r := make([]int, 0, len(s)) // optimizing for speed vs space
+	for _, x := range s {
+		r = append(r, x...)
+	}
+	return r
+}

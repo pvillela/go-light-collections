@@ -384,3 +384,11 @@ func (s SliceString) TakeWhile(pred func(String) bool) SliceString {
 	}
 	return s[:last].Copy()
 }
+
+func (s Slice2String) Flatten() SliceString {
+	r := make([]String, 0, len(s)) // optimizing for speed vs space
+	for _, x := range s {
+		r = append(r, x...)
+	}
+	return r
+}

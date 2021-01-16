@@ -54,8 +54,8 @@ type ISetOfPairT0T1 interface {
 func validateSetInterface(s c.SetT0) {
 	f := func(itf ISetT0) {}
 	f(s)
-	g := func(itf ISetT0T1) {}
-	g(s)
+	// g := func(itf ISetT0T1) {}
+	// g(s)
 }
 
 // Check that the concrete type satisfies the interface.

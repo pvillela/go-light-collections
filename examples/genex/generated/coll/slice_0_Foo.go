@@ -384,3 +384,11 @@ func (s SliceFoo) TakeWhile(pred func(Foo) bool) SliceFoo {
 	}
 	return s[:last].Copy()
 }
+
+func (s Slice2Foo) Flatten() SliceFoo {
+	r := make([]Foo, 0, len(s)) // optimizing for speed vs space
+	for _, x := range s {
+		r = append(r, x...)
+	}
+	return r
+}

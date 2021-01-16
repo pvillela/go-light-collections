@@ -24,3 +24,7 @@ func (s SliceT0) GroupBy(keySelector func(T0) T1) MapT1SliceT0 {
 func (s SliceT0) Map(f func(T0) T1) SliceT1 {
 	return s.MapT1(f)
 }
+
+func (s SliceT0) Zip(other SliceT1) SliceOfPairT0T1 {
+	return s.ZipT1(other)
+}
