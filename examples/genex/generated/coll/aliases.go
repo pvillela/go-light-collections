@@ -1,6 +1,6 @@
 package coll
 
-import "github.com/pvillela/go-light-collections/examples/genex1/somepkg"
+import "github.com/pvillela/go-light-collections/examples/genex/somepkg"
 
 // Foo is a type alias.
 type Foo = somepkg.Foo
