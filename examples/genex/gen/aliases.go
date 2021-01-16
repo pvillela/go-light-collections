@@ -1,4 +1,4 @@
-package coll
+package gen
 
 import (
 	"github.com/pvillela/go-light-collections/examples/genex/pkga"
