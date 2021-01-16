@@ -2,6 +2,11 @@ package coll
 
 import "github.com/pvillela/go-light-collections/examples/genex1/somepkg"
 
+// Foo is a type alias.
 type Foo = somepkg.Foo
 
-type Slicestring = somepkg.Slicestring
+// Int is a type alias.
+type Int = int
+
+// SliceString is a type alias.
+type Slicestring = somepkg.SliceString

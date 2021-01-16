@@ -1,16 +1,15 @@
 #!/bin/bash
 
-T0=$1
-T1=$2
-PACKAGE=$3
-DEST_DIR=$4
+FILE=$1
+T0=$2
+T1=$3
 
 echo "PWD: $PWD"
 
 mkdir -p "${DEST_DIR}"
 
-cat ${COLL_MODULE_DIR}/pkg/collections/types_01.go | \
+cat ${COLL_MODULE_DIR}/pkg/collections/${FILE} | \
     sed -e 's/T0/'${T0}'/g; s/package collections/package '${PACKAGE}'/g' \
         -e 's/T1/'${T1}'/g; s/package collections/package '${PACKAGE}'/g' \
         -e '1 i // Code generated -- DO NOT EDIT.\n' \
-    > "${DEST_DIR}/types_01_${T0}.go"
+    > "${DEST_DIR}/${FILE}_${T0}${T1}.go"

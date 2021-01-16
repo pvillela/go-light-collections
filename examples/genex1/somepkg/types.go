@@ -6,5 +6,5 @@ type Foo struct {
 	v2 string
 }
 
-// Slicestring is a type wrapper.
-type Slicestring []string
+// SliceString is a type wrapper.
+type SliceString []string
