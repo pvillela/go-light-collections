@@ -24,7 +24,3 @@ export PACKAGE=coll
 ./copy_sub.sh slice_0 String
 ./copy_sub.sh types_01 String int
 ./copy_sub.sh slice_01 String int
-
-./copy_sub.sh support_test Foo
-./copy_sub.sh slice_0 Foo
-./copy_sub.sh slice_0_test Foo

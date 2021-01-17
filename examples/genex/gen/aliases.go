@@ -9,6 +9,3 @@ type Person = pkga.Person
 
 // String is a type alias.
 type String = string
-
-// Any is a type alias.
-type Any = interface{}

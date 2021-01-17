@@ -6,7 +6,7 @@ T1=$3
 
 echo "PWD: $PWD"
 
-mkdir -p "${DEST_DIR}"
+mkdir -p "${DEST_DIR}/${PACKAGE}"
 
 cat ${COLL_MODULE_DIR}/pkg/collections/${FILE}.go | \
     sed -e 's/package collections/package '${PACKAGE}'/g' \

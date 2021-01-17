@@ -1,6 +1,6 @@
 // Code generated -- DO NOT EDIT.
 
-package coll
+package collections
 
 import (
 	"errors"
@@ -12,33 +12,33 @@ import (
 // Methods
 
 // Copy returns a copy fo the receiver.
-func (s SliceFoo) Copy() SliceFoo {
+func (s SliceDat) Copy() SliceDat {
 	if s == nil {
 		return nil
 	}
-	s1 := make(SliceFoo, len(s))
+	s1 := make(SliceDat, len(s))
 	copy(s1, s)
 	return s1
 }
 
 // Length returns the number of items in the receiver.
-func (s SliceFoo) Length() int {
+func (s SliceDat) Length() int {
 	return len(s)
 }
 
 // Size returns the number of items in the receiver. Same as Length.
-func (s SliceFoo) Size() int {
+func (s SliceDat) Size() int {
 	return len(s)
 }
 
 // Contains returns true if the element argment is in the receiver, false otherwise.
-func (s SliceFoo) Contains(elem Foo) bool {
+func (s SliceDat) Contains(elem Dat) bool {
 	return s.IndexOf(elem) >= 0
 }
 
 // ContainsSlice returns true if all the elements in the argument slice are in the receiver,
 // false otherwise.
-func (s SliceFoo) ContainsSlice(elems SliceFoo) bool {
+func (s SliceDat) ContainsSlice(elems SliceDat) bool {
 	for _, e := range elems {
 		if !s.Contains(e) {
 			return false
@@ -49,42 +49,42 @@ func (s SliceFoo) ContainsSlice(elems SliceFoo) bool {
 
 // Get returns the element at the specified index and true if index is within the bounds of
 // the slice.
-// Returns the Foo zero value and false if the index is outside the bounds of the slice.
-func (s SliceFoo) Get(index int) (Foo, bool) {
+// Returns the Dat zero value and false if the index is outside the bounds of the slice.
+func (s SliceDat) Get(index int) (Dat, bool) {
 	if 0 <= index && index < len(s) {
 		return s[index], true
 	}
-	var zero Foo
+	var zero Dat
 	return zero, false
 }
 
 // IndexOf -- if the argument element is in the receiver, this function returns the
 // first index with which the element appears in the slice; otherwise, returns -1.
-func (s SliceFoo) IndexOf(elem Foo) int {
-	pred := func(a Foo) bool { return reflect.DeepEqual(elem, a) }
+func (s SliceDat) IndexOf(elem Dat) int {
+	pred := func(a Dat) bool { return reflect.DeepEqual(elem, a) }
 	return s.IndexOfFirst(pred)
 }
 
 // IsEmpty returns true if the receiver is empty, false otherwise.
-func (s SliceFoo) IsEmpty() bool {
+func (s SliceDat) IsEmpty() bool {
 	return s == nil || len(s) == 0
 }
 
 // LastIndexOf -- if the argument element is in the receiver, this function returns the
 // first index with which the element appears in the slice; otherwise, returns -1.
-func (s SliceFoo) LastIndexOf(elem Foo) int {
-	pred := func(a Foo) bool { return reflect.DeepEqual(elem, a) }
+func (s SliceDat) LastIndexOf(elem Dat) int {
+	pred := func(a Dat) bool { return reflect.DeepEqual(elem, a) }
 	return s.IndexOfLast(pred)
 }
 
 // SubSlice returns a copy of the sub-slice of the receiver for the index arguments.
 // Panics if the index arguments do not form a valid sub-slice.
-func (s SliceFoo) SubSlice(fromIndex int, toIndex int) SliceFoo {
+func (s SliceDat) SubSlice(fromIndex int, toIndex int) SliceDat {
 	return s[fromIndex:toIndex].Copy()
 }
 
 // All returns true if all elements in the receiver satisfy the predicate, false otherwise.
-func (s SliceFoo) All(pred func(Foo) bool) bool {
+func (s SliceDat) All(pred func(Dat) bool) bool {
 	for _, x := range s {
 		if !pred(x) {
 			return false
@@ -94,7 +94,7 @@ func (s SliceFoo) All(pred func(Foo) bool) bool {
 }
 
 // Any returns true if at least one element in the receiver satisfy the predicate, false otherwise.
-func (s SliceFoo) Any(pred func(Foo) bool) bool {
+func (s SliceDat) Any(pred func(Dat) bool) bool {
 	for _, x := range s {
 		if pred(x) {
 			return true
@@ -104,7 +104,7 @@ func (s SliceFoo) Any(pred func(Foo) bool) bool {
 }
 
 // Count returns the number of items in the receiver that satisfy the predicate.
-func (s SliceFoo) Count(pred func(Foo) bool) int {
+func (s SliceDat) Count(pred func(Dat) bool) int {
 	count := 0
 	for _, x := range s {
 		if pred(x) {
@@ -116,7 +116,7 @@ func (s SliceFoo) Count(pred func(Foo) bool) int {
 
 // Drop returns a copy of the receiver with the first n elements removed.  If n is greater
 // than the length of the receiver then the empty slice is returned.
-func (s SliceFoo) Drop(n int) SliceFoo {
+func (s SliceDat) Drop(n int) SliceDat {
 	if n > len(s) {
 		return s[:0].Copy()
 	}
@@ -125,7 +125,7 @@ func (s SliceFoo) Drop(n int) SliceFoo {
 
 // DropLast returns a copy of the receiver with the last n elements removed.  If n is greater
 // than the length of the receiver then the empty slice is returned.
-func (s SliceFoo) DropLast(n int) SliceFoo {
+func (s SliceDat) DropLast(n int) SliceDat {
 	if n > len(s) {
 		return s[:0].Copy()
 	}
@@ -134,7 +134,7 @@ func (s SliceFoo) DropLast(n int) SliceFoo {
 
 // DropLastWhile returns a copy of the receiver minus all the contiguous elements at the
 // end of the slice that satisfy the predicate.
-func (s SliceFoo) DropLastWhile(pred func(Foo) bool) SliceFoo {
+func (s SliceDat) DropLastWhile(pred func(Dat) bool) SliceDat {
 	last := len(s)
 	for i := len(s) - 1; i >= 0 && pred(s[i]); i-- {
 		last = i
@@ -144,7 +144,7 @@ func (s SliceFoo) DropLastWhile(pred func(Foo) bool) SliceFoo {
 
 // DropWhile returns a copy of the receiver minus all the contiguous elements at the
 // beginning of the slice that satisfy the predicate.
-func (s SliceFoo) DropWhile(pred func(Foo) bool) SliceFoo {
+func (s SliceDat) DropWhile(pred func(Dat) bool) SliceDat {
 	first := 0
 	for i := 0; i < len(s) && pred(s[i]); i++ {
 		first = i + 1
@@ -154,8 +154,8 @@ func (s SliceFoo) DropWhile(pred func(Foo) bool) SliceFoo {
 
 // Filter returns a new slice containing only the elements in the receiver that
 // satisfy the predicate.
-func (s SliceFoo) Filter(pred func(Foo) bool) SliceFoo {
-	output := make(SliceFoo, 0, len(s)/2) // optimizing for speed vs space
+func (s SliceDat) Filter(pred func(Dat) bool) SliceDat {
+	output := make(SliceDat, 0, len(s)/2) // optimizing for speed vs space
 	for i, a := range s {
 		if pred(s[i]) {
 			output = append(output, a)
@@ -166,21 +166,21 @@ func (s SliceFoo) Filter(pred func(Foo) bool) SliceFoo {
 
 // FilterNot returns a new slice containing only the elements in the receiver that
 // do not satisfy the predicate.
-func (s SliceFoo) FilterNot(pred func(Foo) bool) SliceFoo {
-	return s.Filter(func(a Foo) bool { return !pred(a) })
+func (s SliceDat) FilterNot(pred func(Dat) bool) SliceDat {
+	return s.Filter(func(a Dat) bool { return !pred(a) })
 }
 
 // First returns the first element in the slice, error if the slice is empty/nil.
-func (s SliceFoo) First() (Foo, error) {
+func (s SliceDat) First() (Dat, error) {
 	if len(s) == 0 {
-		var zero Foo
+		var zero Dat
 		return zero, errors.New("empty slice")
 	}
 	return s[0], nil
 }
 
 // ForEach applies the argument function to each item in the receiver.
-func (s SliceFoo) ForEach(f func(Foo)) {
+func (s SliceDat) ForEach(f func(Dat)) {
 	for _, x := range s {
 		f(x)
 	}
@@ -188,7 +188,7 @@ func (s SliceFoo) ForEach(f func(Foo)) {
 
 // IndexOfFirst -- if some item in the receiver satisfies the argument predicate then this
 // function returns the index of the first such item; otherwise, it returns -1.
-func (s SliceFoo) IndexOfFirst(pred func(Foo) bool) int {
+func (s SliceDat) IndexOfFirst(pred func(Dat) bool) int {
 	for i, x := range s {
 		if pred(x) {
 			return i
@@ -199,7 +199,7 @@ func (s SliceFoo) IndexOfFirst(pred func(Foo) bool) int {
 
 // IndexOfLast -- if some item in the receiver satisfies the argument predicate then this
 // function returns the index of the last such item; otherwise, it returns -1.
-func (s SliceFoo) IndexOfLast(pred func(Foo) bool) int {
+func (s SliceDat) IndexOfLast(pred func(Dat) bool) int {
 	for i := len(s) - 1; i >= 0; i-- {
 		if pred(s[i]) {
 			return i
@@ -209,14 +209,14 @@ func (s SliceFoo) IndexOfLast(pred func(Foo) bool) int {
 }
 
 // IsNotEmpty returns true if the receiver is not empty, false otherwise.
-func (s SliceFoo) IsNotEmpty() bool {
+func (s SliceDat) IsNotEmpty() bool {
 	return !s.IsEmpty()
 }
 
 // Last returns the last element in the slice, error if the slice is empty/nil.
-func (s SliceFoo) Last() (Foo, error) {
+func (s SliceDat) Last() (Dat, error) {
 	if len(s) == 0 {
-		var zero Foo
+		var zero Dat
 		return zero, errors.New("empty slice")
 	}
 	return s[len(s)-1], nil
@@ -225,9 +225,9 @@ func (s SliceFoo) Last() (Foo, error) {
 // MaxWith uses a comparator function to determine the maximum value. If the slice is
 // non-empty, returns the first element in the slice with maximum value.
 // Otherwise, returns an error.
-func (s SliceFoo) MaxWith(comparator func(Foo, Foo) int) (Foo, error) {
+func (s SliceDat) MaxWith(comparator func(Dat, Dat) int) (Dat, error) {
 	if len(s) == 0 {
-		var zero Foo
+		var zero Dat
 		return zero, errors.New("empty slice")
 	}
 	max := s[0]
@@ -239,13 +239,13 @@ func (s SliceFoo) MaxWith(comparator func(Foo, Foo) int) (Foo, error) {
 	return max, nil
 }
 
-func (s SliceFoo) minusAllElement(elem Foo) SliceFoo {
-	return s.FilterNot(func(a Foo) bool { return reflect.DeepEqual(a, elem) })
+func (s SliceDat) minusAllElement(elem Dat) SliceDat {
+	return s.FilterNot(func(a Dat) bool { return reflect.DeepEqual(a, elem) })
 }
 
 // Minus returns a new slice which contains the elements of the receiver except for all
 // instances of the elements of the other slice.
-func (s SliceFoo) MinusSlice(other SliceFoo) SliceFoo {
+func (s SliceDat) MinusSlice(other SliceDat) SliceDat {
 	if len(other) == 0 {
 		return s.Copy()
 	}
@@ -259,8 +259,8 @@ func (s SliceFoo) MinusSlice(other SliceFoo) SliceFoo {
 // MinusElement -- if the element passed as an argument is present in the receiver, this
 // function returns a new slice with the contents of the receiver minus the first occurrence of
 // that element.  Otherwise, it returns a copy of the original slice.
-func (s SliceFoo) MinusElement(elem Foo) SliceFoo {
-	index := s.IndexOfFirst(func(a Foo) bool { return reflect.DeepEqual(a, elem) })
+func (s SliceDat) MinusElement(elem Dat) SliceDat {
+	index := s.IndexOfFirst(func(a Dat) bool { return reflect.DeepEqual(a, elem) })
 	if index == -1 {
 		return s.Copy()
 	}
@@ -270,16 +270,16 @@ func (s SliceFoo) MinusElement(elem Foo) SliceFoo {
 // MinWith uses a comparator function to determine the maximum value. If the slice is
 // non-empty, returns the first element in the slice with minimum value.
 // Returns an error if the slice is empty.
-func (s SliceFoo) MinWith(comparator func(Foo, Foo) int) (Foo, error) {
-	reverseComp := func(a1 Foo, a2 Foo) int { return -comparator(a1, a2) }
+func (s SliceDat) MinWith(comparator func(Dat, Dat) int) (Dat, error) {
+	reverseComp := func(a1 Dat, a2 Dat) int { return -comparator(a1, a2) }
 	return s.MaxWith(reverseComp)
 }
 
 // Partition returns two slices, the first containing all items in the receiver that
 // satisfy the argument predicate and the second containing all other items in the receiver.
-func (s SliceFoo) Partition(pred func(Foo) bool) (SliceFoo, SliceFoo) {
-	output1 := make(SliceFoo, 0, len(s)/2) // optimizing for speed vs space
-	output2 := make(SliceFoo, 0, len(s)/2) // optimizing for speed vs space
+func (s SliceDat) Partition(pred func(Dat) bool) (SliceDat, SliceDat) {
+	output1 := make(SliceDat, 0, len(s)/2) // optimizing for speed vs space
+	output2 := make(SliceDat, 0, len(s)/2) // optimizing for speed vs space
 	for i, a := range s {
 		if pred(s[i]) {
 			output1 = append(output1, a)
@@ -291,12 +291,12 @@ func (s SliceFoo) Partition(pred func(Foo) bool) (SliceFoo, SliceFoo) {
 }
 
 // PlusElement returns a copy of the receiver with the element appended to it.
-func (s SliceFoo) PlusElement(elem Foo) SliceFoo {
+func (s SliceDat) PlusElement(elem Dat) SliceDat {
 	return append(s.Copy(), elem)
 }
 
 // Plus returns a copy of the receiver with the elements of the other slice appended to it.
-func (s SliceFoo) PlusSlice(other SliceFoo) SliceFoo {
+func (s SliceDat) PlusSlice(other SliceDat) SliceDat {
 	return append(s.Copy(), other...)
 }
 
@@ -307,9 +307,9 @@ func (s SliceFoo) PlusSlice(other SliceFoo) SliceFoo {
 // It is a special case of Fold where the z value is the first element of the receiver and
 // the fold is executed on the original slice minus the first element.
 // If the slice is empty, returns an error.
-func (s SliceFoo) Reduce(op func(Foo, Foo) Foo) (Foo, error) {
+func (s SliceDat) Reduce(op func(Dat, Dat) Dat) (Dat, error) {
 	if len(s) == 0 {
-		var zero Foo
+		var zero Dat
 		return zero, errors.New("empty slice")
 	}
 	z := s[0]
@@ -320,8 +320,8 @@ func (s SliceFoo) Reduce(op func(Foo, Foo) Foo) (Foo, error) {
 }
 
 // Reversed returns a copy of the receiver with the elements in reverse sequence.
-func (s SliceFoo) Reversed() SliceFoo {
-	r := make(SliceFoo, len(s))
+func (s SliceDat) Reversed() SliceDat {
+	r := make(SliceDat, len(s))
 	size := len(s)
 	for i, x := range s {
 		r[size-i-1] = x
@@ -329,27 +329,27 @@ func (s SliceFoo) Reversed() SliceFoo {
 	return r
 }
 
-type sortableFoo struct {
-	comparator func(Foo, Foo) int
-	slice      SliceFoo
+type sortableDat struct {
+	comparator func(Dat, Dat) int
+	slice      SliceDat
 }
 
-func (x sortableFoo) Len() int               { return len(x.slice) }
-func (x sortableFoo) Less(i int, j int) bool { return x.comparator(x.slice[i], x.slice[j]) < 0 }
-func (x sortableFoo) Swap(i int, j int)      { x.slice[i], x.slice[j] = x.slice[j], x.slice[i] }
+func (x sortableDat) Len() int               { return len(x.slice) }
+func (x sortableDat) Less(i int, j int) bool { return x.comparator(x.slice[i], x.slice[j]) < 0 }
+func (x sortableDat) Swap(i int, j int)      { x.slice[i], x.slice[j] = x.slice[j], x.slice[i] }
 
 // SortedWith returns a copy of the receiver with its elements sorted in increasing order
 // based on the comparator argument.
-func (s SliceFoo) SortedWith(comparator func(Foo, Foo) int) SliceFoo {
+func (s SliceDat) SortedWith(comparator func(Dat, Dat) int) SliceDat {
 	r := s.Copy()
-	srt := sortableFoo{comparator: comparator, slice: r}
+	srt := sortableDat{comparator: comparator, slice: r}
 	sort.Sort(srt)
 	return r
 }
 
 // Take returns a copy of the receiver containing the first n elements. If n is greater
 // than the length of the receiver then a copy of the receiver is returned.
-func (s SliceFoo) Take(n int) SliceFoo {
+func (s SliceDat) Take(n int) SliceDat {
 	if n > len(s) {
 		return s.Copy()
 	}
@@ -358,7 +358,7 @@ func (s SliceFoo) Take(n int) SliceFoo {
 
 // TakeLast returns a copy of the receiver containing the last n elements. If n is greater
 // than the length of the receiver then a copy of the receiver is returned.
-func (s SliceFoo) TakeLast(n int) SliceFoo {
+func (s SliceDat) TakeLast(n int) SliceDat {
 	if n > len(s) {
 		return s.Copy()
 	}
@@ -367,7 +367,7 @@ func (s SliceFoo) TakeLast(n int) SliceFoo {
 
 // TakeLastWhile returns a copy of the receiver containing all the contiguous elements at the
 // end of the slice that satisfy the predicate.
-func (s SliceFoo) TakeLastWhile(pred func(Foo) bool) SliceFoo {
+func (s SliceDat) TakeLastWhile(pred func(Dat) bool) SliceDat {
 	first := len(s)
 	for i := len(s) - 1; i >= 0 && pred(s[i]); i-- {
 		first = i
@@ -377,7 +377,7 @@ func (s SliceFoo) TakeLastWhile(pred func(Foo) bool) SliceFoo {
 
 // TakeWhile returns a copy of the receiver containing all the contiguous elements at the
 // beginning of the slice that satisfy the predicate.
-func (s SliceFoo) TakeWhile(pred func(Foo) bool) SliceFoo {
+func (s SliceDat) TakeWhile(pred func(Dat) bool) SliceDat {
 	last := 0
 	for i := 0; i < len(s) && pred(s[i]); i++ {
 		last = i + 1
@@ -385,8 +385,8 @@ func (s SliceFoo) TakeWhile(pred func(Foo) bool) SliceFoo {
 	return s[:last].Copy()
 }
 
-func (s Slice2Foo) Flatten() SliceFoo {
-	r := make([]Foo, 0, len(s)) // optimizing for speed vs space
+func (s Slice2Dat) Flatten() SliceDat {
+	r := make([]Dat, 0, len(s)) // optimizing for speed vs space
 	for _, x := range s {
 		r = append(r, x...)
 	}

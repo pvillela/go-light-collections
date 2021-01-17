@@ -34,7 +34,7 @@ func TestFlatMapT1(t *testing.T) {
 }
 
 func TestFoldT1(t *testing.T) {
-	op := func(z T1, a T0) T1 { return z.(int) + a.(Foo).V1 }
+	op := func(z T1, a T0) T1 { return z.(int) + a.(Dat).V1 }
 
 	cases := []struct {
 		msg      string
@@ -43,7 +43,7 @@ func TestFoldT1(t *testing.T) {
 		arg2     func(z T1, a T0) T1
 		want     T1
 	}{
-		{"FoldT1: non-empty receiver", sFoo(), 1, op, 1 + 1 + 22 + 333 + 4444 + 22},
+		{"FoldT1: non-empty receiver", sDat(), 1, op, 1 + 1 + 22 + 333 + 4444 + 22},
 		{"FoldT1: empty receiver", SliceT0{}, 42, op, 42},
 	}
 
@@ -54,7 +54,7 @@ func TestFoldT1(t *testing.T) {
 }
 
 func TestGroupByT1(t *testing.T) {
-	f := func(a T0) T1 { return a.(Foo).V1 % 2 }
+	f := func(a T0) T1 { return a.(Dat).V1 % 2 }
 
 	cases := []struct {
 		msg      string
@@ -62,9 +62,9 @@ func TestGroupByT1(t *testing.T) {
 		arg      func(T0) T1
 		want     MapT1SliceT0
 	}{
-		{"GroupByT1: non-empty receiver", sFoo(), f, MapT1SliceT0{
-			0: {Foo{22, "w22"}, Foo{4444, "w4444"}, Foo{22, "w22"}},
-			1: {Foo{1, "w1"}, Foo{333, "w333"}},
+		{"GroupByT1: non-empty receiver", sDat(), f, MapT1SliceT0{
+			0: {Dat{22, "w22"}, Dat{4444, "w4444"}, Dat{22, "w22"}},
+			1: {Dat{1, "w1"}, Dat{333, "w333"}},
 		}},
 		{"GroupByT1: empty receiver", SliceT0{}, f, MapT1SliceT0{}},
 	}
@@ -76,7 +76,7 @@ func TestGroupByT1(t *testing.T) {
 }
 
 func TestMapT1(t *testing.T) {
-	f := func(a T0) T1 { return Bar{a.(Foo).V1 + 1, []string{a.(Foo).V2}} }
+	f := func(a T0) T1 { return Bar{a.(Dat).V1 + 1, []string{a.(Dat).V2}} }
 
 	cases := []struct {
 		msg      string
@@ -84,7 +84,7 @@ func TestMapT1(t *testing.T) {
 		arg      func(T0) T1
 		want     SliceT1
 	}{
-		{"MapT1: non-empty receiver", sFoo(), f, SliceT1{Bar{2, []string{"w1"}}, Bar{23, []string{"w22"}}, Bar{334, []string{"w333"}}, Bar{4445, []string{"w4444"}}, Bar{23, []string{"w22"}}}},
+		{"MapT1: non-empty receiver", sDat(), f, SliceT1{Bar{2, []string{"w1"}}, Bar{23, []string{"w22"}}, Bar{334, []string{"w333"}}, Bar{4445, []string{"w4444"}}, Bar{23, []string{"w22"}}}},
 		{"MapT1: empty receiver", SliceT0{}, f, SliceT1{}},
 	}
 
@@ -104,13 +104,13 @@ func TestZipT1(t *testing.T) {
 		arg      SliceT1
 		want     SliceOfPairT0T1
 	}{
-		{"ZipT1: non-empty receiver, shorter other", sFoo(), shorterOther,
-			SliceOfPairT0T1{{Foo{1, "w1"}, 1}, {Foo{22, "w22"}, 2}, {Foo{333, "w333"}, 3}}},
-		{"ZipT1: non-empty receiver, longer other", sFoo(), longerOther,
-			SliceOfPairT0T1{{Foo{1, "w1"}, 1}, {Foo{22, "w22"}, 2}, {Foo{333, "w333"}, 3},
-				{Foo{4444, "w4444"}, 4}, {Foo{22, "w22"}, 5}}},
-		{"ZipT1: non-empty receiver, empty other", sFoo(), SliceT0{}, SliceOfPairT0T1{}},
-		{"ZipT1: empty receiver, non-empty other", SliceT0{}, sFoo(), SliceOfPairT0T1{}},
+		{"ZipT1: non-empty receiver, shorter other", sDat(), shorterOther,
+			SliceOfPairT0T1{{Dat{1, "w1"}, 1}, {Dat{22, "w22"}, 2}, {Dat{333, "w333"}, 3}}},
+		{"ZipT1: non-empty receiver, longer other", sDat(), longerOther,
+			SliceOfPairT0T1{{Dat{1, "w1"}, 1}, {Dat{22, "w22"}, 2}, {Dat{333, "w333"}, 3},
+				{Dat{4444, "w4444"}, 4}, {Dat{22, "w22"}, 5}}},
+		{"ZipT1: non-empty receiver, empty other", sDat(), SliceT0{}, SliceOfPairT0T1{}},
+		{"ZipT1: empty receiver, non-empty other", SliceT0{}, sDat(), SliceOfPairT0T1{}},
 		{"ZipT1: empty receiver, empty other", SliceT0{}, SliceT0{}, SliceOfPairT0T1{}},
 	}
 
