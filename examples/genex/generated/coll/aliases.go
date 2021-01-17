@@ -4,8 +4,11 @@ import (
 	"github.com/pvillela/go-light-collections/examples/genex/pkga"
 )
 
-// Foo is a type alias.
-type Foo = pkga.Foo
+// Person is a type alias.
+type Person = pkga.Person
 
 // String is a type alias.
 type String = string
+
+// Any is a type alias.
+type Any = interface{}

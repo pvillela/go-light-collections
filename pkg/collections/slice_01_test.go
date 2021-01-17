@@ -1,17 +1,16 @@
-package collections_test
+package collections
 
 import (
 	"testing"
 
-	c "github.com/pvillela/go-light-collections/pkg/collections"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestFlatMapT1(t *testing.T) {
-	var sInt c.SliceInt = []int{1, 2, 3}
-	f := func(a c.Any) c.SliceT1 {
+	var sInt SliceInt = []int{1, 2, 3}
+	f := func(a T0) SliceT1 {
 		n := a.(int)
-		s := make([]c.Any, n)
+		s := make(SliceT1, n)
 		for i := range s {
 			s[i] = n
 		}
@@ -20,12 +19,12 @@ func TestFlatMapT1(t *testing.T) {
 
 	cases := []struct {
 		msg      string
-		receiver c.SliceAny
-		arg      func(c.Any) c.SliceT1
-		want     c.SliceAny
+		receiver SliceT0
+		arg      func(T0) SliceT1
+		want     SliceT1
 	}{
-		{"FlatMapT1: non-empty receiver", sInt.ToSliceAny(), f, []c.Any{1, 2, 2, 3, 3, 3}},
-		{"FlatMapT1: empty receiver", sEmpty(), f, []c.Any{}},
+		{"FlatMapT1: non-empty receiver", sInt.ToSliceAny(), f, SliceT1{1, 2, 2, 3, 3, 3}},
+		{"FlatMapT1: empty receiver", SliceT0{}, f, SliceT1{}},
 	}
 
 	for _, cs := range cases {
@@ -35,17 +34,17 @@ func TestFlatMapT1(t *testing.T) {
 }
 
 func TestFoldT1(t *testing.T) {
-	op := func(z c.Any, a c.Any) c.Any { return z.(int) + a.(Foo).v1 }
+	op := func(z T1, a T0) T1 { return z.(int) + a.(Foo).V1 }
 
 	cases := []struct {
 		msg      string
-		receiver c.SliceAny
+		receiver SliceT0
 		arg1     int
-		arg2     func(z c.Any, a c.Any) c.Any
-		want     c.Any
+		arg2     func(z T1, a T0) T1
+		want     T1
 	}{
 		{"FoldT1: non-empty receiver", sFoo(), 1, op, 1 + 1 + 22 + 333 + 4444 + 22},
-		{"FoldT1: empty receiver", sEmpty(), 42, op, 42},
+		{"FoldT1: empty receiver", SliceT0{}, 42, op, 42},
 	}
 
 	for _, cs := range cases {
@@ -55,19 +54,19 @@ func TestFoldT1(t *testing.T) {
 }
 
 func TestGroupByT1(t *testing.T) {
-	f := func(a c.Any) c.Any { return a.(Foo).v1 % 2 }
+	f := func(a T0) T1 { return a.(Foo).V1 % 2 }
 
 	cases := []struct {
 		msg      string
-		receiver c.SliceAny
-		arg      func(c.Any) c.Any
-		want     c.MapAnySliceAny
+		receiver SliceT0
+		arg      func(T0) T1
+		want     MapT1SliceT0
 	}{
-		{"GroupByT1: non-empty receiver", sFoo(), f, map[c.Any]c.SliceAny{
+		{"GroupByT1: non-empty receiver", sFoo(), f, MapT1SliceT0{
 			0: {Foo{22, "w22"}, Foo{4444, "w4444"}, Foo{22, "w22"}},
 			1: {Foo{1, "w1"}, Foo{333, "w333"}},
 		}},
-		{"GroupByT1: empty receiver", sEmpty(), f, map[c.Any]c.SliceAny{}},
+		{"GroupByT1: empty receiver", SliceT0{}, f, MapT1SliceT0{}},
 	}
 
 	for _, cs := range cases {
@@ -77,16 +76,16 @@ func TestGroupByT1(t *testing.T) {
 }
 
 func TestMapT1(t *testing.T) {
-	f := func(a c.Any) c.Any { return Bar{a.(Foo).v1 + 1, []string{a.(Foo).v2}} }
+	f := func(a T0) T1 { return Bar{a.(Foo).V1 + 1, []string{a.(Foo).V2}} }
 
 	cases := []struct {
 		msg      string
-		receiver c.SliceAny
-		arg      func(c.Any) c.Any
-		want     c.SliceAny
+		receiver SliceT0
+		arg      func(T0) T1
+		want     SliceT1
 	}{
-		{"MapT1: non-empty receiver", sFoo(), f, []c.Any{Bar{2, []string{"w1"}}, Bar{23, []string{"w22"}}, Bar{334, []string{"w333"}}, Bar{4445, []string{"w4444"}}, Bar{23, []string{"w22"}}}},
-		{"MapT1: empty receiver", sEmpty(), f, []c.Any{}},
+		{"MapT1: non-empty receiver", sFoo(), f, SliceT1{Bar{2, []string{"w1"}}, Bar{23, []string{"w22"}}, Bar{334, []string{"w333"}}, Bar{4445, []string{"w4444"}}, Bar{23, []string{"w22"}}}},
+		{"MapT1: empty receiver", SliceT0{}, f, SliceT1{}},
 	}
 
 	for _, cs := range cases {
@@ -96,23 +95,23 @@ func TestMapT1(t *testing.T) {
 }
 
 func TestZipT1(t *testing.T) {
-	var shorterOther c.SliceInt = []int{1, 2, 3}
-	var longerOther c.SliceInt = []int{1, 2, 3, 4, 5, 6, 7}
+	shorterOther := SliceT1{1, 2, 3}
+	longerOther := SliceT1{1, 2, 3, 4, 5, 6, 7}
 
 	cases := []struct {
 		msg      string
-		receiver c.SliceAny
-		arg      c.SliceAny
-		want     c.SliceOfPairAnyAny
+		receiver SliceT0
+		arg      SliceT1
+		want     SliceOfPairT0T1
 	}{
-		{"ZipT1: non-empty receiver, shorter other", sFoo(), shorterOther.ToSliceAny(),
-			[]c.PairAnyAny{{Foo{1, "w1"}, 1}, {Foo{22, "w22"}, 2}, {Foo{333, "w333"}, 3}}},
-		{"ZipT1: non-empty receiver, longer other", sFoo(), longerOther.ToSliceAny(),
-			[]c.PairAnyAny{{Foo{1, "w1"}, 1}, {Foo{22, "w22"}, 2}, {Foo{333, "w333"}, 3},
+		{"ZipT1: non-empty receiver, shorter other", sFoo(), shorterOther,
+			SliceOfPairT0T1{{Foo{1, "w1"}, 1}, {Foo{22, "w22"}, 2}, {Foo{333, "w333"}, 3}}},
+		{"ZipT1: non-empty receiver, longer other", sFoo(), longerOther,
+			SliceOfPairT0T1{{Foo{1, "w1"}, 1}, {Foo{22, "w22"}, 2}, {Foo{333, "w333"}, 3},
 				{Foo{4444, "w4444"}, 4}, {Foo{22, "w22"}, 5}}},
-		{"ZipT1: non-empty receiver, empty other", sFoo(), sEmpty(), []c.PairAnyAny{}},
-		{"ZipT1: empty receiver, non-empty other", sEmpty(), sFoo(), []c.PairAnyAny{}},
-		{"ZipT1: empty receiver, empty other", sEmpty(), sEmpty(), []c.PairAnyAny{}},
+		{"ZipT1: non-empty receiver, empty other", sFoo(), SliceT0{}, SliceOfPairT0T1{}},
+		{"ZipT1: empty receiver, non-empty other", SliceT0{}, sFoo(), SliceOfPairT0T1{}},
+		{"ZipT1: empty receiver, empty other", SliceT0{}, SliceT0{}, SliceOfPairT0T1{}},
 	}
 
 	for _, cs := range cases {

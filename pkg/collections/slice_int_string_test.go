@@ -1,25 +1,18 @@
-package collections_test
+package collections
 
 import (
 	"strconv"
 	"testing"
 
-	c "github.com/pvillela/go-light-collections/pkg/collections"
 	"github.com/stretchr/testify/assert"
 )
 
-// SliceInt defines a type in this package that is equivalent to a type of the same name in
-// package collections.
-// This is done so that methods can be defined. The corresponding type in the collections
-// package is leveraged in the method implementations.
-type SliceInt []int
-
 // Create a specific map function from the pseudo-generic one.
 func (s SliceInt) MapInt(f func(int) int) []int {
-	sa := c.SliceInt(s).ToSliceAny()
-	fa := func(a c.Any) c.Any { return f(a.(int)) }
+	sa := SliceInt(s).ToSliceAny()
+	fa := func(a Any) Any { return f(a.(int)) }
 	ra := sa.Map(fa)
-	return c.ToSliceInt(ra)
+	return ToSliceInt(ra)
 }
 
 // Use the specific map function
@@ -31,18 +24,12 @@ func TestSliceInt_MapInt(t *testing.T) {
 	assert.Equal(t, xout, []int{10, 220, 3330})
 }
 
-// SliceString defines a type in this package that is equivalent to a type of the same name in
-// package collections.
-// This is done so that methods can be defined. The corresponding type in the collections
-// package is leveraged in the method implementations.
-type SliceString []string
-
 // Create a specific filter function from the pseudo-generic cone.
 func (s SliceString) Filter(pred func(string) bool) SliceString {
-	sa := c.SliceString(s).ToSliceAny()
-	preda := func(a c.Any) bool { return pred(a.(string)) }
+	sa := SliceString(s).ToSliceAny()
+	preda := func(a Any) bool { return pred(a.(string)) }
 	ra := sa.Filter(preda)
-	return c.ToSliceString(ra).Und()
+	return ToSliceString(ra).Und()
 }
 
 // Use the specific filter function
@@ -60,8 +47,8 @@ func TestSliceString_Filter(t *testing.T) {
 
 // Create a specific fold function from the pseudo-generic one.
 func (s SliceString) FoldInt(z int, op func(int, string) int) int {
-	sa := c.SliceString(s).ToSliceAny()
-	opa := func(za c.Any, a c.Any) c.Any { return op(za.(int), a.(string)) }
+	sa := SliceString(s).ToSliceAny()
+	opa := func(za Any, a Any) Any { return op(za.(int), a.(string)) }
 	ra := sa.Fold(z, opa)
 	return ra.(int)
 }
