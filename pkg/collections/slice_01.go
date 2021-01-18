@@ -26,7 +26,7 @@ func (s SliceT0) FoldT1(z T1, op func(T1, T0) T1) T1 {
 // the items in the receiver and whose values are slices containing the items in the
 // receiver that correspond to each key obtained with the keySelector function.
 func (s SliceT0) GroupByT1(keySelector func(T0) T1) MapT1SliceT0 {
-	m := make(MapT1SliceT0)
+	m := make(MapT1SliceT0, len(s)/2) // optimizing for speed vs space
 	for _, x := range s {
 		k := keySelector(x)
 		lst, ok := m[k]
@@ -42,11 +42,11 @@ func (s SliceT0) GroupByT1(keySelector func(T0) T1) MapT1SliceT0 {
 // MapT1 returns a new slice resulting from the application of a given function to
 // each element of a given slice.
 func (s SliceT0) MapT1(f func(T0) T1) SliceT1 {
-	output := make([]T1, len(s))
+	r := make(SliceT1, len(s))
 	for i, a := range s {
-		output[i] = f(a)
+		r[i] = f(a)
 	}
-	return output
+	return r
 }
 
 func (s SliceT0) ZipT1(other SliceT1) SliceOfPairT0T1 {

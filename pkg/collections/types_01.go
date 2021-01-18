@@ -15,5 +15,8 @@ type MapT0T1 map[T0]T1
 // MapT1SliceT0 is a type wrapper.
 type MapT1SliceT0 map[T1]SliceT0
 
+// MapT1SetT0 is a type wrapper.
+type MapT1SetT0 map[T1]SetT0
+
 // SetOfPairT0T1 is a type wrapper, implements Set interface.
 type SetOfPairT0T1 map[PairT0T1]bool
