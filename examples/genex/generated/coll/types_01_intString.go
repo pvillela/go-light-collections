@@ -17,5 +17,8 @@ type MapintString map[int]String
 // MapStringSliceint is a type wrapper.
 type MapStringSliceint map[String]Sliceint
 
+// MapStringSetint is a type wrapper.
+type MapStringSetint map[String]Setint
+
 // SetOfPairintString is a type wrapper, implements Set interface.
 type SetOfPairintString map[PairintString]bool

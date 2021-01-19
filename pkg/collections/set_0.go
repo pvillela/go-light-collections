@@ -14,6 +14,9 @@ import (
 
 // ToSet returns a set containing the values in the receiver.
 func (s SliceT0) ToSet() SetT0 {
+	if s == nil {
+		return nil
+	}
 	set := make(SetT0, len(s)) // optimize for speed vs space
 	for _, x := range s {
 		set.Put(x)

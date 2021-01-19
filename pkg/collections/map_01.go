@@ -14,9 +14,9 @@ func (m MapT0T1) Copy() MapT0T1 {
 }
 
 func (m MapT0T1) Entries() SetOfPairT0T1 {
-	entries := make(map[PairT0T1]bool, len(m))
+	entries := make(SetOfPairT0T1, len(m))
 	for k, v := range m {
-		m[PairT0T1{k, v}] = true
+		entries[PairT0T1{k, v}] = true
 	}
 	return entries
 }
@@ -100,9 +100,14 @@ func (m MapT0T1) Any(pred func(PairT0T1) bool) bool {
 }
 
 func (m MapT0T1) ToSlice() SliceOfPairT0T1 {
-	s := SliceOfPairT0T1{}
+	if m == nil {
+		return nil
+	}
+	s := make(SliceOfPairT0T1, len(m))
+	i := 0
 	for k, v := range m {
-		s = append(s, PairT0T1{k, v})
+		s[i] = PairT0T1{k, v}
+		i++
 	}
 	return s
 }
@@ -153,11 +158,11 @@ func (m MapT0T1) ForEach(f func(PairT0T1)) {
 	}
 }
 
-func (m MapT0T1) GetOrElse(k T0, f func() T1) T1 {
+func (m MapT0T1) GetOrElse(k T0, f func(T0) T1) T1 {
 	if v, ok := m[k]; ok {
 		return v
 	}
-	return f()
+	return f(k)
 }
 
 func (m MapT0T1) IsNotEmpty() bool {
@@ -170,7 +175,7 @@ func (m MapT0T1) MaxWith(comparator func(PairT0T1, PairT0T1) int) (PairT0T1, err
 	var max PairT0T1
 
 	if len(m) == 0 {
-		return max, errors.New("empty map")
+		return max, errors.New("empty or nil map")
 	}
 
 	first := true
@@ -210,6 +215,9 @@ func (m MapT0T1) MinWith(comparator func(PairT0T1, PairT0T1) int) (PairT0T1, err
 
 func (m MapT0T1) PlusEntry(entry PairT0T1) MapT0T1 {
 	m1 := m.Copy()
+	if m1 == nil {
+		m1 = MapT0T1{}
+	}
 	m1[entry.X1] = entry.X2
 	return m1
 }
@@ -230,6 +238,7 @@ func (m MapT0T1) PlusSlice(s SliceOfPairT0T1) MapT0T1 {
 	return m1
 }
 
+// Panics if receiver is nil.
 func (m MapT0T1) Add(k T0, v T1) MapT0T1 {
 	m1 := m.Copy()
 	m1[k] = v

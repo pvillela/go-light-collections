@@ -243,7 +243,7 @@ func (s SliceString) minusAllElement(elem String) SliceString {
 	return s.FilterNot(func(a String) bool { return reflect.DeepEqual(a, elem) })
 }
 
-// Minus returns a new slice which contains the elements of the receiver except for all
+// MinusSlice returns a new slice which contains the elements of the receiver except for all
 // instances of the elements of the other slice.
 func (s SliceString) MinusSlice(other SliceString) SliceString {
 	if len(other) == 0 {
@@ -295,7 +295,7 @@ func (s SliceString) PlusElement(elem String) SliceString {
 	return append(s.Copy(), elem)
 }
 
-// Plus returns a copy of the receiver with the elements of the other slice appended to it.
+// PlusSlice returns a copy of the receiver with the elements of the other slice appended to it.
 func (s SliceString) PlusSlice(other SliceString) SliceString {
 	return append(s.Copy(), other...)
 }

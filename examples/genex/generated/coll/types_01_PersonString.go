@@ -17,5 +17,8 @@ type MapPersonString map[Person]String
 // MapStringSlicePerson is a type wrapper.
 type MapStringSlicePerson map[String]SlicePerson
 
+// MapStringSetPerson is a type wrapper.
+type MapStringSetPerson map[String]SetPerson
+
 // SetOfPairPersonString is a type wrapper, implements Set interface.
 type SetOfPairPersonString map[PairPersonString]bool

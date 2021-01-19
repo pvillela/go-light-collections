@@ -6,10 +6,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestFlatMapT1(t *testing.T) {
-	var sInt SliceInt = []int{1, 2, 3}
+func TestSlice_FlatMapT1(t *testing.T) {
 	f := func(a T0) SliceT1 {
-		n := a.(int)
+		n := Any(a).(Dat).V1 % 10
 		s := make(SliceT1, n)
 		for i := range s {
 			s[i] = n
@@ -23,7 +22,7 @@ func TestFlatMapT1(t *testing.T) {
 		arg      func(T0) SliceT1
 		want     SliceT1
 	}{
-		{"FlatMapT1: non-empty receiver", sInt.ToSliceAny(), f, SliceT1{1, 2, 2, 3, 3, 3}},
+		{"FlatMapT1: non-empty receiver", sDat(), f, SliceT1{1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 2, 2}},
 		{"FlatMapT1: empty receiver", SliceT0{}, f, SliceT1{}},
 	}
 
@@ -33,8 +32,8 @@ func TestFlatMapT1(t *testing.T) {
 	}
 }
 
-func TestFoldT1(t *testing.T) {
-	op := func(z T1, a T0) T1 { return z.(int) + a.(Dat).V1 }
+func TestSlice_FoldT1(t *testing.T) {
+	op := func(z T1, a T0) T1 { return Any(z).(int) + Any(a).(Dat).V1 }
 
 	cases := []struct {
 		msg      string
@@ -53,8 +52,8 @@ func TestFoldT1(t *testing.T) {
 	}
 }
 
-func TestGroupByT1(t *testing.T) {
-	f := func(a T0) T1 { return a.(Dat).V1 % 2 }
+func TestSlice_GroupByT1(t *testing.T) {
+	f := func(a T0) T1 { return Any(a).(Dat).V1 % 2 }
 
 	cases := []struct {
 		msg      string
@@ -75,8 +74,8 @@ func TestGroupByT1(t *testing.T) {
 	}
 }
 
-func TestMapT1(t *testing.T) {
-	f := func(a T0) T1 { return Bar{a.(Dat).V1 + 1, []string{a.(Dat).V2}} }
+func TestSlice_MapT1(t *testing.T) {
+	f := func(a T0) T1 { return Any(a).(Dat).V1 + 1 }
 
 	cases := []struct {
 		msg      string
@@ -84,7 +83,7 @@ func TestMapT1(t *testing.T) {
 		arg      func(T0) T1
 		want     SliceT1
 	}{
-		{"MapT1: non-empty receiver", sDat(), f, SliceT1{Bar{2, []string{"w1"}}, Bar{23, []string{"w22"}}, Bar{334, []string{"w333"}}, Bar{4445, []string{"w4444"}}, Bar{23, []string{"w22"}}}},
+		{"MapT1: non-empty receiver", sDat(), f, SliceT1{2, 23, 334, 4445, 23}},
 		{"MapT1: empty receiver", SliceT0{}, f, SliceT1{}},
 	}
 
@@ -94,7 +93,7 @@ func TestMapT1(t *testing.T) {
 	}
 }
 
-func TestZipT1(t *testing.T) {
+func TestSlice_ZipT1(t *testing.T) {
 	shorterOther := SliceT1{1, 2, 3}
 	longerOther := SliceT1{1, 2, 3, 4, 5, 6, 7}
 
@@ -109,9 +108,9 @@ func TestZipT1(t *testing.T) {
 		{"ZipT1: non-empty receiver, longer other", sDat(), longerOther,
 			SliceOfPairT0T1{{Dat{1, "w1"}, 1}, {Dat{22, "w22"}, 2}, {Dat{333, "w333"}, 3},
 				{Dat{4444, "w4444"}, 4}, {Dat{22, "w22"}, 5}}},
-		{"ZipT1: non-empty receiver, empty other", sDat(), SliceT0{}, SliceOfPairT0T1{}},
-		{"ZipT1: empty receiver, non-empty other", SliceT0{}, sDat(), SliceOfPairT0T1{}},
-		{"ZipT1: empty receiver, empty other", SliceT0{}, SliceT0{}, SliceOfPairT0T1{}},
+		{"ZipT1: non-empty receiver, empty other", sDat(), SliceT1{}, SliceOfPairT0T1{}},
+		{"ZipT1: empty receiver, non-empty other", SliceT0{}, shorterOther, SliceOfPairT0T1{}},
+		{"ZipT1: empty receiver, empty other", SliceT0{}, SliceT1{}, SliceOfPairT0T1{}},
 	}
 
 	for _, cs := range cases {

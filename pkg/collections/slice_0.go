@@ -172,7 +172,7 @@ func (s SliceT0) FilterNot(pred func(T0) bool) SliceT0 {
 func (s SliceT0) First() (T0, error) {
 	if len(s) == 0 {
 		var zero T0
-		return zero, errors.New("empty slice")
+		return zero, errors.New("empty or nil slice")
 	}
 	return s[0], nil
 }
@@ -215,7 +215,7 @@ func (s SliceT0) IsNotEmpty() bool {
 func (s SliceT0) Last() (T0, error) {
 	if len(s) == 0 {
 		var zero T0
-		return zero, errors.New("empty slice")
+		return zero, errors.New("empty or nil slice")
 	}
 	return s[len(s)-1], nil
 }
@@ -226,7 +226,7 @@ func (s SliceT0) Last() (T0, error) {
 func (s SliceT0) MaxWith(comparator func(T0, T0) int) (T0, error) {
 	if len(s) == 0 {
 		var zero T0
-		return zero, errors.New("empty slice")
+		return zero, errors.New("empty or nil slice")
 	}
 	max := s[0]
 	for i := 1; i < len(s); i++ {
@@ -241,7 +241,7 @@ func (s SliceT0) minusAllElement(elem T0) SliceT0 {
 	return s.FilterNot(func(a T0) bool { return reflect.DeepEqual(a, elem) })
 }
 
-// Minus returns a new slice which contains the elements of the receiver except for all
+// MinusSlice returns a new slice which contains the elements of the receiver except for all
 // instances of the elements of the other slice.
 func (s SliceT0) MinusSlice(other SliceT0) SliceT0 {
 	if len(other) == 0 {
@@ -293,7 +293,7 @@ func (s SliceT0) PlusElement(elem T0) SliceT0 {
 	return append(s.Copy(), elem)
 }
 
-// Plus returns a copy of the receiver with the elements of the other slice appended to it.
+// PlusSlice returns a copy of the receiver with the elements of the other slice appended to it.
 func (s SliceT0) PlusSlice(other SliceT0) SliceT0 {
 	return append(s.Copy(), other...)
 }
@@ -308,7 +308,7 @@ func (s SliceT0) PlusSlice(other SliceT0) SliceT0 {
 func (s SliceT0) Reduce(op func(T0, T0) T0) (T0, error) {
 	if len(s) == 0 {
 		var zero T0
-		return zero, errors.New("empty slice")
+		return zero, errors.New("empty or nil slice")
 	}
 	z := s[0]
 	for i := 1; i < len(s); i++ {

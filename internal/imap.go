@@ -29,7 +29,7 @@ type IMapT0T1 interface {
 	FilterNot(func(c.PairT0T1) bool) c.MapT0T1
 	FilterValues(func(c.T1) bool) c.MapT0T1
 	ForEach(func(c.PairT0T1))
-	GetOrElse(c.T0, func() c.T1) c.T1
+	GetOrElse(c.T0, func(c.T0) c.T1) c.T1
 	IsNotEmpty() bool
 	MaxWith(func(c.PairT0T1, c.PairT0T1) int) (c.PairT0T1, error)
 	MinusKey(c.T0) c.MapT0T1

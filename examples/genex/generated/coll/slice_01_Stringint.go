@@ -28,7 +28,7 @@ func (s SliceString) Foldint(z int, op func(int, String) int) int {
 // the items in the receiver and whose values are slices containing the items in the
 // receiver that correspond to each key obtained with the keySelector function.
 func (s SliceString) GroupByint(keySelector func(String) int) MapintSliceString {
-	m := make(MapintSliceString)
+	m := make(MapintSliceString, len(s)/2) // optimizing for speed vs space
 	for _, x := range s {
 		k := keySelector(x)
 		lst, ok := m[k]
@@ -44,11 +44,11 @@ func (s SliceString) GroupByint(keySelector func(String) int) MapintSliceString 
 // Mapint returns a new slice resulting from the application of a given function to
 // each element of a given slice.
 func (s SliceString) Mapint(f func(String) int) Sliceint {
-	output := make([]int, len(s))
+	r := make(Sliceint, len(s))
 	for i, a := range s {
-		output[i] = f(a)
+		r[i] = f(a)
 	}
-	return output
+	return r
 }
 
 func (s SliceString) Zipint(other Sliceint) SliceOfPairStringint {
