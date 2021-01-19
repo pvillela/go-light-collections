@@ -322,7 +322,7 @@ func TestMap_Filter(t *testing.T) {
 		{"Filter: pred matches some", mBase(), pred2, MapT0T1{22: "w22", 4444: "w4444"}},
 		{"Filter: pred matches none", mBase(), pred3, MapT0T1{}},
 		{"Filter: empty receiver", MapT0T1{}, pred2, MapT0T1{}},
-		{"Filter: nil receiver", nil, pred2, MapT0T1{}},
+		{"Filter: nil receiver", nil, pred2, nil},
 	}
 
 	for _, cs := range cases {
@@ -346,7 +346,7 @@ func TestMap_FilterKeys(t *testing.T) {
 		{"FilterKeys: pred matches some", mBase(), pred2, MapT0T1{22: "w22", 4444: "w4444"}},
 		{"FilterKeys: pred matches none", mBase(), pred3, MapT0T1{}},
 		{"FilterKeys: empty receiver", MapT0T1{}, pred2, MapT0T1{}},
-		{"FilterKeys: nil receiver", nil, pred2, MapT0T1{}},
+		{"FilterKeys: nil receiver", nil, pred2, nil},
 	}
 
 	for _, cs := range cases {
@@ -370,7 +370,7 @@ func TestMap_FilterNot(t *testing.T) {
 		{"FilterNot: pred matches some", mBase(), pred2, MapT0T1{22: "w22", 4444: "w4444"}},
 		{"FilterNot: pred matches none", mBase(), pred3, mBase()},
 		{"FilterNot: empty receiver", MapT0T1{}, pred2, MapT0T1{}},
-		{"FilterNot: nil receiver", nil, pred2, MapT0T1{}},
+		{"FilterNot: nil receiver", nil, pred2, nil},
 	}
 
 	for _, cs := range cases {
@@ -394,7 +394,7 @@ func TestMap_FilterValues(t *testing.T) {
 		{"FilterValues: pred matches some", mBase(), pred2, MapT0T1{22: "w22", 4444: "w4444"}},
 		{"FilterValues: pred matches none", mBase(), pred3, MapT0T1{}},
 		{"FilterValues: empty receiver", MapT0T1{}, pred2, MapT0T1{}},
-		{"FilterValues: nil receiver", nil, pred2, MapT0T1{}},
+		{"FilterValues: nil receiver", nil, pred2, nil},
 	}
 
 	for _, cs := range cases {
@@ -407,17 +407,18 @@ func TestMap_ForEach(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver MapT0T1
-		want     SliceT0
+		want     map[Any]bool
 	}{
-		{"ForEach: non-empty receiver", mBase(), SliceT0{1, 22, 333, 4444}},
-		{"ForEach: empty receiver", MapT0T1{}, SliceT0{}},
-		{"ForEach: nil receiver", nil, SliceT0{}},
+		{"ForEach: non-empty receiver", mBase(),
+			map[Any]bool{1: true, 22: true, 333: true, 4444: true}},
+		{"ForEach: empty receiver", MapT0T1{}, map[Any]bool{}},
+		{"ForEach: nil receiver", nil, map[Any]bool{}},
 	}
 
 	for _, cs := range cases {
-		got := SliceT0{}
+		got := map[Any]bool{}
 		f := func(a PairT0T1) {
-			got = append(got, a.X1)
+			got[a.X1] = true
 		}
 
 		cs.receiver.ForEach(f)
@@ -612,7 +613,7 @@ func TestMap_PlusSlice(t *testing.T) {
 		{"PlusSlice: empty + empty", MapT0T1{}, SliceOfPairT0T1{}, MapT0T1{}},
 		{"PlusSlice: empty + nil", MapT0T1{}, nil, MapT0T1{}},
 		{"PlusSlice: nil + empty", nil, SliceOfPairT0T1{}, MapT0T1{}},
-		{"PlusSlice: nil + nil", nil, nil, MapT0T1{}},
+		{"PlusSlice: nil + nil", nil, nil, nil},
 	}
 
 	for _, cs := range cases {
@@ -632,19 +633,13 @@ func TestMap_Add(t *testing.T) {
 		{"Add: key present", mBase(), 333, "x3",
 			MapT0T1{1: "w1", 22: "w22", 333: "x3", 4444: "w4444"}},
 		{"Add: key absent", mBase(), 9, "x9",
-			MapT0T1{1: "w1", 9: "x9", 22: "w22", 333: "x3", 4444: "w4444"}},
+			MapT0T1{1: "w1", 9: "x9", 22: "w22", 333: "w333", 4444: "w4444"}},
 		{"Add: empty", MapT0T1{}, 333, "w333", MapT0T1{333: "w333"}},
 		{"Add: nil", nil, 333, "w333", MapT0T1{333: "w333"}},
 	}
 
 	for _, cs := range cases {
-		if cs.receiver != nil {
-			cs.receiver.Add(cs.arg1, cs.arg2)
-			got := cs.receiver
-			assert.Equal(t, cs.want, got, cs.msg)
-		} else {
-			var fPanic assert.PanicTestFunc
-			assert.Panics()
-		}
+		got := cs.receiver.Add(cs.arg1, cs.arg2)
+		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }

@@ -113,6 +113,9 @@ func (m MapT0T1) ToSlice() SliceOfPairT0T1 {
 }
 
 func (m MapT0T1) Filter(pred func(PairT0T1) bool) MapT0T1 {
+	if m == nil {
+		return nil
+	}
 	m1 := MapT0T1{}
 	for k, v := range m {
 		if pred(PairT0T1{k, v}) {
@@ -123,6 +126,9 @@ func (m MapT0T1) Filter(pred func(PairT0T1) bool) MapT0T1 {
 }
 
 func (m MapT0T1) FilterKeys(pred func(T0) bool) MapT0T1 {
+	if m == nil {
+		return nil
+	}
 	m1 := MapT0T1{}
 	for k, v := range m {
 		if pred(k) {
@@ -133,6 +139,9 @@ func (m MapT0T1) FilterKeys(pred func(T0) bool) MapT0T1 {
 }
 
 func (m MapT0T1) FilterNot(pred func(PairT0T1) bool) MapT0T1 {
+	if m == nil {
+		return nil
+	}
 	m1 := MapT0T1{}
 	for k, v := range m {
 		if !pred(PairT0T1{k, v}) {
@@ -143,6 +152,9 @@ func (m MapT0T1) FilterNot(pred func(PairT0T1) bool) MapT0T1 {
 }
 
 func (m MapT0T1) FilterValues(pred func(T1) bool) MapT0T1 {
+	if m == nil {
+		return nil
+	}
 	m1 := MapT0T1{}
 	for k, v := range m {
 		if pred(v) {
@@ -223,7 +235,19 @@ func (m MapT0T1) PlusEntry(entry PairT0T1) MapT0T1 {
 }
 
 func (m MapT0T1) PlusMap(other MapT0T1) MapT0T1 {
-	m1 := m.Copy()
+	var m1 MapT0T1
+	switch {
+	case m == nil && other == nil:
+		return nil
+	case m == nil:
+		m1 = MapT0T1{}
+	default:
+		m1 = m.Copy()
+	}
+
+	if m1 == nil {
+		m1 = MapT0T1{}
+	}
 	for k, v := range other {
 		m1[k] = v
 	}
@@ -231,16 +255,30 @@ func (m MapT0T1) PlusMap(other MapT0T1) MapT0T1 {
 }
 
 func (m MapT0T1) PlusSlice(s SliceOfPairT0T1) MapT0T1 {
-	m1 := m.Copy()
+	var m1 MapT0T1
+	switch {
+	case m == nil && s == nil:
+		return nil
+	case m == nil:
+		m1 = MapT0T1{}
+	default:
+		m1 = m.Copy()
+	}
+
+	if m1 == nil {
+		m1 = MapT0T1{}
+	}
 	for _, pair := range s {
 		m1[pair.X1] = pair.X2
 	}
 	return m1
 }
 
-// Panics if receiver is nil.
 func (m MapT0T1) Add(k T0, v T1) MapT0T1 {
 	m1 := m.Copy()
+	if m1 == nil {
+		m1 = MapT0T1{}
+	}
 	m1[k] = v
 	return m1
 }
