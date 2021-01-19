@@ -15,11 +15,11 @@
 // On the other hand, some additional simple coding is required to create the aformentioned
 // conversions.
 //
-// This approach is not as performant as recoding or generating a function such as filter for
-// slices of each underlying type ([]int, []string, []Foo, etc.), but the core algorith is coded
-// only once (as a pseudo-generic function) and only simple conversion functions need to be
-// coded for different concrete types.  The additional performancce overhead is mostly
-// associated with copying slices to/from []interface{}, and likewise for maps and sets..
+// This first approach is not as performant as recoding or generating a function such as filter
+// for slices of each underlying type ([]int, []string, []Foo, etc.), but the core algorith is
+// coded only once (as a pseudo-generic function) and only simple conversion functions need to
+// be coded for different concrete types.  The additional performancce overhead is mostly
+// associated with copying slices to/from []interface{}, and likewise for maps and sets.
 // In most cases, this will have low impact.
 // In cases of large slices/maps/sets with elements that are large data structures, using
 // slices/maps/sets of pointers may be considered to minimize the overhead.
@@ -28,5 +28,10 @@
 //
 // The second approach is code generation.  This framework uses type aliases and wrappers
 // to facilitate the replacement of the pseudo-generic types with specific concrete types
-// in support of code generation.
+// in support of code generation.  This second approach is exemplified in the
+// examples/genex package and sub-packages.
+//
+// The package examples/gentest and its sub-packages contain the generation of tests for
+// specific concrete types.  These tests serve to test the correctness of the code generation
+// process.
 package glc
