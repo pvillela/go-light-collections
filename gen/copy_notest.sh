@@ -9,7 +9,7 @@ echo "PWD: $PWD"
 
 mkdir -p "${DEST_DIR}/${PACKAGE}"
 
-cat ${COLL_MODULE_DIR}/pkg/glc/${FILE}.go | \
+cat ${COLL_MODULE_DIR}/pkg/glc/${FILE}_test.go | \
     sed -e 's/package glc/package '${PACKAGE}'/g' \
         -e 's/T0/'${T0}'/g' \
         -e 's/T1/'${T1}'/g' \

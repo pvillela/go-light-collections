@@ -1,6 +1,6 @@
 package internal
 
-import c "github.com/pvillela/go-light-collections/pkg/collections"
+import c "github.com/pvillela/go-light-collections/pkg/glc"
 
 /////////////////////
 // This file is used to define the intended methods to be implemented by certain
