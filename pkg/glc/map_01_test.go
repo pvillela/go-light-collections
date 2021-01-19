@@ -387,7 +387,7 @@ func TestMap_FilterValues(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver MapT0T1
-		arg      func(T0) bool
+		arg      func(T1) bool
 		want     MapT0T1
 	}{
 		{"FilterValues: pred matches all", mBase(), pred1, mBase()},

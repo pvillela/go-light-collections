@@ -54,5 +54,8 @@ type SetAny = SetT0
 // SetT1 is a type alias.
 type SetT1 = SetT0
 
+// SetT2 is a type alias.
+type SetT2 = SetT0
+
 // SetOfPairAnyAny is a type alias.
 type SetOfPairAnyAny = SetOfPairT0T1

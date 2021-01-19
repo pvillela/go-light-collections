@@ -18,8 +18,6 @@ export PACKAGE=coll
 ./copy_sub.sh types_01 int String
 ./copy_sub.sh types_01 String int
 
-# ./copy_sub.sh types_012 Person int String
-
 # Slices
 
 ./copy_sub.sh slice_0 Person
@@ -34,7 +32,7 @@ export PACKAGE=coll
 
 # Maps
 
-# ./copy_sub.sh map_01 Person int
-# ./copy_sub.sh map_012 Person int String
+./copy_sub.sh map_01 Person int
+./copy_sub.sh map_012 Person int String
 
 # Sets

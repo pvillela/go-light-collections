@@ -5,6 +5,9 @@ package collections
 // FlatMapint returns the slice obtained by applying the argument f to each item in the
 // receiver and concatenating the results.
 func (s SliceDat) FlatMapint(f func(Dat) Sliceint) Sliceint {
+	if s == nil {
+		return nil
+	}
 	r := make([]int, 0, len(s)) // optimizing for speed vs space
 	for _, x := range s {
 		r = append(r, f(x)...)
@@ -28,6 +31,9 @@ func (s SliceDat) Foldint(z int, op func(int, Dat) int) int {
 // the items in the receiver and whose values are slices containing the items in the
 // receiver that correspond to each key obtained with the keySelector function.
 func (s SliceDat) GroupByint(keySelector func(Dat) int) MapintSliceDat {
+	if s == nil {
+		return nil
+	}
 	m := make(MapintSliceDat, len(s)/2) // optimizing for speed vs space
 	for _, x := range s {
 		k := keySelector(x)
@@ -44,6 +50,9 @@ func (s SliceDat) GroupByint(keySelector func(Dat) int) MapintSliceDat {
 // Mapint returns a new slice resulting from the application of a given function to
 // each element of a given slice.
 func (s SliceDat) Mapint(f func(Dat) int) Sliceint {
+	if s == nil {
+		return nil
+	}
 	r := make(Sliceint, len(s))
 	for i, a := range s {
 		r[i] = f(a)
@@ -52,6 +61,9 @@ func (s SliceDat) Mapint(f func(Dat) int) Sliceint {
 }
 
 func (s SliceDat) Zipint(other Sliceint) SliceOfPairDatint {
+	if s == nil {
+		return nil
+	}
 	size := len(s)
 	if size > len(other) {
 		size = len(other)
@@ -68,6 +80,9 @@ func (s SliceDat) Zipint(other Sliceint) SliceOfPairDatint {
 // If multiple items in the receiver have the same first component, the corresponding
 // value in the resulting map will be taken from the last such item in the receiver.
 func (s SliceOfPairDatint) ToMap() MapDatint {
+	if s == nil {
+		return nil
+	}
 	m := make(map[Dat]int, len(s))
 	for _, p := range s {
 		m[p.X1] = p.X2

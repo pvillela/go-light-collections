@@ -8,7 +8,7 @@ import (
 
 func TestSlice_FlatMapT1(t *testing.T) {
 	f := func(a T0) SliceT1 {
-		n := Any(a).(Dat).V1 % 10
+		n := toDat(a).V1 % 10
 		s := make(SliceT1, n)
 		for i := range s {
 			s[i] = n
@@ -34,7 +34,7 @@ func TestSlice_FlatMapT1(t *testing.T) {
 }
 
 func TestSlice_FoldT1(t *testing.T) {
-	op := func(z T1, a T0) T1 { return Any(z).(int) + Any(a).(Dat).V1 }
+	op := func(z T1, a T0) T1 { return Any(z).(int) + toDat(a).V1 }
 
 	cases := []struct {
 		msg      string
@@ -55,7 +55,7 @@ func TestSlice_FoldT1(t *testing.T) {
 }
 
 func TestSlice_GroupByT1(t *testing.T) {
-	f := func(a T0) T1 { return Any(a).(Dat).V1 % 2 }
+	f := func(a T0) T1 { return toDat(a).V1 % 2 }
 
 	cases := []struct {
 		msg      string
@@ -78,7 +78,7 @@ func TestSlice_GroupByT1(t *testing.T) {
 }
 
 func TestSlice_MapT1(t *testing.T) {
-	f := func(a T0) T1 { return Any(a).(Dat).V1 + 1 }
+	f := func(a T0) T1 { return toDat(a).V1 + 1 }
 
 	cases := []struct {
 		msg      string

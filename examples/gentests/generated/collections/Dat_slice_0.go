@@ -67,7 +67,7 @@ func (s SliceDat) IndexOf(elem Dat) int {
 
 // IsEmpty returns true if the receiver is empty, false otherwise.
 func (s SliceDat) IsEmpty() bool {
-	return s == nil || len(s) == 0
+	return len(s) == 0
 }
 
 // LastIndexOf -- if the argument element is in the receiver, this function returns the
@@ -155,6 +155,9 @@ func (s SliceDat) DropWhile(pred func(Dat) bool) SliceDat {
 // Filter returns a new slice containing only the elements in the receiver that
 // satisfy the predicate.
 func (s SliceDat) Filter(pred func(Dat) bool) SliceDat {
+	if s == nil {
+		return nil
+	}
 	output := make(SliceDat, 0, len(s)/2) // optimizing for speed vs space
 	for i, a := range s {
 		if pred(s[i]) {
@@ -321,6 +324,9 @@ func (s SliceDat) Reduce(op func(Dat, Dat) Dat) (Dat, error) {
 
 // Reversed returns a copy of the receiver with the elements in reverse sequence.
 func (s SliceDat) Reversed() SliceDat {
+	if s == nil {
+		return nil
+	}
 	r := make(SliceDat, len(s))
 	size := len(s)
 	for i, x := range s {

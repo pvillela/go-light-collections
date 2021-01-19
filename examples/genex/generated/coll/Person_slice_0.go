@@ -67,7 +67,7 @@ func (s SlicePerson) IndexOf(elem Person) int {
 
 // IsEmpty returns true if the receiver is empty, false otherwise.
 func (s SlicePerson) IsEmpty() bool {
-	return s == nil || len(s) == 0
+	return len(s) == 0
 }
 
 // LastIndexOf -- if the argument element is in the receiver, this function returns the
@@ -155,6 +155,9 @@ func (s SlicePerson) DropWhile(pred func(Person) bool) SlicePerson {
 // Filter returns a new slice containing only the elements in the receiver that
 // satisfy the predicate.
 func (s SlicePerson) Filter(pred func(Person) bool) SlicePerson {
+	if s == nil {
+		return nil
+	}
 	output := make(SlicePerson, 0, len(s)/2) // optimizing for speed vs space
 	for i, a := range s {
 		if pred(s[i]) {
@@ -321,6 +324,9 @@ func (s SlicePerson) Reduce(op func(Person, Person) Person) (Person, error) {
 
 // Reversed returns a copy of the receiver with the elements in reverse sequence.
 func (s SlicePerson) Reversed() SlicePerson {
+	if s == nil {
+		return nil
+	}
 	r := make(SlicePerson, len(s))
 	size := len(s)
 	for i, x := range s {

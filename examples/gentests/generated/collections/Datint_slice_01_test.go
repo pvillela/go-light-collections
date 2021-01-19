@@ -10,7 +10,7 @@ import (
 
 func TestSlice_FlatMapint(t *testing.T) {
 	f := func(a Dat) Sliceint {
-		n := Any(a).(Dat).V1 % 10
+		n := toDat(a).V1 % 10
 		s := make(Sliceint, n)
 		for i := range s {
 			s[i] = n
@@ -26,6 +26,7 @@ func TestSlice_FlatMapint(t *testing.T) {
 	}{
 		{"FlatMapint: non-empty receiver", sDat(), f, Sliceint{1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 2, 2}},
 		{"FlatMapint: empty receiver", SliceDat{}, f, Sliceint{}},
+		{"FlatMapint: nil receiver", nil, f, nil},
 	}
 
 	for _, cs := range cases {
@@ -35,7 +36,7 @@ func TestSlice_FlatMapint(t *testing.T) {
 }
 
 func TestSlice_Foldint(t *testing.T) {
-	op := func(z int, a Dat) int { return Any(z).(int) + Any(a).(Dat).V1 }
+	op := func(z int, a Dat) int { return Any(z).(int) + toDat(a).V1 }
 
 	cases := []struct {
 		msg      string
@@ -46,6 +47,7 @@ func TestSlice_Foldint(t *testing.T) {
 	}{
 		{"Foldint: non-empty receiver", sDat(), 1, op, 1 + 1 + 22 + 333 + 4444 + 22},
 		{"Foldint: empty receiver", SliceDat{}, 42, op, 42},
+		{"Foldint: nil receiver", nil, 42, op, 42},
 	}
 
 	for _, cs := range cases {
@@ -55,7 +57,7 @@ func TestSlice_Foldint(t *testing.T) {
 }
 
 func TestSlice_GroupByint(t *testing.T) {
-	f := func(a Dat) int { return Any(a).(Dat).V1 % 2 }
+	f := func(a Dat) int { return toDat(a).V1 % 2 }
 
 	cases := []struct {
 		msg      string
@@ -68,6 +70,7 @@ func TestSlice_GroupByint(t *testing.T) {
 			1: {Dat{1, "w1"}, Dat{333, "w333"}},
 		}},
 		{"GroupByint: empty receiver", SliceDat{}, f, MapintSliceDat{}},
+		{"GroupByint: nil receiver", nil, f, nil},
 	}
 
 	for _, cs := range cases {
@@ -77,7 +80,7 @@ func TestSlice_GroupByint(t *testing.T) {
 }
 
 func TestSlice_Mapint(t *testing.T) {
-	f := func(a Dat) int { return Any(a).(Dat).V1 + 1 }
+	f := func(a Dat) int { return toDat(a).V1 + 1 }
 
 	cases := []struct {
 		msg      string
@@ -87,6 +90,7 @@ func TestSlice_Mapint(t *testing.T) {
 	}{
 		{"Mapint: non-empty receiver", sDat(), f, Sliceint{2, 23, 334, 4445, 23}},
 		{"Mapint: empty receiver", SliceDat{}, f, Sliceint{}},
+		{"Mapint: nil receiver", nil, f, nil},
 	}
 
 	for _, cs := range cases {
@@ -111,8 +115,13 @@ func TestSlice_Zipint(t *testing.T) {
 			SliceOfPairDatint{{Dat{1, "w1"}, 1}, {Dat{22, "w22"}, 2}, {Dat{333, "w333"}, 3},
 				{Dat{4444, "w4444"}, 4}, {Dat{22, "w22"}, 5}}},
 		{"Zipint: non-empty receiver, empty other", sDat(), Sliceint{}, SliceOfPairDatint{}},
+		{"Zipint: non-empty receiver, nil other", sDat(), Sliceint{}, SliceOfPairDatint{}},
 		{"Zipint: empty receiver, non-empty other", SliceDat{}, shorterOther, SliceOfPairDatint{}},
 		{"Zipint: empty receiver, empty other", SliceDat{}, Sliceint{}, SliceOfPairDatint{}},
+		{"Zipint: empty receiver, nil other", SliceDat{}, Sliceint{}, SliceOfPairDatint{}},
+		{"Zipint: nil receiver, non-empty other", nil, shorterOther, nil},
+		{"Zipint: nil receiver, empty other", nil, Sliceint{}, nil},
+		{"Zipint: nil receiver, nil other", nil, nil, nil},
 	}
 
 	for _, cs := range cases {

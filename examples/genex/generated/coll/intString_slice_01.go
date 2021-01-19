@@ -5,6 +5,9 @@ package coll
 // FlatMapString returns the slice obtained by applying the argument f to each item in the
 // receiver and concatenating the results.
 func (s Sliceint) FlatMapString(f func(int) SliceString) SliceString {
+	if s == nil {
+		return nil
+	}
 	r := make([]String, 0, len(s)) // optimizing for speed vs space
 	for _, x := range s {
 		r = append(r, f(x)...)
@@ -28,6 +31,9 @@ func (s Sliceint) FoldString(z String, op func(String, int) String) String {
 // the items in the receiver and whose values are slices containing the items in the
 // receiver that correspond to each key obtained with the keySelector function.
 func (s Sliceint) GroupByString(keySelector func(int) String) MapStringSliceint {
+	if s == nil {
+		return nil
+	}
 	m := make(MapStringSliceint, len(s)/2) // optimizing for speed vs space
 	for _, x := range s {
 		k := keySelector(x)
@@ -44,6 +50,9 @@ func (s Sliceint) GroupByString(keySelector func(int) String) MapStringSliceint 
 // MapString returns a new slice resulting from the application of a given function to
 // each element of a given slice.
 func (s Sliceint) MapString(f func(int) String) SliceString {
+	if s == nil {
+		return nil
+	}
 	r := make(SliceString, len(s))
 	for i, a := range s {
 		r[i] = f(a)
@@ -52,6 +61,9 @@ func (s Sliceint) MapString(f func(int) String) SliceString {
 }
 
 func (s Sliceint) ZipString(other SliceString) SliceOfPairintString {
+	if s == nil {
+		return nil
+	}
 	size := len(s)
 	if size > len(other) {
 		size = len(other)
@@ -68,6 +80,9 @@ func (s Sliceint) ZipString(other SliceString) SliceOfPairintString {
 // If multiple items in the receiver have the same first component, the corresponding
 // value in the resulting map will be taken from the last such item in the receiver.
 func (s SliceOfPairintString) ToMap() MapintString {
+	if s == nil {
+		return nil
+	}
 	m := make(map[int]String, len(s))
 	for _, p := range s {
 		m[p.X1] = p.X2
