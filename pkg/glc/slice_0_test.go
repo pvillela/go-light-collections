@@ -368,7 +368,7 @@ func TestSlice_Filter(t *testing.T) {
 			SliceT0{Dat{22, "w22"}, Dat{4444, "w4444"}, Dat{22, "w22"}}},
 		{"Filter: pred matches none", sDat(), pred3, SliceT0{}},
 		{"Filter: empty receiver", SliceT0{}, pred2, SliceT0{}},
-		{"Filter: nil receiver", nil, pred2, SliceT0{}},
+		{"Filter: nil receiver", nil, pred2, nil},
 	}
 
 	for _, cs := range cases {
@@ -393,7 +393,7 @@ func TestSlice_FilterNot(t *testing.T) {
 			SliceT0{Dat{22, "w22"}, Dat{4444, "w4444"}, Dat{22, "w22"}}},
 		{"FilterNot: pred matches none", sDat(), pred3, sDat()},
 		{"FilterNot: empty receiver", SliceT0{}, pred2, SliceT0{}},
-		{"FilterNot: nil receiver", nil, pred2, SliceT0{}},
+		{"FilterNot: nil receiver", nil, pred2, nil},
 	}
 
 	for _, cs := range cases {
@@ -555,7 +555,7 @@ func TestSlice_MaxWith(t *testing.T) {
 	}
 }
 
-func TestSlice_Minus(t *testing.T) {
+func TestSlice_MinusSlice(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver SliceT0
@@ -566,7 +566,7 @@ func TestSlice_Minus(t *testing.T) {
 		{"MinusSlice: intersects", sDat(), append(sDat()[1:2], Dat{22, "xyz"}), append(sDat()[0:1], sDat()[2], sDat()[3])},
 		{"MinusSlice: disjoint", sDat(), append(sDat()[:0], Dat{22, "xyz"}, Dat{0, "abc"}), sDat()},
 		{"MinusSlice: empty slice", SliceT0{}, append(sDat()[2:2], sDat()[1]), SliceT0{}},
-		{"MinusSlice: nil slice", nil, append(sDat()[2:2], sDat()[1]), SliceT0{}},
+		{"MinusSlice: nil slice", nil, append(sDat()[2:2], sDat()[1]), nil},
 	}
 
 	for _, cs := range cases {
@@ -726,7 +726,7 @@ func TestSlice_Reversed(t *testing.T) {
 	}{
 		{"Reversed: non-empty slice", sDat(), rev},
 		{"Reversed: empty slice", SliceT0{}, SliceT0{}},
-		{"Reversed: nil slice", nil, SliceT0{}},
+		{"Reversed: nil slice", nil, nil},
 	}
 
 	for _, cs := range cases {
