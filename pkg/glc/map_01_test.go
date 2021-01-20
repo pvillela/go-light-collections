@@ -16,17 +16,6 @@ func mBase() MapT0T1 {
 	return MapT0T1{1: "w1", 22: "w22", 333: "w333", 4444: "w4444"}
 }
 
-// func pairsBase() SetOfPairT0T1 {
-// 	return SetOfPairT0T1{
-// 		PairT0T1{1, "w1"}: true, PairT0T1{22, "w22"}: true, PairT0T1{333, "w333"}: true,
-// 		PairT0T1{4444, "w4444"}: true,
-// 	}
-// }
-
-// func intX1(a Any) int { return Any(Any(a).(PairT0T1).X1).(int) }
-
-// func stringX2(a Any) string { return Any(Any(a).(PairT0T1).X1).(string) }
-
 func toInt(a Any) int { return Any(a).(int) }
 
 func toString(a Any) string { return Any(a).(string) }
