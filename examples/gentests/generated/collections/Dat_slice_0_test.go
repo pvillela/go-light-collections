@@ -14,7 +14,7 @@ func TestSlice_Copy(t *testing.T) {
 		msg      string
 		receiver SliceDat
 	}{
-		{"Copy: non-empty slice", sDat()},
+		{"Copy: nonempty slice", sDat()},
 		{"Copy: empty slice", SliceDat{}},
 		{"Copy: nil slice", nil},
 	}
@@ -32,7 +32,7 @@ func TestSlice_LengthSize(t *testing.T) {
 		receiver SliceDat
 		want     int
 	}{
-		{"Length and Size: non-empty slice", sDat(), 5},
+		{"Length and Size: nonempty slice", sDat(), 5},
 		{"Length and Size: empty slice", SliceDat{}, 0},
 		{"Length and Size: nil slice", nil, 0},
 	}
@@ -71,11 +71,11 @@ func TestSlice_ContainsAll(t *testing.T) {
 		arg      SliceDat
 		want     bool
 	}{
-		{"ContainsSlice: subset", sDat(), append(sDat()[2:3], sDat()[1]), true},
-		{"ContainsSlice: intersects", sDat(), append(sDat()[1:2], Dat{22, "xyz"}), false},
-		{"ContainsSlice: disjoint", sDat(), SliceDat{Dat{22, "xyz"}, Dat{0, "abc"}}, false},
-		{"ContainsSlice: empty slice", SliceDat{}, append(sDat()[2:3], sDat()[1]), false},
-		{"ContainsSlice: nil slice", nil, append(sDat()[2:3], sDat()[1]), false},
+		{"ContainsAll: subset", sDat(), append(sDat()[2:3], sDat()[1]), true},
+		{"ContainsAll: intersects", sDat(), append(sDat()[1:2], Dat{22, "xyz"}), false},
+		{"ContainsAll: disjoint", sDat(), SliceDat{Dat{22, "xyz"}, Dat{0, "abc"}}, false},
+		{"ContainsAll: empty slice", SliceDat{}, append(sDat()[2:3], sDat()[1]), false},
+		{"ContainsAll: nil slice", nil, append(sDat()[2:3], sDat()[1]), false},
 	}
 
 	for _, cs := range cases {
@@ -117,8 +117,8 @@ func TestSlice_IndexOf(t *testing.T) {
 		arg      Dat
 		want     int
 	}{
-		{"IndexOf: non-empty, present", sDat(), Dat{22, "w22"}, 1},
-		{"IndexOf: non-empty, absent", sDat(), Dat{0, "xyz"}, -1},
+		{"IndexOf: nonempty, present", sDat(), Dat{22, "w22"}, 1},
+		{"IndexOf: nonempty, absent", sDat(), Dat{0, "xyz"}, -1},
 		{"IndexOf: empty", SliceDat{}, Dat{0, "xyz"}, -1},
 		{"IndexOf: nil", nil, Dat{0, "xyz"}, -1},
 	}
@@ -135,7 +135,7 @@ func TestSlice_IsEmpty(t *testing.T) {
 		receiver SliceDat
 		want     bool
 	}{
-		{"IsEmpty: non-empty", sDat(), false},
+		{"IsEmpty: nonempty", sDat(), false},
 		{"IsEmpty: empty", SliceDat{}, true},
 		{"IsEmpty: nil", nil, true},
 	}
@@ -153,8 +153,8 @@ func TestSlice_LastIndexOf(t *testing.T) {
 		arg      Dat
 		want     int
 	}{
-		{"LastIndexOf: non-empty, present", sDat(), Dat{22, "w22"}, 4},
-		{"LastIndexOf: non-empty, absent", sDat(), Dat{0, "xyz"}, -1},
+		{"LastIndexOf: nonempty, present", sDat(), Dat{22, "w22"}, 4},
+		{"LastIndexOf: nonempty, absent", sDat(), Dat{0, "xyz"}, -1},
 		{"LastIndexOf: empty", SliceDat{}, Dat{0, "xyz"}, -1},
 		{"LastIndexOf: nil", nil, Dat{0, "xyz"}, -1},
 	}
@@ -411,7 +411,7 @@ func TestSlice_First(t *testing.T) {
 		want     Dat
 		werr     error
 	}{
-		{"First: non-empty", sDat(), Dat{1, "w1"}, nil},
+		{"First: nonempty", sDat(), Dat{1, "w1"}, nil},
 		{"First: empty", SliceDat{}, Dat{}, errors.New("empty or nil slice")},
 		{"First: nil", nil, Dat{}, errors.New("empty or nil slice")},
 	}
@@ -431,7 +431,7 @@ func TestSlice_ForEach(t *testing.T) {
 		receiver SliceDat
 		want     []int
 	}{
-		{"ForEach: non-empty receiver", sDat(), []int{1, 22, 333, 4444, 22}},
+		{"ForEach: nonempty receiver", sDat(), []int{1, 22, 333, 4444, 22}},
 		{"ForEach: empty receiver", SliceDat{}, []int{}},
 		{"ForEach: nil receiver", nil, []int{}},
 	}
@@ -501,7 +501,7 @@ func TestSlice_IsNotEmpty(t *testing.T) {
 		receiver SliceDat
 		want     bool
 	}{
-		{"IsNotEmpty: non-empty", sDat(), true},
+		{"IsNotEmpty: nonempty", sDat(), true},
 		{"IsNotEmpty: empty", SliceDat{}, false},
 		{"IsNotEmpty: nil", nil, false},
 	}
@@ -519,7 +519,7 @@ func TestSlice_Last(t *testing.T) {
 		want     Dat
 		werr     error
 	}{
-		{"Last: non-empty", sDat(), Dat{22, "w22"}, nil},
+		{"Last: nonempty", sDat(), Dat{22, "w22"}, nil},
 		{"Last: empty", SliceDat{}, Dat{}, errors.New("empty or nil slice")},
 		{"Last: nil", nil, Dat{}, errors.New("empty or nil slice")},
 	}
@@ -543,7 +543,7 @@ func TestSlice_MaxWith(t *testing.T) {
 		want     Dat
 		werr     error
 	}{
-		{"MaxWith: non-empty receiver", sDat(), comp, Dat{4444, "w4444"}, nil},
+		{"MaxWith: nonempty receiver", sDat(), comp, Dat{4444, "w4444"}, nil},
 		{"MaxWith: empty receiver", SliceDat{}, comp, Dat{}, errors.New("empty or nil slice")},
 		{"MaxWith: nil receiver", nil, comp, Dat{}, errors.New("empty or nil slice")},
 	}
@@ -606,7 +606,7 @@ func TestSlice_MinWith(t *testing.T) {
 		want     Dat
 		werr     error
 	}{
-		{"MinWith: non-empty receiver", sDat(), comp, Dat{4444, "w4444"}, nil},
+		{"MinWith: nonempty receiver", sDat(), comp, Dat{4444, "w4444"}, nil},
 		{"MinWith: empty receiver", SliceDat{}, comp, Dat{}, errors.New("empty or nil slice")},
 		{"MinWith: nil receiver", nil, comp, Dat{}, errors.New("empty or nil slice")},
 	}
@@ -653,10 +653,10 @@ func TestSlice_PlusSlice(t *testing.T) {
 		arg      SliceDat
 		want     SliceDat
 	}{
-		{"PlusSlice: non-empty + non-empty", sDat()[:3], sDat()[3:], sDat()},
-		{"PlusSlice: non-empty + empty", sDat()[:3], SliceDat{}, sDat()[:3]},
-		{"PlusSlice: empty + non-empty", SliceDat{}, sDat()[3:], sDat()[3:]},
-		{"PlusSlice: nil + non-empty", nil, sDat()[3:], sDat()[3:]},
+		{"PlusSlice: nonempty + nonempty", sDat()[:3], sDat()[3:], sDat()},
+		{"PlusSlice: nonempty + empty", sDat()[:3], SliceDat{}, sDat()[:3]},
+		{"PlusSlice: empty + nonempty", SliceDat{}, sDat()[3:], sDat()[3:]},
+		{"PlusSlice: nil + nonempty", nil, sDat()[3:], sDat()[3:]},
 		{"PlusSlice: empty + empty", SliceDat{}, SliceDat{}, SliceDat{}},
 		{"PlusSlice: empty + nil", SliceDat{}, nil, SliceDat{}},
 		{"PlusSlice: nil + empty", nil, SliceDat{}, nil},
@@ -676,7 +676,7 @@ func TestSlice_PlusElement(t *testing.T) {
 		arg      Dat
 		want     SliceDat
 	}{
-		{"PlusElement: non-empty", sDat()[:4], sDat()[4], sDat()},
+		{"PlusElement: nonempty", sDat()[:4], sDat()[4], sDat()},
 		{"PlusElement: empty", SliceDat{}, sDat()[4], sDat()[4:5]},
 		{"PlusElement: nil", nil, sDat()[4], sDat()[4:5]},
 	}
@@ -726,7 +726,7 @@ func TestSlice_Reversed(t *testing.T) {
 		receiver SliceDat
 		want     SliceDat
 	}{
-		{"Reversed: non-empty slice", sDat(), rev},
+		{"Reversed: nonempty slice", sDat(), rev},
 		{"Reversed: empty slice", SliceDat{}, SliceDat{}},
 		{"Reversed: nil slice", nil, nil},
 	}
@@ -749,7 +749,7 @@ func TestSlice_SortedWith(t *testing.T) {
 		arg      func(Dat, Dat) int
 		want     SliceDat
 	}{
-		{"SortedWith: non-empty receiver", sDat(), comp, sorted},
+		{"SortedWith: nonempty receiver", sDat(), comp, sorted},
 		{"SortedWith: empty receiver", SliceDat{}, comp, SliceDat{}},
 		{"SortedWith: nil receiver", nil, comp, nil},
 	}

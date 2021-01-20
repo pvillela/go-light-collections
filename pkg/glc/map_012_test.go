@@ -41,7 +41,7 @@ func TestMap_FlatMapT2(t *testing.T) {
 		arg      func(PairT0T1) SliceT2
 		want     SliceT2
 	}{
-		{"FlatMapT2: non-empty receiver", mBase(), f, SliceT2{1, 2, 2, 3, 3, 3, 4, 4, 4, 4}},
+		{"FlatMapT2: nonempty receiver", mBase(), f, SliceT2{1, 2, 2, 3, 3, 3, 4, 4, 4, 4}},
 		{"FlatMapT2: empty receiver", MapT0T1{}, f, SliceT2{}},
 		{"FlatMapT2: nil receiver", nil, f, nil},
 	}
@@ -63,7 +63,7 @@ func TestMap_MapT2(t *testing.T) {
 		arg      func(PairT0T1) T2
 		want     SliceT2
 	}{
-		{"MapT2: non-empty receiver", mBase(), f, SliceT2{2, 23, 334, 4445}},
+		{"MapT2: nonempty receiver", mBase(), f, SliceT2{2, 23, 334, 4445}},
 		{"MapT2: empty receiver", MapT0T1{}, f, SliceT2{}},
 		{"MapT2: nil receiver", nil, f, nil},
 	}
@@ -83,7 +83,7 @@ func TestMap_MapKeysT2(t *testing.T) {
 		arg      func(PairT0T1) T2
 		want     MapT2T1
 	}{
-		{"MapKeysT2: non-empty receiver", mBase(), f, MapT2T1{2: "w1", 23: "w22", 334: "w333",
+		{"MapKeysT2: nonempty receiver", mBase(), f, MapT2T1{2: "w1", 23: "w22", 334: "w333",
 			4445: "w4444"}},
 		{"MapKeysT2: empty receiver", MapT0T1{}, f, MapT2T1{}},
 		{"MapKeysT2: nil receiver", nil, f, nil},
@@ -104,7 +104,7 @@ func TestMap_MapValuesT2(t *testing.T) {
 		arg      func(PairT0T1) T2
 		want     MapT0T2
 	}{
-		{"MapValuesT2: non-empty receiver", mBase(), f, MapT0T2{1: 3, 22: 25, 333: 337,
+		{"MapValuesT2: nonempty receiver", mBase(), f, MapT0T2{1: 3, 22: 25, 333: 337,
 			4444: 4449}},
 		{"MapValuesT2: empty receiver", MapT0T1{}, f, MapT0T2{}},
 		{"MapValuesT2: nil receiver", nil, f, nil},

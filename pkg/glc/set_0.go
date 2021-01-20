@@ -162,7 +162,7 @@ func (s SetT0) IsNotEmpty() bool {
 }
 
 // MaxWith uses a comparator function to determine the maximum value. If the set is
-// non-empty, returns the element in the set with maximum value.
+// nonempty, returns the element in the set with maximum value.
 // Otherwise, returns an error.
 func (s SetT0) MaxWith(comparator func(T0, T0) int) (T0, error) {
 	var max T0
@@ -215,7 +215,7 @@ func (s SetT0) MinusSlice(slice SliceT0) SetT0 {
 }
 
 // MinWith uses a comparator function to determine the maximum value. If the set is
-// non-empty, returns theelement in the set with minimum value.
+// nonempty, returns theelement in the set with minimum value.
 // Returns an error if the set is empty.
 func (s SetT0) MinWith(comparator func(T0, T0) int) (T0, error) {
 	reverseComp := func(a1 T0, a2 T0) int { return -comparator(a1, a2) }

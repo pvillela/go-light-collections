@@ -15,7 +15,7 @@ func TestMapT1_FooBar(t *testing.T) {
 		arg      func(T0) T1
 		want     SliceT1
 	}{
-		{"MapT1: non-empty receiver", sDat(), f, SliceT1{Bar{2, []string{"w1"}}, Bar{23, []string{"w22"}}, Bar{334, []string{"w333"}}, Bar{4445, []string{"w4444"}}, Bar{23, []string{"w22"}}}},
+		{"MapT1: nonempty receiver", sDat(), f, SliceT1{Bar{2, []string{"w1"}}, Bar{23, []string{"w22"}}, Bar{334, []string{"w333"}}, Bar{4445, []string{"w4444"}}, Bar{23, []string{"w22"}}}},
 		{"MapT1: empty receiver", SliceT0{}, f, SliceT1{}},
 	}
 

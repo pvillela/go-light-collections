@@ -41,7 +41,7 @@ func TestMap_Copy(t *testing.T) {
 		msg      string
 		receiver Mapintstring
 	}{
-		{"Copy: non-empty map", mBase()},
+		{"Copy: nonempty map", mBase()},
 		{"Copy: empty map", Mapintstring{}},
 		{"Copy: nil map", nil},
 	}
@@ -59,7 +59,7 @@ func TestMap_Entries(t *testing.T) {
 		receiver Mapintstring
 		want     SetOfPairintstring
 	}{
-		{"Entries: non-empty map", mBase(), SetOfPairintstring{
+		{"Entries: nonempty map", mBase(), SetOfPairintstring{
 			Pairintstring{1, "w1"}: true, Pairintstring{22, "w22"}: true, Pairintstring{333, "w333"}: true,
 			Pairintstring{4444, "w4444"}: true}},
 		{"Entries: empty map", Mapintstring{}, SetOfPairintstring{}},
@@ -78,7 +78,7 @@ func TestMap_Keys(t *testing.T) {
 		receiver Mapintstring
 		want     Setint
 	}{
-		{"Keys: non-empty map", mBase(), Setint{1: true, 22: true, 333: true, 4444: true}},
+		{"Keys: nonempty map", mBase(), Setint{1: true, 22: true, 333: true, 4444: true}},
 		{"Keys: empty map", Mapintstring{}, Setint{}},
 		{"Keys: nil map", nil, Setint{}},
 	}
@@ -95,7 +95,7 @@ func TestMap_LengthSize(t *testing.T) {
 		receiver Mapintstring
 		want     int
 	}{
-		{"Length and Size: non-empty map", mBase(), 4},
+		{"Length and Size: nonempty map", mBase(), 4},
 		{"Length and Size: empty map", Mapintstring{}, 0},
 		{"Length and Size: nil map", nil, 0},
 	}
@@ -114,7 +114,7 @@ func TestMap_Values(t *testing.T) {
 		receiver Mapintstring
 		want     Setstring
 	}{
-		{"Values: non-empty map", mBase(), Setstring{"w1": true, "w22": true, "w333": true,
+		{"Values: nonempty map", mBase(), Setstring{"w1": true, "w22": true, "w333": true,
 			"w4444": true}},
 		{"Values: empty map", Mapintstring{}, Setstring{}},
 		{"Values: nil map", nil, Setstring{}},
@@ -217,7 +217,7 @@ func TestMap_IsEmpty(t *testing.T) {
 		receiver Mapintstring
 		want     bool
 	}{
-		{"IsEmpty: non-empty", mBase(), false},
+		{"IsEmpty: nonempty", mBase(), false},
 		{"IsEmpty: empty", Mapintstring{}, true},
 		{"IsEmpty: nil", nil, true},
 	}
@@ -298,7 +298,7 @@ func TestMap_ToSlice(t *testing.T) {
 		receiver Mapintstring
 		want     SetOfPairintstring
 	}{
-		{"ToSlice: non-empty", mBase(), pairsBase},
+		{"ToSlice: nonempty", mBase(), pairsBase},
 		{"ToSlice: empty", Mapintstring{}, SetOfPairintstring{}},
 		{"ToSlice: nil", nil, nil},
 	}
@@ -411,7 +411,7 @@ func TestMap_ForEach(t *testing.T) {
 		receiver Mapintstring
 		want     map[Any]bool
 	}{
-		{"ForEach: non-empty receiver", mBase(),
+		{"ForEach: nonempty receiver", mBase(),
 			map[Any]bool{1: true, 22: true, 333: true, 4444: true}},
 		{"ForEach: empty receiver", Mapintstring{}, map[Any]bool{}},
 		{"ForEach: nil receiver", nil, map[Any]bool{}},
@@ -455,7 +455,7 @@ func TestMap_IsNotEmpty(t *testing.T) {
 		receiver Mapintstring
 		want     bool
 	}{
-		{"IsNotEmpty: non-empty", mBase(), true},
+		{"IsNotEmpty: nonempty", mBase(), true},
 		{"IsNotEmpty: empty", Mapintstring{}, false},
 		{"IsNotEmpty: nil", nil, false},
 	}
@@ -476,7 +476,7 @@ func TestMap_MaxWith(t *testing.T) {
 		want     Pairintstring
 		werr     error
 	}{
-		{"MaxWith: non-empty receiver", mBase(), comp, Pairintstring{4444, "w4444"}, nil},
+		{"MaxWith: nonempty receiver", mBase(), comp, Pairintstring{4444, "w4444"}, nil},
 		{"MaxWith: empty receiver", Mapintstring{}, comp, Pairintstring{}, errors.New("empty or nil map")},
 		{"MaxWith: nil receiver", nil, comp, Pairintstring{}, errors.New("empty or nil map")},
 	}
@@ -540,7 +540,7 @@ func TestMap_MinWith(t *testing.T) {
 		want     Pairintstring
 		werr     error
 	}{
-		{"MinWith: non-empty receiver", mBase(), comp, Pairintstring{4444, "w4444"}, nil},
+		{"MinWith: nonempty receiver", mBase(), comp, Pairintstring{4444, "w4444"}, nil},
 		{"MinWith: empty receiver", Mapintstring{}, comp, Pairintstring{}, errors.New("empty or nil map")},
 		{"MinWith: nil receiver", nil, comp, Pairintstring{}, errors.New("empty or nil map")},
 	}
@@ -561,7 +561,7 @@ func TestMap_PlusEntry(t *testing.T) {
 		arg      Pairintstring
 		want     Mapintstring
 	}{
-		{"PlusEntry: non-empty", Mapintstring{1: "w1", 22: "w22", 4444: "w4444"}, Pairintstring{333, "w333"},
+		{"PlusEntry: nonempty", Mapintstring{1: "w1", 22: "w22", 4444: "w4444"}, Pairintstring{333, "w333"},
 			mBase()},
 		{"PlusEntry: empty", Mapintstring{}, Pairintstring{333, "w333"}, Mapintstring{333: "w333"}},
 		{"PlusEntry: nil", nil, Pairintstring{333, "w333"}, Mapintstring{333: "w333"}},
@@ -580,12 +580,12 @@ func TestMap_PlusMap(t *testing.T) {
 		arg      Mapintstring
 		want     Mapintstring
 	}{
-		{"PlusMap: non-empty + non-empty", mBase(), Mapintstring{9: "x9", 333: "x3"},
+		{"PlusMap: nonempty + nonempty", mBase(), Mapintstring{9: "x9", 333: "x3"},
 			Mapintstring{1: "w1", 9: "x9", 22: "w22", 333: "x3", 4444: "w4444"}},
-		{"PlusMap: non-empty + empty", mBase(), Mapintstring{}, mBase()},
-		{"PlusMap: non-empty + nil", mBase(), nil, mBase()},
-		{"PlusMap: empty + non-empty", Mapintstring{}, mBase(), mBase()},
-		{"PlusMap: nil + non-empty", nil, mBase(), mBase()},
+		{"PlusMap: nonempty + empty", mBase(), Mapintstring{}, mBase()},
+		{"PlusMap: nonempty + nil", mBase(), nil, mBase()},
+		{"PlusMap: empty + nonempty", Mapintstring{}, mBase(), mBase()},
+		{"PlusMap: nil + nonempty", nil, mBase(), mBase()},
 		{"PlusMap: empty + empty", Mapintstring{}, Mapintstring{}, Mapintstring{}},
 		{"PlusMap: empty + nil", Mapintstring{}, nil, Mapintstring{}},
 		{"PlusMap: nil + empty", nil, Mapintstring{}, Mapintstring{}},
@@ -605,12 +605,12 @@ func TestMap_PlusSlice(t *testing.T) {
 		arg      SliceOfPairintstring
 		want     Mapintstring
 	}{
-		{"PlusSlice: non-empty + non-empty", mBase(), SliceOfPairintstring{{9, "x9"}, {333, "x3"}},
+		{"PlusSlice: nonempty + nonempty", mBase(), SliceOfPairintstring{{9, "x9"}, {333, "x3"}},
 			Mapintstring{1: "w1", 9: "x9", 22: "w22", 333: "x3", 4444: "w4444"}},
-		{"PlusSlice: non-empty + empty", mBase(), SliceOfPairintstring{}, mBase()},
-		{"PlusSlice: empty + non-empty", Mapintstring{}, SliceOfPairintstring{{9, "x9"}, {333, "x3"}},
+		{"PlusSlice: nonempty + empty", mBase(), SliceOfPairintstring{}, mBase()},
+		{"PlusSlice: empty + nonempty", Mapintstring{}, SliceOfPairintstring{{9, "x9"}, {333, "x3"}},
 			Mapintstring{9: "x9", 333: "x3"}},
-		{"PlusSlice: nil + non-empty", nil, SliceOfPairintstring{{9, "x9"}, {333, "x3"}},
+		{"PlusSlice: nil + nonempty", nil, SliceOfPairintstring{{9, "x9"}, {333, "x3"}},
 			Mapintstring{9: "x9", 333: "x3"}},
 		{"PlusSlice: empty + empty", Mapintstring{}, SliceOfPairintstring{}, Mapintstring{}},
 		{"PlusSlice: empty + nil", Mapintstring{}, nil, Mapintstring{}},

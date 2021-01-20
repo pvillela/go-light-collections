@@ -19,3 +19,7 @@ func sDat() SliceT0 {
 // Type conversion functions.
 
 func toDat(a Any) Dat { return Any(a).(Dat) }
+
+func toInt(a Any) int { return Any(a).(int) }
+
+func toString(a Any) string { return Any(a).(string) }

@@ -226,7 +226,7 @@ func (s SlicePerson) Last() (Person, error) {
 }
 
 // MaxWith uses a comparator function to determine the maximum value. If the slice is
-// non-empty, returns the first element in the slice with maximum value.
+// nonempty, returns the first element in the slice with maximum value.
 // Otherwise, returns an error.
 func (s SlicePerson) MaxWith(comparator func(Person, Person) int) (Person, error) {
 	if len(s) == 0 {
@@ -271,7 +271,7 @@ func (s SlicePerson) MinusElement(elem Person) SlicePerson {
 }
 
 // MinWith uses a comparator function to determine the maximum value. If the slice is
-// non-empty, returns the first element in the slice with minimum value.
+// nonempty, returns the first element in the slice with minimum value.
 // Returns an error if the slice is empty.
 func (s SlicePerson) MinWith(comparator func(Person, Person) int) (Person, error) {
 	reverseComp := func(a1 Person, a2 Person) int { return -comparator(a1, a2) }

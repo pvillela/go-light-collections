@@ -36,7 +36,7 @@ func (s SliceT0) Contains(elem T0) bool {
 
 // ContainsSlice returns true if all the elements in the argument slice are in the receiver,
 // false otherwise.
-func (s SliceT0) ContainsSlice(elems SliceT0) bool {
+func (s SliceT0) ContainsAll(elems SliceT0) bool {
 	for _, e := range elems {
 		if !s.Contains(e) {
 			return false
@@ -224,7 +224,7 @@ func (s SliceT0) Last() (T0, error) {
 }
 
 // MaxWith uses a comparator function to determine the maximum value. If the slice is
-// non-empty, returns the first element in the slice with maximum value.
+// nonempty, returns the first element in the slice with maximum value.
 // Otherwise, returns an error.
 func (s SliceT0) MaxWith(comparator func(T0, T0) int) (T0, error) {
 	if len(s) == 0 {
@@ -269,7 +269,7 @@ func (s SliceT0) MinusElement(elem T0) SliceT0 {
 }
 
 // MinWith uses a comparator function to determine the maximum value. If the slice is
-// non-empty, returns the first element in the slice with minimum value.
+// nonempty, returns the first element in the slice with minimum value.
 // Returns an error if the slice is empty.
 func (s SliceT0) MinWith(comparator func(T0, T0) int) (T0, error) {
 	reverseComp := func(a1 T0, a2 T0) int { return -comparator(a1, a2) }

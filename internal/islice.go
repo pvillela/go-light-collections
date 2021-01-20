@@ -14,7 +14,7 @@ type ISliceT0 interface {
 	Length() int
 	Size() int
 	Contains(elem c.T0) bool
-	ContainsSlice(elems c.SliceT0) bool
+	ContainsAll(elems c.SliceT0) bool
 	Get(index int) (c.T0, bool)
 	IndexOf(elem c.T0) int
 	IsEmpty() bool

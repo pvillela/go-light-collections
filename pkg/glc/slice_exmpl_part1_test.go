@@ -59,15 +59,6 @@ func (s SlicePFoo) ToSliceAny() c.SliceAny {
 	return r
 }
 
-// ToSlicePFoo is a conversion function.
-func ToSlicePFoo(s c.SliceAny) SlicePFoo {
-	r := make(SlicePFoo, len(s))
-	for i, p := range s {
-		r[i] = p.(*Foo)
-	}
-	return r
-}
-
 ////
 // Types and standard converters for our second example data structure.
 

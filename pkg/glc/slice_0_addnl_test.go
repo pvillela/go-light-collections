@@ -36,14 +36,14 @@ func TestContainsAll_Bar(t *testing.T) {
 		arg      SliceT0
 		want     bool
 	}{
-		{"ContainsSlice: subset", sBar(), append(sBar()[2:3], sBar()[1]), true},
-		{"ContainsSlice: intersects", sBar(), append(sBar()[1:2], Bar{22, []string{"xyz"}}), false},
-		{"ContainsSlice: disjoint", sBar(), append(sBar()[:0], Bar{22, []string{"xyz"}}, Bar{0, []string{"abc"}}), false},
-		{"ContainsSlice: empty slice", SliceT0{}, append(sBar()[2:3], sBar()[1]), false},
+		{"ContainsAll: subset", sBar(), append(sBar()[2:3], sBar()[1]), true},
+		{"ContainsAll: intersects", sBar(), append(sBar()[1:2], Bar{22, []string{"xyz"}}), false},
+		{"ContainsAll: disjoint", sBar(), append(sBar()[:0], Bar{22, []string{"xyz"}}, Bar{0, []string{"abc"}}), false},
+		{"ContainsAll: empty slice", SliceT0{}, append(sBar()[2:3], sBar()[1]), false},
 	}
 
 	for _, cs := range cases {
-		got := cs.receiver.ContainsSlice(cs.arg)
+		got := cs.receiver.ContainsAll(cs.arg)
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }

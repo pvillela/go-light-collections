@@ -22,7 +22,7 @@ func TestSlice_FlatMapT1(t *testing.T) {
 		arg      func(T0) SliceT1
 		want     SliceT1
 	}{
-		{"FlatMapT1: non-empty receiver", sDat(), f, SliceT1{1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 2, 2}},
+		{"FlatMapT1: nonempty receiver", sDat(), f, SliceT1{1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 2, 2}},
 		{"FlatMapT1: empty receiver", SliceT0{}, f, SliceT1{}},
 		{"FlatMapT1: nil receiver", nil, f, nil},
 	}
@@ -43,7 +43,7 @@ func TestSlice_FoldT1(t *testing.T) {
 		arg2     func(z T1, a T0) T1
 		want     T1
 	}{
-		{"FoldT1: non-empty receiver", sDat(), 1, op, 1 + 1 + 22 + 333 + 4444 + 22},
+		{"FoldT1: nonempty receiver", sDat(), 1, op, 1 + 1 + 22 + 333 + 4444 + 22},
 		{"FoldT1: empty receiver", SliceT0{}, 42, op, 42},
 		{"FoldT1: nil receiver", nil, 42, op, 42},
 	}
@@ -63,7 +63,7 @@ func TestSlice_GroupByT1(t *testing.T) {
 		arg      func(T0) T1
 		want     MapT1SliceT0
 	}{
-		{"GroupByT1: non-empty receiver", sDat(), f, MapT1SliceT0{
+		{"GroupByT1: nonempty receiver", sDat(), f, MapT1SliceT0{
 			0: {Dat{22, "w22"}, Dat{4444, "w4444"}, Dat{22, "w22"}},
 			1: {Dat{1, "w1"}, Dat{333, "w333"}},
 		}},
@@ -86,7 +86,7 @@ func TestSlice_MapT1(t *testing.T) {
 		arg      func(T0) T1
 		want     SliceT1
 	}{
-		{"MapT1: non-empty receiver", sDat(), f, SliceT1{2, 23, 334, 4445, 23}},
+		{"MapT1: nonempty receiver", sDat(), f, SliceT1{2, 23, 334, 4445, 23}},
 		{"MapT1: empty receiver", SliceT0{}, f, SliceT1{}},
 		{"MapT1: nil receiver", nil, f, nil},
 	}
@@ -107,17 +107,17 @@ func TestSlice_ZipT1(t *testing.T) {
 		arg      SliceT1
 		want     SliceOfPairT0T1
 	}{
-		{"ZipT1: non-empty receiver, shorter other", sDat(), shorterOther,
+		{"ZipT1: nonempty receiver, shorter other", sDat(), shorterOther,
 			SliceOfPairT0T1{{Dat{1, "w1"}, 1}, {Dat{22, "w22"}, 2}, {Dat{333, "w333"}, 3}}},
-		{"ZipT1: non-empty receiver, longer other", sDat(), longerOther,
+		{"ZipT1: nonempty receiver, longer other", sDat(), longerOther,
 			SliceOfPairT0T1{{Dat{1, "w1"}, 1}, {Dat{22, "w22"}, 2}, {Dat{333, "w333"}, 3},
 				{Dat{4444, "w4444"}, 4}, {Dat{22, "w22"}, 5}}},
-		{"ZipT1: non-empty receiver, empty other", sDat(), SliceT1{}, SliceOfPairT0T1{}},
-		{"ZipT1: non-empty receiver, nil other", sDat(), SliceT1{}, SliceOfPairT0T1{}},
-		{"ZipT1: empty receiver, non-empty other", SliceT0{}, shorterOther, SliceOfPairT0T1{}},
+		{"ZipT1: nonempty receiver, empty other", sDat(), SliceT1{}, SliceOfPairT0T1{}},
+		{"ZipT1: nonempty receiver, nil other", sDat(), SliceT1{}, SliceOfPairT0T1{}},
+		{"ZipT1: empty receiver, nonempty other", SliceT0{}, shorterOther, SliceOfPairT0T1{}},
 		{"ZipT1: empty receiver, empty other", SliceT0{}, SliceT1{}, SliceOfPairT0T1{}},
 		{"ZipT1: empty receiver, nil other", SliceT0{}, SliceT1{}, SliceOfPairT0T1{}},
-		{"ZipT1: nil receiver, non-empty other", nil, shorterOther, nil},
+		{"ZipT1: nil receiver, nonempty other", nil, shorterOther, nil},
 		{"ZipT1: nil receiver, empty other", nil, SliceT1{}, nil},
 		{"ZipT1: nil receiver, nil other", nil, nil, nil},
 	}

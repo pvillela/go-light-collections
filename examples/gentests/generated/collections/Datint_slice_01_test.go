@@ -24,7 +24,7 @@ func TestSlice_FlatMapint(t *testing.T) {
 		arg      func(Dat) Sliceint
 		want     Sliceint
 	}{
-		{"FlatMapint: non-empty receiver", sDat(), f, Sliceint{1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 2, 2}},
+		{"FlatMapint: nonempty receiver", sDat(), f, Sliceint{1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 2, 2}},
 		{"FlatMapint: empty receiver", SliceDat{}, f, Sliceint{}},
 		{"FlatMapint: nil receiver", nil, f, nil},
 	}
@@ -45,7 +45,7 @@ func TestSlice_Foldint(t *testing.T) {
 		arg2     func(z int, a Dat) int
 		want     int
 	}{
-		{"Foldint: non-empty receiver", sDat(), 1, op, 1 + 1 + 22 + 333 + 4444 + 22},
+		{"Foldint: nonempty receiver", sDat(), 1, op, 1 + 1 + 22 + 333 + 4444 + 22},
 		{"Foldint: empty receiver", SliceDat{}, 42, op, 42},
 		{"Foldint: nil receiver", nil, 42, op, 42},
 	}
@@ -65,7 +65,7 @@ func TestSlice_GroupByint(t *testing.T) {
 		arg      func(Dat) int
 		want     MapintSliceDat
 	}{
-		{"GroupByint: non-empty receiver", sDat(), f, MapintSliceDat{
+		{"GroupByint: nonempty receiver", sDat(), f, MapintSliceDat{
 			0: {Dat{22, "w22"}, Dat{4444, "w4444"}, Dat{22, "w22"}},
 			1: {Dat{1, "w1"}, Dat{333, "w333"}},
 		}},
@@ -88,7 +88,7 @@ func TestSlice_Mapint(t *testing.T) {
 		arg      func(Dat) int
 		want     Sliceint
 	}{
-		{"Mapint: non-empty receiver", sDat(), f, Sliceint{2, 23, 334, 4445, 23}},
+		{"Mapint: nonempty receiver", sDat(), f, Sliceint{2, 23, 334, 4445, 23}},
 		{"Mapint: empty receiver", SliceDat{}, f, Sliceint{}},
 		{"Mapint: nil receiver", nil, f, nil},
 	}
@@ -109,17 +109,17 @@ func TestSlice_Zipint(t *testing.T) {
 		arg      Sliceint
 		want     SliceOfPairDatint
 	}{
-		{"Zipint: non-empty receiver, shorter other", sDat(), shorterOther,
+		{"Zipint: nonempty receiver, shorter other", sDat(), shorterOther,
 			SliceOfPairDatint{{Dat{1, "w1"}, 1}, {Dat{22, "w22"}, 2}, {Dat{333, "w333"}, 3}}},
-		{"Zipint: non-empty receiver, longer other", sDat(), longerOther,
+		{"Zipint: nonempty receiver, longer other", sDat(), longerOther,
 			SliceOfPairDatint{{Dat{1, "w1"}, 1}, {Dat{22, "w22"}, 2}, {Dat{333, "w333"}, 3},
 				{Dat{4444, "w4444"}, 4}, {Dat{22, "w22"}, 5}}},
-		{"Zipint: non-empty receiver, empty other", sDat(), Sliceint{}, SliceOfPairDatint{}},
-		{"Zipint: non-empty receiver, nil other", sDat(), Sliceint{}, SliceOfPairDatint{}},
-		{"Zipint: empty receiver, non-empty other", SliceDat{}, shorterOther, SliceOfPairDatint{}},
+		{"Zipint: nonempty receiver, empty other", sDat(), Sliceint{}, SliceOfPairDatint{}},
+		{"Zipint: nonempty receiver, nil other", sDat(), Sliceint{}, SliceOfPairDatint{}},
+		{"Zipint: empty receiver, nonempty other", SliceDat{}, shorterOther, SliceOfPairDatint{}},
 		{"Zipint: empty receiver, empty other", SliceDat{}, Sliceint{}, SliceOfPairDatint{}},
 		{"Zipint: empty receiver, nil other", SliceDat{}, Sliceint{}, SliceOfPairDatint{}},
-		{"Zipint: nil receiver, non-empty other", nil, shorterOther, nil},
+		{"Zipint: nil receiver, nonempty other", nil, shorterOther, nil},
 		{"Zipint: nil receiver, empty other", nil, Sliceint{}, nil},
 		{"Zipint: nil receiver, nil other", nil, nil, nil},
 	}

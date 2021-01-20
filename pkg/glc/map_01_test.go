@@ -16,19 +16,15 @@ func mBase() MapT0T1 {
 	return MapT0T1{1: "w1", 22: "w22", 333: "w333", 4444: "w4444"}
 }
 
-func toInt(a Any) int { return Any(a).(int) }
-
-func toString(a Any) string { return Any(a).(string) }
-
 ////
-// TestMap_s
+// TestMaps
 
 func TestMap_Copy(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver MapT0T1
 	}{
-		{"Copy: non-empty map", mBase()},
+		{"Copy: nonempty map", mBase()},
 		{"Copy: empty map", MapT0T1{}},
 		{"Copy: nil map", nil},
 	}
@@ -46,7 +42,7 @@ func TestMap_Entries(t *testing.T) {
 		receiver MapT0T1
 		want     SetOfPairT0T1
 	}{
-		{"Entries: non-empty map", mBase(), SetOfPairT0T1{
+		{"Entries: nonempty map", mBase(), SetOfPairT0T1{
 			PairT0T1{1, "w1"}: true, PairT0T1{22, "w22"}: true, PairT0T1{333, "w333"}: true,
 			PairT0T1{4444, "w4444"}: true}},
 		{"Entries: empty map", MapT0T1{}, SetOfPairT0T1{}},
@@ -65,7 +61,7 @@ func TestMap_Keys(t *testing.T) {
 		receiver MapT0T1
 		want     SetT0
 	}{
-		{"Keys: non-empty map", mBase(), SetT0{1: true, 22: true, 333: true, 4444: true}},
+		{"Keys: nonempty map", mBase(), SetT0{1: true, 22: true, 333: true, 4444: true}},
 		{"Keys: empty map", MapT0T1{}, SetT0{}},
 		{"Keys: nil map", nil, SetT0{}},
 	}
@@ -82,7 +78,7 @@ func TestMap_LengthSize(t *testing.T) {
 		receiver MapT0T1
 		want     int
 	}{
-		{"Length and Size: non-empty map", mBase(), 4},
+		{"Length and Size: nonempty map", mBase(), 4},
 		{"Length and Size: empty map", MapT0T1{}, 0},
 		{"Length and Size: nil map", nil, 0},
 	}
@@ -101,7 +97,7 @@ func TestMap_Values(t *testing.T) {
 		receiver MapT0T1
 		want     SetT1
 	}{
-		{"Values: non-empty map", mBase(), SetT1{"w1": true, "w22": true, "w333": true,
+		{"Values: nonempty map", mBase(), SetT1{"w1": true, "w22": true, "w333": true,
 			"w4444": true}},
 		{"Values: empty map", MapT0T1{}, SetT1{}},
 		{"Values: nil map", nil, SetT1{}},
@@ -204,7 +200,7 @@ func TestMap_IsEmpty(t *testing.T) {
 		receiver MapT0T1
 		want     bool
 	}{
-		{"IsEmpty: non-empty", mBase(), false},
+		{"IsEmpty: nonempty", mBase(), false},
 		{"IsEmpty: empty", MapT0T1{}, true},
 		{"IsEmpty: nil", nil, true},
 	}
@@ -285,7 +281,7 @@ func TestMap_ToSlice(t *testing.T) {
 		receiver MapT0T1
 		want     SetOfPairT0T1
 	}{
-		{"ToSlice: non-empty", mBase(), pairsBase},
+		{"ToSlice: nonempty", mBase(), pairsBase},
 		{"ToSlice: empty", MapT0T1{}, SetOfPairT0T1{}},
 		{"ToSlice: nil", nil, nil},
 	}
@@ -398,7 +394,7 @@ func TestMap_ForEach(t *testing.T) {
 		receiver MapT0T1
 		want     map[Any]bool
 	}{
-		{"ForEach: non-empty receiver", mBase(),
+		{"ForEach: nonempty receiver", mBase(),
 			map[Any]bool{1: true, 22: true, 333: true, 4444: true}},
 		{"ForEach: empty receiver", MapT0T1{}, map[Any]bool{}},
 		{"ForEach: nil receiver", nil, map[Any]bool{}},
@@ -442,7 +438,7 @@ func TestMap_IsNotEmpty(t *testing.T) {
 		receiver MapT0T1
 		want     bool
 	}{
-		{"IsNotEmpty: non-empty", mBase(), true},
+		{"IsNotEmpty: nonempty", mBase(), true},
 		{"IsNotEmpty: empty", MapT0T1{}, false},
 		{"IsNotEmpty: nil", nil, false},
 	}
@@ -463,7 +459,7 @@ func TestMap_MaxWith(t *testing.T) {
 		want     PairT0T1
 		werr     error
 	}{
-		{"MaxWith: non-empty receiver", mBase(), comp, PairT0T1{4444, "w4444"}, nil},
+		{"MaxWith: nonempty receiver", mBase(), comp, PairT0T1{4444, "w4444"}, nil},
 		{"MaxWith: empty receiver", MapT0T1{}, comp, PairT0T1{}, errors.New("empty or nil map")},
 		{"MaxWith: nil receiver", nil, comp, PairT0T1{}, errors.New("empty or nil map")},
 	}
@@ -527,7 +523,7 @@ func TestMap_MinWith(t *testing.T) {
 		want     PairT0T1
 		werr     error
 	}{
-		{"MinWith: non-empty receiver", mBase(), comp, PairT0T1{4444, "w4444"}, nil},
+		{"MinWith: nonempty receiver", mBase(), comp, PairT0T1{4444, "w4444"}, nil},
 		{"MinWith: empty receiver", MapT0T1{}, comp, PairT0T1{}, errors.New("empty or nil map")},
 		{"MinWith: nil receiver", nil, comp, PairT0T1{}, errors.New("empty or nil map")},
 	}
@@ -548,7 +544,7 @@ func TestMap_PlusEntry(t *testing.T) {
 		arg      PairT0T1
 		want     MapT0T1
 	}{
-		{"PlusEntry: non-empty", MapT0T1{1: "w1", 22: "w22", 4444: "w4444"}, PairT0T1{333, "w333"},
+		{"PlusEntry: nonempty", MapT0T1{1: "w1", 22: "w22", 4444: "w4444"}, PairT0T1{333, "w333"},
 			mBase()},
 		{"PlusEntry: empty", MapT0T1{}, PairT0T1{333, "w333"}, MapT0T1{333: "w333"}},
 		{"PlusEntry: nil", nil, PairT0T1{333, "w333"}, MapT0T1{333: "w333"}},
@@ -567,12 +563,12 @@ func TestMap_PlusMap(t *testing.T) {
 		arg      MapT0T1
 		want     MapT0T1
 	}{
-		{"PlusMap: non-empty + non-empty", mBase(), MapT0T1{9: "x9", 333: "x3"},
+		{"PlusMap: nonempty + nonempty", mBase(), MapT0T1{9: "x9", 333: "x3"},
 			MapT0T1{1: "w1", 9: "x9", 22: "w22", 333: "x3", 4444: "w4444"}},
-		{"PlusMap: non-empty + empty", mBase(), MapT0T1{}, mBase()},
-		{"PlusMap: non-empty + nil", mBase(), nil, mBase()},
-		{"PlusMap: empty + non-empty", MapT0T1{}, mBase(), mBase()},
-		{"PlusMap: nil + non-empty", nil, mBase(), mBase()},
+		{"PlusMap: nonempty + empty", mBase(), MapT0T1{}, mBase()},
+		{"PlusMap: nonempty + nil", mBase(), nil, mBase()},
+		{"PlusMap: empty + nonempty", MapT0T1{}, mBase(), mBase()},
+		{"PlusMap: nil + nonempty", nil, mBase(), mBase()},
 		{"PlusMap: empty + empty", MapT0T1{}, MapT0T1{}, MapT0T1{}},
 		{"PlusMap: empty + nil", MapT0T1{}, nil, MapT0T1{}},
 		{"PlusMap: nil + empty", nil, MapT0T1{}, MapT0T1{}},
@@ -592,12 +588,12 @@ func TestMap_PlusSlice(t *testing.T) {
 		arg      SliceOfPairT0T1
 		want     MapT0T1
 	}{
-		{"PlusSlice: non-empty + non-empty", mBase(), SliceOfPairT0T1{{9, "x9"}, {333, "x3"}},
+		{"PlusSlice: nonempty + nonempty", mBase(), SliceOfPairT0T1{{9, "x9"}, {333, "x3"}},
 			MapT0T1{1: "w1", 9: "x9", 22: "w22", 333: "x3", 4444: "w4444"}},
-		{"PlusSlice: non-empty + empty", mBase(), SliceOfPairT0T1{}, mBase()},
-		{"PlusSlice: empty + non-empty", MapT0T1{}, SliceOfPairT0T1{{9, "x9"}, {333, "x3"}},
+		{"PlusSlice: nonempty + empty", mBase(), SliceOfPairT0T1{}, mBase()},
+		{"PlusSlice: empty + nonempty", MapT0T1{}, SliceOfPairT0T1{{9, "x9"}, {333, "x3"}},
 			MapT0T1{9: "x9", 333: "x3"}},
-		{"PlusSlice: nil + non-empty", nil, SliceOfPairT0T1{{9, "x9"}, {333, "x3"}},
+		{"PlusSlice: nil + nonempty", nil, SliceOfPairT0T1{{9, "x9"}, {333, "x3"}},
 			MapT0T1{9: "x9", 333: "x3"}},
 		{"PlusSlice: empty + empty", MapT0T1{}, SliceOfPairT0T1{}, MapT0T1{}},
 		{"PlusSlice: empty + nil", MapT0T1{}, nil, MapT0T1{}},
