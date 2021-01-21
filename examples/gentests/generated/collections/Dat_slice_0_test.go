@@ -71,15 +71,24 @@ func TestSlice_ContainsAll(t *testing.T) {
 		arg      SliceDat
 		want     bool
 	}{
-		{"ContainsAll: subset", sDat(), append(sDat()[2:3], sDat()[1]), true},
-		{"ContainsAll: intersects", sDat(), append(sDat()[1:2], Dat{22, "xyz"}), false},
-		{"ContainsAll: disjoint", sDat(), SliceDat{Dat{22, "xyz"}, Dat{0, "abc"}}, false},
-		{"ContainsAll: empty slice", SliceDat{}, append(sDat()[2:3], sDat()[1]), false},
-		{"ContainsAll: nil slice", nil, append(sDat()[2:3], sDat()[1]), false},
+		{"ContainsAll: nonempty receiver, other subset", sDat(),
+			append(sDat()[2:3], sDat()[1]), true},
+		{"ContainsAll: nonempty receiver, other intersects", sDat(),
+			append(sDat()[1:2], Dat{22, "xyz"}), false},
+		{"ContainsAll: nonempty receiver, other disjoint", sDat(),
+			SliceDat{Dat{22, "xyz"}, Dat{0, "abc"}}, false},
+		{"ContainsAll: nonempty receiver, other empty", sDat(), SliceDat{}, true},
+		{"ContainsAll: nonempty receiver, other nil", sDat(), nil, true},
+		{"ContainsAll: empty receiver, other nonempty", SliceDat{}, append(sDat()[2:3], sDat()[1]), false},
+		{"ContainsAll: empty receiver, other empty", SliceDat{}, SliceDat{}, true},
+		{"ContainsAll: empty receiver, other nil", SliceDat{}, nil, true},
+		{"ContainsAll: nil receiver, other nonempty", nil, append(sDat()[2:3], sDat()[1]), false},
+		{"ContainsAll: nil receiver, other empty", nil, SliceDat{}, true},
+		{"ContainsAll: nil receiver, other nil", nil, nil, true},
 	}
 
 	for _, cs := range cases {
-		got := cs.receiver.ContainsSlice(cs.arg)
+		got := cs.receiver.ContainsAll(cs.arg)
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
@@ -173,18 +182,27 @@ func TestSlice_SubSlice(t *testing.T) {
 		arg1     int
 		arg2     int
 		want     SliceDat
+		succeeds bool
 	}{
-		{"SubSlice: nonempty - from beginning", sDat(), 0, 2, sDat()[:2]},
-		{"SubSlice: nonempty - from middle", sDat(), 1, 3, sDat()[1:3]},
-		{"SubSlice: nonempty - from end", sDat(), size - 3, size, sDat()[size-3:]},
-		{"SubSlice: nonempty - empty sub-slice", sDat(), 2, 2, SliceDat{}},
-		{"SubSlice: empty - empty sub-slice", SliceDat{}, 0, 0, SliceDat{}},
-		{"SubSlice: nil - empty sub-slice", nil, 0, 0, nil},
+		{"SubSlice: nonempty - from beginning", sDat(), 0, 2, sDat()[:2], true},
+		{"SubSlice: nonempty - from middle", sDat(), 1, 3, sDat()[1:3], true},
+		{"SubSlice: nonempty - from end", sDat(), size - 3, size, sDat()[size-3:], true},
+		{"SubSlice: nonempty - empty sub-slice", sDat(), 2, 2, SliceDat{}, true},
+		{"SubSlice: nonempty - invalid indices", sDat(), 5, 6, SliceDat{}, false},
+		{"SubSlice: empty - empty sub-slice", SliceDat{}, 0, 0, SliceDat{}, true},
+		{"SubSlice: empty - invalid indices", SliceDat{}, 1, 1, SliceDat{}, false},
+		{"SubSlice: nil - empty sub-slice", nil, 0, 0, nil, true},
+		{"SubSlice: nil - invalid indices", nil, 1, 1, nil, false},
 	}
 
 	for _, cs := range cases {
-		got := cs.receiver.SubSlice(cs.arg1, cs.arg2)
-		assert.Equal(t, cs.want, got, cs.msg)
+		if cs.succeeds {
+			got := cs.receiver.SubSlice(cs.arg1, cs.arg2)
+			assert.Equal(t, cs.want, got, cs.msg)
+		} else {
+			var ptf assert.PanicTestFunc = func() { cs.receiver.SubSlice(cs.arg1, cs.arg2) }
+			assert.Panics(t, ptf, cs.msg)
+		}
 	}
 }
 

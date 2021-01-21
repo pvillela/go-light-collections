@@ -14,11 +14,11 @@ type SliceOfPairPersonint []PairPersonint
 // MapPersonint is a type wrapper, implements Map interface.
 type MapPersonint map[Person]int
 
-// MapintSlicePerson is a type wrapper.
-type MapintSlicePerson map[int]SlicePerson
+// MapPersonSliceint is a type wrapper.
+type MapPersonSliceint map[Person]Sliceint
 
-// MapintSetPerson is a type wrapper.
-type MapintSetPerson map[int]SetPerson
+// MapPersonSetint is a type wrapper.
+type MapPersonSetint map[Person]Setint
 
 // SetOfPairPersonint is a type wrapper, implements Set interface.
 type SetOfPairPersonint map[PairPersonint]bool

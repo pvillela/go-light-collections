@@ -18,23 +18,8 @@ func mBase() Mapintstring {
 	return Mapintstring{1: "w1", 22: "w22", 333: "w333", 4444: "w4444"}
 }
 
-// func pairsBase() SetOfPairintstring {
-// 	return SetOfPairintstring{
-// 		Pairintstring{1, "w1"}: true, Pairintstring{22, "w22"}: true, Pairintstring{333, "w333"}: true,
-// 		Pairintstring{4444, "w4444"}: true,
-// 	}
-// }
-
-// func intX1(a Any) int { return Any(Any(a).(Pairintstring).X1).(int) }
-
-// func stringX2(a Any) string { return Any(Any(a).(Pairintstring).X1).(string) }
-
-func toInt(a Any) int { return Any(a).(int) }
-
-func toString(a Any) string { return Any(a).(string) }
-
 ////
-// TestMap_s
+// TestMaps
 
 func TestMap_Copy(t *testing.T) {
 	cases := []struct {

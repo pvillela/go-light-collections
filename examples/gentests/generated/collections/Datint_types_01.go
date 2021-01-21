@@ -14,11 +14,11 @@ type SliceOfPairDatint []PairDatint
 // MapDatint is a type wrapper, implements Map interface.
 type MapDatint map[Dat]int
 
-// MapintSliceDat is a type wrapper.
-type MapintSliceDat map[int]SliceDat
+// MapDatSliceint is a type wrapper.
+type MapDatSliceint map[Dat]Sliceint
 
-// MapintSetDat is a type wrapper.
-type MapintSetDat map[int]SetDat
+// MapDatSetint is a type wrapper.
+type MapDatSetint map[Dat]Setint
 
 // SetOfPairDatint is a type wrapper, implements Set interface.
 type SetOfPairDatint map[PairDatint]bool

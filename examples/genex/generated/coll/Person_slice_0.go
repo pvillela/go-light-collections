@@ -38,7 +38,7 @@ func (s SlicePerson) Contains(elem Person) bool {
 
 // ContainsSlice returns true if all the elements in the argument slice are in the receiver,
 // false otherwise.
-func (s SlicePerson) ContainsSlice(elems SlicePerson) bool {
+func (s SlicePerson) ContainsAll(elems SlicePerson) bool {
 	for _, e := range elems {
 		if !s.Contains(e) {
 			return false
