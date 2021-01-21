@@ -129,3 +129,22 @@ func TestSlice_Zipint(t *testing.T) {
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
+
+func TestSlice_ToMap(t *testing.T) {
+	data := SliceOfPairDatint{{Dat{1, "w1"}, 10}, {Dat{22, "w22"}, 42}, {Dat{1, "w1"}, 9}}
+
+	cases := []struct {
+		msg      string
+		receiver SliceOfPairDatint
+		want     MapDatint
+	}{
+		{"ToMap: nonempty receiver", data, MapDatint{Dat{1, "w1"}: 9, Dat{22, "w22"}: 42}},
+		{"ToMap: empty receiver", SliceOfPairDatint{}, MapDatint{}},
+		{"ToMap: nil receiver", nil, nil},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.ToMap()
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
+}
