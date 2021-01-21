@@ -32,5 +32,5 @@ export PACKAGE=collections
 # Set tests
 ./copy_sub.sh set_0 int
 ./copy_sub.sh set_0_test int
-./copy_sub.sh set_01 int int
-./copy_sub.sh set_01_test int int
+./copy_sub.sh set_01 int string
+./copy_sub.sh set_01_test int string

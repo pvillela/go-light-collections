@@ -1,17 +1,20 @@
 package glc
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
+
+func itoa(i int) string { return strconv.Itoa(i) }
 
 func TestSet_FlatMapT1(t *testing.T) {
 	f := func(a T0) SetT1 {
 		n := toInt(a)
 		s := make(SetT1, n%10)
 		for i := 0; i < n%10; i++ {
-			s[n+i] = true
+			s[itoa(n+i)] = true
 		}
 		return s
 	}
@@ -22,8 +25,9 @@ func TestSet_FlatMapT1(t *testing.T) {
 		arg      func(T0) SetT1
 		want     SetT1
 	}{
-		{"FlatMapT1: nonempty receiver", sBase(), f, SetT1{1: true, 22: true, 23: true,
-			333: true, 334: true, 335: true, 4444: true, 4445: true, 4446: true, 4447: true}},
+		{"FlatMapT1: nonempty receiver", sBase(), f, SetT1{"1": true, "22": true, "23": true,
+			"333": true, "334": true, "335": true, "4444": true, "4445": true, "4446": true,
+			"4447": true}},
 		{"FlatMapT1: empty receiver", SetT0{}, f, SetT1{}},
 		{"FlatMapT1: nil receiver", nil, f, nil},
 	}
@@ -35,7 +39,7 @@ func TestSet_FlatMapT1(t *testing.T) {
 }
 
 func TestSet_GroupByT1(t *testing.T) {
-	f := func(a T0) T1 { return toInt(a) % 2 }
+	f := func(a T0) T1 { return itoa(toInt(a) % 2) }
 
 	cases := []struct {
 		msg      string
@@ -44,8 +48,8 @@ func TestSet_GroupByT1(t *testing.T) {
 		want     MapT1SetT0
 	}{
 		{"GroupByT1: nonempty receiver", sBase(), f, MapT1SetT0{
-			0: {22: true, 4444: true},
-			1: {1: true, 333: true},
+			"0": {22: true, 4444: true},
+			"1": {1: true, 333: true},
 		}},
 		{"GroupByT1: empty receiver", SetT0{}, f, MapT1SetT0{}},
 		{"GroupByT1: nil receiver", nil, f, nil},
@@ -58,7 +62,7 @@ func TestSet_GroupByT1(t *testing.T) {
 }
 
 func TestSet_MapT1(t *testing.T) {
-	f := func(a T0) T1 { return toInt(a) + 1 }
+	f := func(a T0) T1 { return itoa(toInt(a) + 1) }
 
 	cases := []struct {
 		msg      string
@@ -66,7 +70,8 @@ func TestSet_MapT1(t *testing.T) {
 		arg      func(T0) T1
 		want     SetT1
 	}{
-		{"MapT1: nonempty receiver", sBase(), f, SetT1{2: true, 23: true, 334: true, 4445: true}},
+		{"MapT1: nonempty receiver", sBase(), f, SetT1{"2": true, "23": true, "334": true,
+			"4445": true}},
 		{"MapT1: empty receiver", SetT0{}, f, SetT1{}},
 		{"MapT1: nil receiver", nil, f, nil},
 	}
@@ -78,14 +83,14 @@ func TestSet_MapT1(t *testing.T) {
 }
 
 func TestSet_ToMap(t *testing.T) {
-	data := SetOfPairT0T1{{1, 10}: true, {22, 42}: true, {1, 9}: true}
+	data := SetOfPairT0T1{{1, "10"}: true, {22, "42"}: true, {1, "9"}: true}
 
 	cases := []struct {
 		msg      string
 		receiver SetOfPairT0T1
 		want     MapT0T1
 	}{
-		{"ToMap: nonempty receiver", data, MapT0T1{1: 9, 22: 42}},
+		{"ToMap: nonempty receiver", data, MapT0T1{1: "9", 22: "42"}},
 		{"ToMap: empty receiver", SetOfPairT0T1{}, MapT0T1{}},
 		{"ToMap: nil receiver", nil, nil},
 	}
