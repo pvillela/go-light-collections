@@ -180,18 +180,27 @@ func TestSlice_SubSlice(t *testing.T) {
 		arg1     int
 		arg2     int
 		want     SliceT0
+		succeeds bool
 	}{
-		{"SubSlice: nonempty - from beginning", sDat(), 0, 2, sDat()[:2]},
-		{"SubSlice: nonempty - from middle", sDat(), 1, 3, sDat()[1:3]},
-		{"SubSlice: nonempty - from end", sDat(), size - 3, size, sDat()[size-3:]},
-		{"SubSlice: nonempty - empty sub-slice", sDat(), 2, 2, SliceT0{}},
-		{"SubSlice: empty - empty sub-slice", SliceT0{}, 0, 0, SliceT0{}},
-		{"SubSlice: nil - empty sub-slice", nil, 0, 0, nil},
+		{"SubSlice: nonempty - from beginning", sDat(), 0, 2, sDat()[:2], true},
+		{"SubSlice: nonempty - from middle", sDat(), 1, 3, sDat()[1:3], true},
+		{"SubSlice: nonempty - from end", sDat(), size - 3, size, sDat()[size-3:], true},
+		{"SubSlice: nonempty - empty sub-slice", sDat(), 2, 2, SliceT0{}, true},
+		{"SubSlice: nonempty - invalid indices", sDat(), 5, 6, SliceT0{}, false},
+		{"SubSlice: empty - empty sub-slice", SliceT0{}, 0, 0, SliceT0{}, true},
+		{"SubSlice: empty - invalid indices", SliceT0{}, 1, 1, SliceT0{}, false},
+		{"SubSlice: nil - empty sub-slice", nil, 0, 0, nil, true},
+		{"SubSlice: nil - invalid indices", nil, 1, 1, nil, false},
 	}
 
 	for _, cs := range cases {
-		got := cs.receiver.SubSlice(cs.arg1, cs.arg2)
-		assert.Equal(t, cs.want, got, cs.msg)
+		if cs.succeeds {
+			got := cs.receiver.SubSlice(cs.arg1, cs.arg2)
+			assert.Equal(t, cs.want, got, cs.msg)
+		} else {
+			var ptf assert.PanicTestFunc = func() { cs.receiver.SubSlice(cs.arg1, cs.arg2) }
+			assert.Panics(t, ptf, cs.msg)
+		}
 	}
 }
 

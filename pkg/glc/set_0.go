@@ -28,6 +28,7 @@ func (s SliceT0) ToSet() SetT0 {
 // Set methods
 
 // Put mutates the receiver by adding the argument if it is not already in the receiver.
+// Panics if the receiver is nil.
 func (s SetT0) Put(e T0) {
 	s[e] = true
 }
@@ -121,6 +122,9 @@ func (s SetT0) Count(pred func(T0) bool) int {
 // Filter returns a new set containing only the elements in the receiver that
 // satisfy the predicate.
 func (s SetT0) Filter(pred func(T0) bool) SetT0 {
+	if s == nil {
+		return nil
+	}
 	output := make(SetT0, len(s)/2) // optimizing for speed vs space
 	for e := range s {
 		if pred(e) {
@@ -146,6 +150,9 @@ func (s SetT0) ForEach(f func(T0)) {
 // Intersect returns a new set that contains the elements that are in both the receiver
 // and the other set.
 func (s SetT0) Intersect(other SetT0) SetT0 {
+	if s == nil {
+		return nil
+	}
 	s1 := make(SetT0, math.MinInt(len(s), len(other)))
 	for e := range other {
 		_, ok := s[e]
@@ -168,7 +175,7 @@ func (s SetT0) MaxWith(comparator func(T0, T0) int) (T0, error) {
 	var max T0
 
 	if len(s) == 0 {
-		return max, errors.New("empty set")
+		return max, errors.New("empty or nil set")
 	}
 
 	first := true
@@ -242,6 +249,9 @@ func (s SetT0) Partition(pred func(T0) bool) (SetT0, SetT0) {
 // copy of the receiver.
 func (s SetT0) PlusElement(elem T0) SetT0 {
 	s1 := s.Copy()
+	if s1 == nil {
+		s1 = SetT0{}
+	}
 	s1[elem] = true
 	return s1
 }
@@ -249,6 +259,12 @@ func (s SetT0) PlusElement(elem T0) SetT0 {
 // PlusSet returns a copy of the receiver with the elements of the other set added to it.
 func (s SetT0) PlusSet(other SetT0) SetT0 {
 	s1 := s.Copy()
+	if s1 == nil {
+		if other == nil {
+			return nil
+		}
+		s1 = SetT0{}
+	}
 	for e := range other {
 		s1[e] = true
 	}
@@ -258,6 +274,12 @@ func (s SetT0) PlusSet(other SetT0) SetT0 {
 // PlusSlice returns a copy of the receiver with the elements of the slice added to it.
 func (s SetT0) PlusSlice(slice SliceT0) SetT0 {
 	s1 := s.Copy()
+	if s1 == nil {
+		if slice == nil {
+			return nil
+		}
+		s1 = SetT0{}
+	}
 	for _, e := range slice {
 		s1[e] = true
 	}
@@ -266,6 +288,9 @@ func (s SetT0) PlusSlice(slice SliceT0) SetT0 {
 
 // ToSlice returns a slice containing the elements of the receiver.
 func (s SetT0) ToSlice() SliceT0 {
+	if s == nil {
+		return nil
+	}
 	slice := make(SliceT0, len(s))
 	i := 0
 	for e := range s {

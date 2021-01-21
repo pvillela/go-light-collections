@@ -141,11 +141,11 @@ func TestSet_ContainsSet(t *testing.T) {
 		{"ContainsSet: nonempty receiver, other empty", sBase(), SetT0{}, true},
 		{"ContainsSet: nonempty receiver, other nil", sBase(), nil, true},
 		{"ContainsSet: empty receiver, other nonempty", SetT0{},
-			SetT0{22: true, 333: true}, true},
+			SetT0{22: true, 333: true}, false},
 		{"ContainsSet: empty receiver, other empty", SetT0{}, SetT0{}, true},
 		{"ContainsSet: empty receiver, other nil", SetT0{}, nil, true},
 		{"ContainsSet: nil receiver, other nonempty", nil,
-			SetT0{22: true, 333: true}, true},
+			SetT0{22: true, 333: true}, false},
 		{"ContainsSet: nil receiver, other empty", nil, SetT0{}, true},
 		{"ContainsSet: nil receiver, other nil", nil, nil, true},
 	}
@@ -172,11 +172,11 @@ func TestSet_ContainsSlice(t *testing.T) {
 		{"ContainsSlice: nonempty receiver, elems empty", sBase(), SliceT0{}, true},
 		{"ContainsSlice: nonempty receiver, elems nil", sBase(), nil, true},
 		{"ContainsSlice: empty receiver, elems nonempty", SetT0{},
-			SliceT0{22, 333, 22}, true},
+			SliceT0{22, 333, 22}, false},
 		{"ContainsSlice: empty receiver, elems empty", SetT0{}, SliceT0{}, true},
 		{"ContainsSlice: empty receiver, elems nil", SetT0{}, nil, true},
 		{"ContainsSlice: nil receiver, elems nonempty", nil,
-			SliceT0{22, 333, 22}, true},
+			SliceT0{22, 333, 22}, false},
 		{"ContainsSlice: nil receiver, elems empty", nil, SliceT0{}, true},
 		{"ContainsSlice: nil receiver, elems nil", nil, nil, true},
 	}
@@ -560,12 +560,18 @@ func TestSet_Put(t *testing.T) {
 		{"Put: nonempty absent", SetT0{1: true, 22: true, 4444: true}, 333, sBase()},
 		{"Put: nonempty present", sBase(), 333, sBase()},
 		{"Put: empty", SetT0{}, 333, SetT0{333: true}},
-		{"Put: nil", nil, 333, SetT0{333: true}},
+		{"Put: nil", nil, 333, nil},
 	}
 
 	for _, cs := range cases {
-		got := cs.receiver
-		got.Put(cs.arg)
-		assert.Equal(t, cs.want, got, cs.msg)
+		if cs.receiver != nil {
+			got := cs.receiver
+			got.Put(cs.arg)
+			assert.Equal(t, cs.want, got, cs.msg)
+		} else {
+			var ptf assert.PanicTestFunc = func() { cs.receiver.Put(cs.arg) }
+			assert.Panics(t, ptf, cs.msg)
+		}
+
 	}
 }
