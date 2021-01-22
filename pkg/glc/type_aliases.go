@@ -15,10 +15,6 @@ type T1 = T0
 // Used to clarify method signatures and facilitate replacement for code generation.
 type T2 = T0
 
-// T3 is a type alias.
-// Used to clarify method signatures and facilitate replacement for code generation.
-type T3 = T0
-
 // SliceAny is a type alias.
 type SliceAny = SliceT0
 
@@ -38,15 +34,6 @@ type SliceOfPairAnyAny = SliceOfPairT0T1
 
 // MapAnyAny is a type alias.
 type MapAnyAny = MapT0T1
-
-// MapT0T2 is a type wrapper, implements Map interface.
-type MapT0T2 = MapT0T1
-
-// MapT2T1 is a alias.
-type MapT2T1 = MapT0T1
-
-// MapAnySliceAny is a type alias.
-type MapAnySliceAny = MapT1SliceT0
 
 // SetAny is a type alias.
 type SetAny = SetT0

@@ -30,11 +30,11 @@ func (s SlicePerson) FoldString(z String, op func(String, Person) String) String
 // GroupByString returns a map whose keys are outputs of the keySelector function applied to
 // the items in the receiver and whose values are slices containing the items in the
 // receiver that correspond to each key obtained with the keySelector function.
-func (s SlicePerson) GroupByString(keySelector func(Person) String) MapStringSlicePerson {
+func (s SlicePerson) GroupByString(keySelector func(Person) String) map[String]SlicePerson {
 	if s == nil {
 		return nil
 	}
-	m := make(MapStringSlicePerson, len(s)/2) // optimizing for speed vs space
+	m := make(map[String]SlicePerson, len(s)/2) // optimizing for speed vs space
 	for _, x := range s {
 		k := keySelector(x)
 		lst, ok := m[k]

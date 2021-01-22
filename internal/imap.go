@@ -46,8 +46,8 @@ type IMapT0T1 interface {
 type IMapT0T1T2 interface {
 	FlatMapT2(func(c.PairT0T1) c.SliceT2) c.SliceT2
 	MapT2(func(c.PairT0T1) c.T2) c.SliceT2
-	MapKeysT2(func(c.PairT0T1) c.T2) c.MapT2T1
-	MapValuesT2(func(c.PairT0T1) c.T2) c.MapT0T2
+	MapKeysT2(func(c.PairT0T1) c.T2) map[c.T2]c.T1
+	MapValuesT2(func(c.PairT0T1) c.T2) map[c.T0]c.T2
 }
 
 // Check that the concrete type satisfies the interfaces.

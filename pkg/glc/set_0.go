@@ -3,7 +3,7 @@ package glc
 import (
 	"errors"
 
-	"github.com/pvillela/go-light-collections/pkg/util/math"
+	"github.com/pvillela/go-light-collections/pkg/util/util"
 )
 
 /////////////////////
@@ -153,7 +153,7 @@ func (s SetT0) Intersect(other SetT0) SetT0 {
 	if s == nil {
 		return nil
 	}
-	s1 := make(SetT0, math.MinInt(len(s), len(other)))
+	s1 := make(SetT0, util.MinInt(len(s), len(other)))
 	for e := range other {
 		_, ok := s[e]
 		if ok {

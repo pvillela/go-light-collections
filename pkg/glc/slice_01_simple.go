@@ -15,7 +15,7 @@ func (s SliceT0) Fold(z T1, op func(T1, T0) T1) T1 {
 	return s.FoldT1(z, op)
 }
 
-func (s SliceT0) GroupBy(keySelector func(T0) T1) MapT1SliceT0 {
+func (s SliceT0) GroupBy(keySelector func(T0) T1) map[T1]SliceT0 {
 	return s.GroupByT1(keySelector)
 }
 

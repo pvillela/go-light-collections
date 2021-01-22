@@ -9,14 +9,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func itoa(i int) string { return strconv.Itoa(i) }
-
 func TestSet_FlatMapstring(t *testing.T) {
 	f := func(a int) Setstring {
 		n := toInt(a)
 		s := make(Setstring, n%10)
 		for i := 0; i < n%10; i++ {
-			s[itoa(n+i)] = true
+			s[strconv.Itoa(n+i)] = true
 		}
 		return s
 	}
@@ -41,19 +39,19 @@ func TestSet_FlatMapstring(t *testing.T) {
 }
 
 func TestSet_GroupBystring(t *testing.T) {
-	f := func(a int) string { return itoa(toInt(a) % 2) }
+	f := func(a int) string { return strconv.Itoa(toInt(a) % 2) }
 
 	cases := []struct {
 		msg      string
 		receiver Setint
 		arg      func(int) string
-		want     MapstringSetint
+		want     map[string]Setint
 	}{
-		{"GroupBystring: nonempty receiver", sBase(), f, MapstringSetint{
+		{"GroupBystring: nonempty receiver", sBase(), f, map[string]Setint{
 			"0": {22: true, 4444: true},
 			"1": {1: true, 333: true},
 		}},
-		{"GroupBystring: empty receiver", Setint{}, f, MapstringSetint{}},
+		{"GroupBystring: empty receiver", Setint{}, f, map[string]Setint{}},
 		{"GroupBystring: nil receiver", nil, f, nil},
 	}
 
@@ -64,7 +62,7 @@ func TestSet_GroupBystring(t *testing.T) {
 }
 
 func TestSet_Mapstring(t *testing.T) {
-	f := func(a int) string { return itoa(toInt(a) + 1) }
+	f := func(a int) string { return strconv.Itoa(toInt(a) + 1) }
 
 	cases := []struct {
 		msg      string

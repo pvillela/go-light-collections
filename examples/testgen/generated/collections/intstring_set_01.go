@@ -20,11 +20,11 @@ func (s Setint) FlatMapstring(f func(int) Setstring) Setstring {
 // GroupBystring returns a map whose keys are outputs of the keySelector function applied to
 // the elements in the receiver and whose values are sets containing the elements in the
 // receiver that correspond to each key obtained with the keySelector function.
-func (s Setint) GroupBystring(keySelector func(int) string) MapstringSetint {
+func (s Setint) GroupBystring(keySelector func(int) string) map[string]Setint {
 	if s == nil {
 		return nil
 	}
-	m := make(MapstringSetint, len(s)/2) // optimizing for speed vs space
+	m := make(map[string]Setint, len(s)/2) // optimizing for speed vs space
 	for x := range s {
 		k := keySelector(x)
 		set, ok := m[k]

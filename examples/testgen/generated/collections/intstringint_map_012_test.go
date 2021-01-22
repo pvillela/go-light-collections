@@ -83,11 +83,11 @@ func TestMap_MapKeysint(t *testing.T) {
 		msg      string
 		receiver Mapintstring
 		arg      func(Pairintstring) int
-		want     Mapintstring
+		want     map[int]string
 	}{
-		{"MapKeysint: nonempty receiver", mBase(), f, Mapintstring{2: "w1", 23: "w22", 334: "w333",
+		{"MapKeysint: nonempty receiver", mBase(), f, map[int]string{2: "w1", 23: "w22", 334: "w333",
 			4445: "w4444"}},
-		{"MapKeysint: empty receiver", Mapintstring{}, f, Mapintstring{}},
+		{"MapKeysint: empty receiver", Mapintstring{}, f, map[int]string{}},
 		{"MapKeysint: nil receiver", nil, f, nil},
 	}
 
@@ -104,11 +104,11 @@ func TestMap_MapValuesint(t *testing.T) {
 		msg      string
 		receiver Mapintstring
 		arg      func(Pairintstring) int
-		want     Mapintint
+		want     map[int]int
 	}{
-		{"MapValuesint: nonempty receiver", mBase(), f, Mapintint{1: 3, 22: 25, 333: 337,
+		{"MapValuesint: nonempty receiver", mBase(), f, map[int]int{1: 3, 22: 25, 333: 337,
 			4444: 4449}},
-		{"MapValuesint: empty receiver", Mapintstring{}, f, Mapintint{}},
+		{"MapValuesint: empty receiver", Mapintstring{}, f, map[int]int{}},
 		{"MapValuesint: nil receiver", nil, f, nil},
 	}
 

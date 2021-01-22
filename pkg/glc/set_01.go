@@ -18,11 +18,11 @@ func (s SetT0) FlatMapT1(f func(T0) SetT1) SetT1 {
 // GroupByT1 returns a map whose keys are outputs of the keySelector function applied to
 // the elements in the receiver and whose values are sets containing the elements in the
 // receiver that correspond to each key obtained with the keySelector function.
-func (s SetT0) GroupByT1(keySelector func(T0) T1) MapT1SetT0 {
+func (s SetT0) GroupByT1(keySelector func(T0) T1) map[T1]SetT0 {
 	if s == nil {
 		return nil
 	}
-	m := make(MapT1SetT0, len(s)/2) // optimizing for speed vs space
+	m := make(map[T1]SetT0, len(s)/2) // optimizing for speed vs space
 	for x := range s {
 		k := keySelector(x)
 		set, ok := m[k]

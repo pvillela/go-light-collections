@@ -81,11 +81,11 @@ func TestMap_MapKeysT2(t *testing.T) {
 		msg      string
 		receiver MapT0T1
 		arg      func(PairT0T1) T2
-		want     MapT2T1
+		want     map[T2]T1
 	}{
-		{"MapKeysT2: nonempty receiver", mBase(), f, MapT2T1{2: "w1", 23: "w22", 334: "w333",
+		{"MapKeysT2: nonempty receiver", mBase(), f, map[T2]T1{2: "w1", 23: "w22", 334: "w333",
 			4445: "w4444"}},
-		{"MapKeysT2: empty receiver", MapT0T1{}, f, MapT2T1{}},
+		{"MapKeysT2: empty receiver", MapT0T1{}, f, map[T2]T1{}},
 		{"MapKeysT2: nil receiver", nil, f, nil},
 	}
 
@@ -102,11 +102,11 @@ func TestMap_MapValuesT2(t *testing.T) {
 		msg      string
 		receiver MapT0T1
 		arg      func(PairT0T1) T2
-		want     MapT0T2
+		want     map[T0]T2
 	}{
-		{"MapValuesT2: nonempty receiver", mBase(), f, MapT0T2{1: 3, 22: 25, 333: 337,
+		{"MapValuesT2: nonempty receiver", mBase(), f, map[T0]T2{1: 3, 22: 25, 333: 337,
 			4444: 4449}},
-		{"MapValuesT2: empty receiver", MapT0T1{}, f, MapT0T2{}},
+		{"MapValuesT2: empty receiver", MapT0T1{}, f, map[T0]T2{}},
 		{"MapValuesT2: nil receiver", nil, f, nil},
 	}
 

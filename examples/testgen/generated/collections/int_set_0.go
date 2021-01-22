@@ -5,7 +5,7 @@ package collections
 import (
 	"errors"
 
-	"github.com/pvillela/go-light-collections/pkg/util/math"
+	"github.com/pvillela/go-light-collections/pkg/util/util"
 )
 
 /////////////////////
@@ -155,7 +155,7 @@ func (s Setint) Intersect(other Setint) Setint {
 	if s == nil {
 		return nil
 	}
-	s1 := make(Setint, math.MinInt(len(s), len(other)))
+	s1 := make(Setint, util.MinInt(len(s), len(other)))
 	for e := range other {
 		_, ok := s[e]
 		if ok {

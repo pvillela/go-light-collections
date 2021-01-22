@@ -61,13 +61,13 @@ func TestSlice_GroupByT1(t *testing.T) {
 		msg      string
 		receiver SliceT0
 		arg      func(T0) T1
-		want     MapT1SliceT0
+		want     map[T1]SliceT0
 	}{
-		{"GroupByT1: nonempty receiver", sDat(), f, MapT1SliceT0{
+		{"GroupByT1: nonempty receiver", sDat(), f, map[T1]SliceT0{
 			0: {Dat{22, "w22"}, Dat{4444, "w4444"}, Dat{22, "w22"}},
 			1: {Dat{1, "w1"}, Dat{333, "w333"}},
 		}},
-		{"GroupByT1: empty receiver", SliceT0{}, f, MapT1SliceT0{}},
+		{"GroupByT1: empty receiver", SliceT0{}, f, map[T1]SliceT0{}},
 		{"GroupByT1: nil receiver", nil, f, nil},
 	}
 

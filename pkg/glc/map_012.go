@@ -22,22 +22,22 @@ func (m MapT0T1) MapT2(f func(PairT0T1) T2) SliceT2 {
 	return r
 }
 
-func (m MapT0T1) MapKeysT2(f func(PairT0T1) T2) MapT2T1 {
+func (m MapT0T1) MapKeysT2(f func(PairT0T1) T2) map[T2]T1 {
 	if m == nil {
 		return nil
 	}
-	r := make(MapT2T1)
+	r := make(map[T2]T1)
 	for k, v := range m {
 		r[f(PairT0T1{k, v})] = v
 	}
 	return r
 }
 
-func (m MapT0T1) MapValuesT2(f func(PairT0T1) T2) MapT0T2 {
+func (m MapT0T1) MapValuesT2(f func(PairT0T1) T2) map[T0]T2 {
 	if m == nil {
 		return nil
 	}
-	r := make(MapT0T2)
+	r := make(map[T0]T2)
 	for k, v := range m {
 		r[k] = f(PairT0T1{k, v})
 	}

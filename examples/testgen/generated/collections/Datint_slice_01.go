@@ -30,11 +30,11 @@ func (s SliceDat) Foldint(z int, op func(int, Dat) int) int {
 // GroupByint returns a map whose keys are outputs of the keySelector function applied to
 // the items in the receiver and whose values are slices containing the items in the
 // receiver that correspond to each key obtained with the keySelector function.
-func (s SliceDat) GroupByint(keySelector func(Dat) int) MapintSliceDat {
+func (s SliceDat) GroupByint(keySelector func(Dat) int) map[int]SliceDat {
 	if s == nil {
 		return nil
 	}
-	m := make(MapintSliceDat, len(s)/2) // optimizing for speed vs space
+	m := make(map[int]SliceDat, len(s)/2) // optimizing for speed vs space
 	for _, x := range s {
 		k := keySelector(x)
 		lst, ok := m[k]

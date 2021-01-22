@@ -24,22 +24,22 @@ func (m MapStringint) Mapint(f func(PairStringint) int) Sliceint {
 	return r
 }
 
-func (m MapStringint) MapKeysint(f func(PairStringint) int) Mapintint {
+func (m MapStringint) MapKeysint(f func(PairStringint) int) map[int]int {
 	if m == nil {
 		return nil
 	}
-	r := make(Mapintint)
+	r := make(map[int]int)
 	for k, v := range m {
 		r[f(PairStringint{k, v})] = v
 	}
 	return r
 }
 
-func (m MapStringint) MapValuesint(f func(PairStringint) int) MapStringint {
+func (m MapStringint) MapValuesint(f func(PairStringint) int) map[String]int {
 	if m == nil {
 		return nil
 	}
-	r := make(MapStringint)
+	r := make(map[String]int)
 	for k, v := range m {
 		r[k] = f(PairStringint{k, v})
 	}

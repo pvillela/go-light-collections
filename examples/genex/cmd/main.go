@@ -11,36 +11,28 @@ import (
 func main() {
 	persons := coll.SlicePerson{{Name: "John", Age: 80}, {Name: "Paul", Age: 78},
 		{Name: "George", Age: 77}, {Name: "Ringo", Age: 80}}
+	fmt.Printf("*** persons: %#v\n", persons)
 
 	personsWithEvenNames := persons.Filter(func(p pkga.Person) bool { return len(p.Name)%2 == 0 })
+	fmt.Printf("*** personsWithEvenNames: %#v\n", personsWithEvenNames)
 
 	namesOfPWEN := personsWithEvenNames.MapString(func(p pkga.Person) string { return p.Name })
+	fmt.Printf("*** namesOfPWEN: %#v\n", namesOfPWEN)
 
 	agesOfPWEN := personsWithEvenNames.Mapint(func(p pkga.Person) int { return p.Age })
+	fmt.Printf("*** agesOfPWEN: %#v\n", agesOfPWEN)
 
 	namesToAgesOfPWEN := namesOfPWEN.Zipint(agesOfPWEN).ToMap()
-
+	fmt.Printf("*** namesToAgesOfPWEN: %#v\n", namesToAgesOfPWEN)
 	fmt.Println(namesToAgesOfPWEN["Paul"])
-	// Output: 78
-
 	fmt.Println(namesToAgesOfPWEN["Ringo"])
-	// Output: 0
-
-	fmt.Println(namesToAgesOfPWEN)
-	// Output: map[George:77 John:80 Paul:78]
 
 	beatlesMap := namesToAgesOfPWEN.Add("Ringo", 80)
-
-	fmt.Println(beatlesMap)
-	// Output: map[George:77 John:80 Paul:78 Ringo:80]
+	fmt.Printf("*** beatlesMap: %#v\n", beatlesMap)
 
 	beatlesMapEvenAges := beatlesMap.FilterValues(func(age int) bool { return age%2 == 0 })
-
-	fmt.Println(beatlesMapEvenAges)
-	// Output: map[John:80 Paul:78 Ringo:80]
+	fmt.Printf("*** beatlesMapEvenAges: %#v\n", beatlesMapEvenAges)
 
 	mungedMap := beatlesMapEvenAges.MapValuesint(func(p coll.PairStringint) int { return len(p.X1) + p.X2 })
-
-	fmt.Println(mungedMap)
-	// Output: map[John:84 Paul:82 Ringo:85]
+	fmt.Printf("*** mungedMap: %#v\n", mungedMap)
 }

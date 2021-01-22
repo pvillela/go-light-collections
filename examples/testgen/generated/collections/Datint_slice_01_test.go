@@ -63,13 +63,13 @@ func TestSlice_GroupByint(t *testing.T) {
 		msg      string
 		receiver SliceDat
 		arg      func(Dat) int
-		want     MapintSliceDat
+		want     map[int]SliceDat
 	}{
-		{"GroupByint: nonempty receiver", sDat(), f, MapintSliceDat{
+		{"GroupByint: nonempty receiver", sDat(), f, map[int]SliceDat{
 			0: {Dat{22, "w22"}, Dat{4444, "w4444"}, Dat{22, "w22"}},
 			1: {Dat{1, "w1"}, Dat{333, "w333"}},
 		}},
-		{"GroupByint: empty receiver", SliceDat{}, f, MapintSliceDat{}},
+		{"GroupByint: empty receiver", SliceDat{}, f, map[int]SliceDat{}},
 		{"GroupByint: nil receiver", nil, f, nil},
 	}
 
