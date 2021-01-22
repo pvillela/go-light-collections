@@ -8,7 +8,7 @@ An example is provided with a simple pattern in the [glc](https://github.com/pvi
 
 This framework also supports code generation for specific types.  See the [genex](https://github.com/pvillela/go-light-collections/tree/main/examples/genex) example. 
 
-The package [examples/gentest](https://github.com/pvillela/go-light-collections/tree/main/examples/gentests) and its sub-packages contain the generation of tests for
+The package [examples/testgen](https://github.com/pvillela/go-light-collections/tree/main/examples/testgen) and its sub-packages contain the generation of tests for
 specific concrete types.  These tests serve to test the correctness of the code generation
 process.
 
