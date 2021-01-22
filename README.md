@@ -12,6 +12,8 @@ The package [examples/gentest](https://github.com/pvillela/go-light-collections/
 specific concrete types.  These tests serve to test the correctness of the code generation
 process.
 
+This library is extensively tested, including 100% test coverage for the core code and the execution of the tests with code generation.
+
 
 ## To-dos
 
