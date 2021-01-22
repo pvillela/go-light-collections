@@ -15,9 +15,7 @@ process.
 
 ## To-dos
 
+*   Add missing library godoc comments
 *   Update collections package documentation
 *   Write code generation documentation
-*   Add missing godoc comments
-*   Add Map methods
-*   Add Set methods
-*   Update code generation example
+*   Update code generation example documentation
