@@ -1,4 +1,4 @@
 #/!bin/bash
 
 rm -r examples/genex/generated
-rm -r examples/gentests/generated
+rm -r examples/testgen/generated

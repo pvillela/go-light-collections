@@ -2,24 +2,24 @@
 
 package coll
 
-// FlatMapint returns the slice obtained by applying the argument f to each item in the
+// FlatMapString returns the slice obtained by applying the argument f to each item in the
 // receiver and concatenating the results.
-func (s Sliceint) FlatMapint(f func(int) Sliceint) Sliceint {
+func (s SlicePerson) FlatMapString(f func(Person) SliceString) SliceString {
 	if s == nil {
 		return nil
 	}
-	r := make([]int, 0, len(s)) // optimizing for speed vs space
+	r := make([]String, 0, len(s)) // optimizing for speed vs space
 	for _, x := range s {
 		r = append(r, f(x)...)
 	}
 	return r
 }
 
-// Foldint returns the accumulated value obtained by applying the operation op to z,
+// FoldString returns the accumulated value obtained by applying the operation op to z,
 // and the first element of the given slice, then applying op to the result of the first
 // operation and the second element of the given slice, and so on.
 // Returns z if the slice is empty.
-func (s Sliceint) Foldint(z int, op func(int, int) int) int {
+func (s SlicePerson) FoldString(z String, op func(String, Person) String) String {
 	result := z
 	for _, a := range s {
 		result = op(result, a)
@@ -27,19 +27,19 @@ func (s Sliceint) Foldint(z int, op func(int, int) int) int {
 	return result
 }
 
-// GroupByint returns a map whose keys are outputs of the keySelector function applied to
+// GroupByString returns a map whose keys are outputs of the keySelector function applied to
 // the items in the receiver and whose values are slices containing the items in the
 // receiver that correspond to each key obtained with the keySelector function.
-func (s Sliceint) GroupByint(keySelector func(int) int) MapintSliceint {
+func (s SlicePerson) GroupByString(keySelector func(Person) String) MapStringSlicePerson {
 	if s == nil {
 		return nil
 	}
-	m := make(MapintSliceint, len(s)/2) // optimizing for speed vs space
+	m := make(MapStringSlicePerson, len(s)/2) // optimizing for speed vs space
 	for _, x := range s {
 		k := keySelector(x)
 		lst, ok := m[k]
 		if !ok {
-			lst = make(Sliceint, 0, 1)
+			lst = make(SlicePerson, 0, 1)
 		}
 		lst = append(lst, x)
 		m[k] = lst
@@ -47,20 +47,20 @@ func (s Sliceint) GroupByint(keySelector func(int) int) MapintSliceint {
 	return m
 }
 
-// Mapint returns a new slice resulting from the application of a given function to
+// MapString returns a new slice resulting from the application of a given function to
 // each element of a given slice.
-func (s Sliceint) Mapint(f func(int) int) Sliceint {
+func (s SlicePerson) MapString(f func(Person) String) SliceString {
 	if s == nil {
 		return nil
 	}
-	r := make(Sliceint, len(s))
+	r := make(SliceString, len(s))
 	for i, a := range s {
 		r[i] = f(a)
 	}
 	return r
 }
 
-func (s Sliceint) Zipint(other Sliceint) SliceOfPairintint {
+func (s SlicePerson) ZipString(other SliceString) SliceOfPairPersonString {
 	if s == nil {
 		return nil
 	}
@@ -68,9 +68,9 @@ func (s Sliceint) Zipint(other Sliceint) SliceOfPairintint {
 	if size > len(other) {
 		size = len(other)
 	}
-	r := make([]Pairintint, size)
+	r := make([]PairPersonString, size)
 	for i := 0; i < size; i++ {
-		r[i] = Pairintint{s[i], other[i]}
+		r[i] = PairPersonString{s[i], other[i]}
 	}
 	return r
 }
@@ -79,11 +79,11 @@ func (s Sliceint) Zipint(other Sliceint) SliceOfPairintint {
 // whose values are the corresonding second components in the items of the receiver.
 // If multiple items in the receiver have the same first component, the corresponding
 // value in the resulting map will be taken from the last such item in the receiver.
-func (s SliceOfPairintint) ToMap() Mapintint {
+func (s SliceOfPairPersonString) ToMap() MapPersonString {
 	if s == nil {
 		return nil
 	}
-	m := make(map[int]int, len(s))
+	m := make(map[Person]String, len(s))
 	for _, p := range s {
 		m[p.X1] = p.X2
 	}
