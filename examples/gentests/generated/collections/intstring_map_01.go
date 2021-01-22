@@ -247,9 +247,6 @@ func (m Mapintstring) PlusMap(other Mapintstring) Mapintstring {
 		m1 = m.Copy()
 	}
 
-	if m1 == nil {
-		m1 = Mapintstring{}
-	}
 	for k, v := range other {
 		m1[k] = v
 	}
@@ -267,9 +264,6 @@ func (m Mapintstring) PlusSlice(s SliceOfPairintstring) Mapintstring {
 		m1 = m.Copy()
 	}
 
-	if m1 == nil {
-		m1 = Mapintstring{}
-	}
 	for _, pair := range s {
 		m1[pair.X1] = pair.X2
 	}

@@ -3,9 +3,6 @@ package glc
 // SliceInt is a wrapper type to enable extension methods.
 type SliceInt []int
 
-// Und converts to the underlying type.
-func (s SliceInt) Und() []int { return s }
-
 // ToSliceAny converts to
 func (s SliceInt) ToSliceAny() SliceT0 {
 	r := make(SliceT0, len(s))

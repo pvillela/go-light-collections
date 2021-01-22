@@ -414,6 +414,26 @@ func TestSet_MinusSet(t *testing.T) {
 	}
 }
 
+func TestSet_MinusSlice(t *testing.T) {
+	cases := []struct {
+		msg      string
+		receiver Setint
+		arg      Sliceint
+		want     Setint
+	}{
+		{"MinusSlice: subset", sBase(), Sliceint{22, 333}, Setint{1: true, 4444: true}},
+		{"MinusSlice: intersects", sBase(), Sliceint{0, 22, 9, 333}, Setint{1: true, 4444: true}},
+		{"MinusSlice: disjoint", sBase(), Sliceint{0, 9, 42}, sBase()},
+		{"MinusSlice: empty slice", Setint{}, Sliceint{22, 333}, Setint{}},
+		{"MinusSlice: nil slice", nil, Sliceint{22, 333}, nil},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.MinusSlice(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
+}
+
 func TestSet_MinWith(t *testing.T) {
 	comp := func(a1 int, a2 int) int { return -(toInt(a1) - toInt(a2)) }
 	var zero int

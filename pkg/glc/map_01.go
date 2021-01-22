@@ -245,9 +245,6 @@ func (m MapT0T1) PlusMap(other MapT0T1) MapT0T1 {
 		m1 = m.Copy()
 	}
 
-	if m1 == nil {
-		m1 = MapT0T1{}
-	}
 	for k, v := range other {
 		m1[k] = v
 	}
@@ -265,9 +262,6 @@ func (m MapT0T1) PlusSlice(s SliceOfPairT0T1) MapT0T1 {
 		m1 = m.Copy()
 	}
 
-	if m1 == nil {
-		m1 = MapT0T1{}
-	}
 	for _, pair := range s {
 		m1[pair.X1] = pair.X2
 	}

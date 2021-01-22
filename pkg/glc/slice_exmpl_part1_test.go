@@ -22,9 +22,6 @@ type Foo struct {
 // Used with all pseudo-generic functions for slices.
 type SliceFoo []Foo
 
-// Und converts to the underlying type.
-func (s SliceFoo) Und() []Foo { return s }
-
 // ToSliceAny converts to SliceAny.
 func (s SliceFoo) ToSliceAny() c.SliceAny {
 	r := make(c.SliceAny, len(s))
@@ -46,9 +43,6 @@ func ToSliceFoo(s c.SliceAny) SliceFoo {
 // SlicePFoo is a wrapper type to enable extension methods.
 // Used with pseudo-generic functions for slices of pointers.
 type SlicePFoo []*Foo
-
-// Und converts to the underlying type.
-func (s SlicePFoo) Und() []*Foo { return s }
 
 // ToSliceAny converts to SliceAny.
 func (s SlicePFoo) ToSliceAny() c.SliceAny {
@@ -72,9 +66,6 @@ type Bar struct {
 // Used with all pseudo-generic functions for slices.
 type SliceBar []Bar
 
-// Und converts to the underlying type.
-func (s SliceBar) Und() []Bar { return s }
-
 // ToSliceAny converts to SliceAny.
 func (s SliceBar) ToSliceAny() c.SliceAny {
 	r := make(c.SliceAny, len(s))
@@ -96,9 +87,6 @@ func ToSliceBar(s c.SliceAny) SliceBar {
 // SlicePBar is a wrapper type to enable extension methods.
 // Used with pseudo-generic functions for slices of pointers.
 type SlicePBar []*Bar
-
-// Und converts to the underlying type.
-func (s SlicePBar) Und() []*Bar { return s }
 
 // ToSliceAny converts to SliceAny.
 func (s SlicePBar) ToSliceAny() c.SliceAny {

@@ -29,7 +29,7 @@ func (s SliceString) Filter(pred func(string) bool) SliceString {
 	sa := SliceString(s).ToSliceAny()
 	preda := func(a Any) bool { return pred(a.(string)) }
 	ra := sa.Filter(preda)
-	return ToSliceString(ra).Und()
+	return ToSliceString(ra)
 }
 
 // Use the specific filter function

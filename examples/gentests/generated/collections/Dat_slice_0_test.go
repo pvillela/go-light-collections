@@ -582,9 +582,14 @@ func TestSlice_MinusSlice(t *testing.T) {
 		arg      SliceDat
 		want     SliceDat
 	}{
-		{"MinusSlice: subset", sDat(), append(sDat()[3:4], sDat()[1]), append(sDat()[0:1], sDat()[2])},
-		{"MinusSlice: intersects", sDat(), append(sDat()[1:2], Dat{22, "xyz"}), append(sDat()[0:1], sDat()[2], sDat()[3])},
-		{"MinusSlice: disjoint", sDat(), append(sDat()[:0], Dat{22, "xyz"}, Dat{0, "abc"}), sDat()},
+		{"MinusSlice: nonempty receiver, other subset", sDat(),
+			append(sDat()[3:4], sDat()[1]), append(sDat()[0:1], sDat()[2])},
+		{"MinusSlice: nonempty receiver, other intersects", sDat(),
+			append(sDat()[1:2], Dat{22, "xyz"}), append(sDat()[0:1], sDat()[2], sDat()[3])},
+		{"MinusSlice: nonempty receiver, other disjoint", sDat(),
+			append(sDat()[:0], Dat{22, "xyz"}, Dat{0, "abc"}), sDat()},
+		{"MinusSlice: nonempty receiver, other empty", sDat(), SliceDat{}, sDat()},
+		{"MinusSlice: nonempty receiver, other nil", sDat(), nil, sDat()},
 		{"MinusSlice: empty slice", SliceDat{}, append(sDat()[2:2], sDat()[1]), SliceDat{}},
 		{"MinusSlice: nil slice", nil, append(sDat()[2:2], sDat()[1]), nil},
 	}
@@ -867,6 +872,28 @@ func TestSlice_TakeWhile(t *testing.T) {
 
 	for _, cs := range cases {
 		got := cs.receiver.TakeWhile(cs.arg)
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
+}
+
+func TestSlice_Flatten(t *testing.T) {
+	data := Slice2Dat{{Dat{1, "w1"}, Dat{2, "w2"}}, {Dat{22, "w22"}},
+		{Dat{333, "w333"}, Dat{334, "w334"}, Dat{335, "w335"}}, {Dat{4444, "w4444"}},
+		{Dat{22, "w22"}}}
+	cases := []struct {
+		msg      string
+		receiver Slice2Dat
+		want     SliceDat
+	}{
+		{"Flatten: nonempty", data, SliceDat{Dat{1, "w1"}, Dat{2, "w2"}, Dat{22, "w22"},
+			Dat{333, "w333"}, Dat{334, "w334"}, Dat{335, "w335"}, Dat{4444, "w4444"},
+			Dat{22, "w22"}}},
+		{"Flatten: empty", Slice2Dat{}, SliceDat{}},
+		{"Flatten: nil", nil, nil},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.Flatten()
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }

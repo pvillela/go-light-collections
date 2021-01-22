@@ -392,6 +392,9 @@ func (s SlicePerson) TakeWhile(pred func(Person) bool) SlicePerson {
 }
 
 func (s Slice2Person) Flatten() SlicePerson {
+	if s == nil {
+		return nil
+	}
 	r := make([]Person, 0, len(s)) // optimizing for speed vs space
 	for _, x := range s {
 		r = append(r, x...)

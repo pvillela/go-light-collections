@@ -85,7 +85,7 @@ func TestSet_Mapstring(t *testing.T) {
 }
 
 func TestSet_ToMap(t *testing.T) {
-	data := SetOfPairintstring{{1, "10"}: true, {22, "42"}: true, {1, "9"}: true}
+	data := SetOfPairintstring{{22, "42"}: true, {1, "9"}: true}
 
 	cases := []struct {
 		msg      string

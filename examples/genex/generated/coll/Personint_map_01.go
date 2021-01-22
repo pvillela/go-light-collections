@@ -247,9 +247,6 @@ func (m MapPersonint) PlusMap(other MapPersonint) MapPersonint {
 		m1 = m.Copy()
 	}
 
-	if m1 == nil {
-		m1 = MapPersonint{}
-	}
 	for k, v := range other {
 		m1[k] = v
 	}
@@ -267,9 +264,6 @@ func (m MapPersonint) PlusSlice(s SliceOfPairPersonint) MapPersonint {
 		m1 = m.Copy()
 	}
 
-	if m1 == nil {
-		m1 = MapPersonint{}
-	}
 	for _, pair := range s {
 		m1[pair.X1] = pair.X2
 	}

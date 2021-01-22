@@ -392,6 +392,9 @@ func (s SliceDat) TakeWhile(pred func(Dat) bool) SliceDat {
 }
 
 func (s Slice2Dat) Flatten() SliceDat {
+	if s == nil {
+		return nil
+	}
 	r := make([]Dat, 0, len(s)) // optimizing for speed vs space
 	for _, x := range s {
 		r = append(r, x...)

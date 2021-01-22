@@ -392,6 +392,9 @@ func (s Sliceint) TakeWhile(pred func(int) bool) Sliceint {
 }
 
 func (s Slice2int) Flatten() Sliceint {
+	if s == nil {
+		return nil
+	}
 	r := make([]int, 0, len(s)) // optimizing for speed vs space
 	for _, x := range s {
 		r = append(r, x...)
