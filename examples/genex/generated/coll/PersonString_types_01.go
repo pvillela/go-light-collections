@@ -8,17 +8,11 @@ type PairPersonString struct {
 	X2 String
 }
 
+// MapPersonString is a type wrapper, implements IMap interfaces.
+type MapPersonString map[Person]String
+
 // SliceOfPairPersonString is a type wrapper.
 type SliceOfPairPersonString []PairPersonString
 
-// MapPersonString is a type wrapper, implements Map interface.
-type MapPersonString map[Person]String
-
-// MapPersonSliceString is a type wrapper.
-type MapPersonSliceString map[Person]SliceString
-
-// MapPersonSetString is a type wrapper.
-type MapPersonSetString map[Person]SetString
-
-// SetOfPairPersonString is a type wrapper, implements Set interface.
+// SetOfPairPersonString is a type wrapper, implements ISetOfPairPersonString interface.
 type SetOfPairPersonString map[PairPersonString]bool

@@ -8,17 +8,11 @@ type PairDatint struct {
 	X2 int
 }
 
+// MapDatint is a type wrapper, implements IMap interfaces.
+type MapDatint map[Dat]int
+
 // SliceOfPairDatint is a type wrapper.
 type SliceOfPairDatint []PairDatint
 
-// MapDatint is a type wrapper, implements Map interface.
-type MapDatint map[Dat]int
-
-// MapDatSliceint is a type wrapper.
-type MapDatSliceint map[Dat]Sliceint
-
-// MapDatSetint is a type wrapper.
-type MapDatSetint map[Dat]Setint
-
-// SetOfPairDatint is a type wrapper, implements Set interface.
+// SetOfPairDatint is a type wrapper, implements ISetOfPairDatint interface.
 type SetOfPairDatint map[PairDatint]bool

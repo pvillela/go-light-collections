@@ -41,7 +41,7 @@ type ISetT0 interface {
 // depend on type c.T1.
 type ISetT0T1 interface {
 	FlatMapT1(func(c.T0) c.SetT1) c.SetT1
-	GroupByT1(keySelector func(c.T0) c.T1) c.MapT1SliceT0
+	GroupByT1(keySelector func(c.T0) c.T1) map[c.T1]c.SetT0
 	MapT1(f func(c.T0) c.T1) c.SetT1
 }
 
@@ -54,8 +54,8 @@ type ISetOfPairT0T1 interface {
 func validateSetInterface(s c.SetT0) {
 	f := func(itf ISetT0) {}
 	f(s)
-	// g := func(itf ISetT0T1) {}
-	// g(s)
+	g := func(itf ISetT0T1) {}
+	g(s)
 }
 
 // Check that the concrete type satisfies the interface.

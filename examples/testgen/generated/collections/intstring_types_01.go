@@ -8,17 +8,11 @@ type Pairintstring struct {
 	X2 string
 }
 
+// Mapintstring is a type wrapper, implements IMap interfaces.
+type Mapintstring map[int]string
+
 // SliceOfPairintstring is a type wrapper.
 type SliceOfPairintstring []Pairintstring
 
-// Mapintstring is a type wrapper, implements Map interface.
-type Mapintstring map[int]string
-
-// MapintSlicestring is a type wrapper.
-type MapintSlicestring map[int]Slicestring
-
-// MapintSetstring is a type wrapper.
-type MapintSetstring map[int]Setstring
-
-// SetOfPairintstring is a type wrapper, implements Set interface.
+// SetOfPairintstring is a type wrapper, implements ISetOfPairintstring interface.
 type SetOfPairintstring map[Pairintstring]bool

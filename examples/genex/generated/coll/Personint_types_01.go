@@ -8,17 +8,11 @@ type PairPersonint struct {
 	X2 int
 }
 
+// MapPersonint is a type wrapper, implements IMap interfaces.
+type MapPersonint map[Person]int
+
 // SliceOfPairPersonint is a type wrapper.
 type SliceOfPairPersonint []PairPersonint
 
-// MapPersonint is a type wrapper, implements Map interface.
-type MapPersonint map[Person]int
-
-// MapPersonSliceint is a type wrapper.
-type MapPersonSliceint map[Person]Sliceint
-
-// MapPersonSetint is a type wrapper.
-type MapPersonSetint map[Person]Setint
-
-// SetOfPairPersonint is a type wrapper, implements Set interface.
+// SetOfPairPersonint is a type wrapper, implements ISetOfPairPersonint interface.
 type SetOfPairPersonint map[PairPersonint]bool

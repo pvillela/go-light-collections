@@ -8,17 +8,11 @@ type Pairintint struct {
 	X2 int
 }
 
+// Mapintint is a type wrapper, implements IMap interfaces.
+type Mapintint map[int]int
+
 // SliceOfPairintint is a type wrapper.
 type SliceOfPairintint []Pairintint
 
-// Mapintint is a type wrapper, implements Map interface.
-type Mapintint map[int]int
-
-// MapintSliceint is a type wrapper.
-type MapintSliceint map[int]Sliceint
-
-// MapintSetint is a type wrapper.
-type MapintSetint map[int]Setint
-
-// SetOfPairintint is a type wrapper, implements Set interface.
+// SetOfPairintint is a type wrapper, implements ISetOfPairintint interface.
 type SetOfPairintint map[Pairintint]bool

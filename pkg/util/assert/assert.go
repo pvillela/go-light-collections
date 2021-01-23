@@ -8,16 +8,25 @@ import (
 func Equal(want interface{}, got interface{}) {
 	if !reflect.DeepEqual(got, want) {
 		template := `--- Failed equality assertion ...
-want type:
-%T
-want value:
-%v
-got type:
-%T
-got value:
-%v
+want:
+%#v
+got:
+%#v
 `
-		msg := fmt.Sprintf(template, got, got, want, want)
+		msg := fmt.Sprintf(template, want, got)
+		panic(msg)
+	}
+}
+
+func NotEqual(arg1 interface{}, arg2 interface{}) {
+	if reflect.DeepEqual(arg2, arg1) {
+		template := `--- Failed inequality assertion ...
+arg1:
+%#v
+arg2:
+%#v
+`
+		msg := fmt.Sprintf(template, arg1, arg2)
 		panic(msg)
 	}
 }
