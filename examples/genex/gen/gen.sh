@@ -28,3 +28,7 @@ export PACKAGE=coll
 
 ./copy_sub.sh map_01 String int  # requires types_0 String and int; types_01 String int
 ./copy_sub.sh map_012 String int int  # requires types_0 String, int, and int; types_01 String int
+
+# Nested collection
+./copy_sub.sh types_01 int SlicePerson
+./copy_sub.sh map_01 int SlicePerson

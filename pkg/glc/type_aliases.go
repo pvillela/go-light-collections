@@ -27,7 +27,10 @@ type SliceT1 = SliceT0
 type SliceT2 = SliceT0
 
 // PairAnyAny is a type alias.
-type PairAnyAny = PairT0T1
+type PairAnyAny = struct {
+	X1 Any
+	X2 Any
+}
 
 // SliceOfPairAnyAny is a type alias.
 type SliceOfPairAnyAny = SliceOfPairT0T1

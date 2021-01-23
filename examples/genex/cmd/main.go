@@ -7,8 +7,11 @@ import (
 	"github.com/pvillela/go-light-collections/examples/genex/pkga"
 )
 
-// Simple example of usage of generated collections
+// Example of usage of generated collections
 func main() {
+
+	// Examples with various collections involving the Person type.
+
 	persons := coll.SlicePerson{{Name: "John", Age: 80}, {Name: "Paul", Age: 78},
 		{Name: "George", Age: 77}, {Name: "Ringo", Age: 80}}
 	fmt.Printf("*** persons: %#v\n", persons)
@@ -35,4 +38,6 @@ func main() {
 
 	mungedMap := beatlesMapEvenAges.MapValuesint(func(p coll.PairStringint) int { return len(p.X1) + p.X2 })
 	fmt.Printf("*** mungedMap: %#v\n", mungedMap)
+
+	// Example with nested collection type.
 }
