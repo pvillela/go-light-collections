@@ -8,25 +8,13 @@ import (
 	"github.com/pvillela/go-light-collections/pkg/util/util"
 )
 
-/////////////////////
-// Helper functions
+////
+// Type
 
-/////////////////////
-// Slice method that returns a Set
+// Setint is a type wrapper, implements Set interface.
+type Setint map[int]bool
 
-// ToSet returns a set containing the values in the receiver.
-func (s Sliceint) ToSet() Setint {
-	if s == nil {
-		return nil
-	}
-	set := make(Setint, len(s)) // optimize for speed vs space
-	for _, x := range s {
-		set.Put(x)
-	}
-	return set
-}
-
-/////////////////////
+////
 // Set methods
 
 // Put mutates the receiver by adding the argument if it is not already in the receiver.

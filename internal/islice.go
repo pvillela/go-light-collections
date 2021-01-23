@@ -49,17 +49,17 @@ type ISliceT0 interface {
 	TakeLast(n int) c.SliceT0
 	TakeLastWhile(pred func(c.T0) bool) c.SliceT0
 	TakeWhile(pred func(c.T0) bool) c.SliceT0
-	ToSet() c.SetT0 // implemented in set_0.go
+	ToSet() map[c.T0]bool
 }
 
 // ISliceT0T1 defines the methods to be implemented by the concrete type c.SliceT0 that
 // depend on type T1.
 type ISliceT0T1 interface {
-	FlatMapT1(func(c.T0) c.SliceT1) c.SliceT1
+	FlatMapT1(func(c.T0) []c.T1) []c.T1
 	FoldT1(z c.T1, op func(c.T1, c.T0) c.T1) c.T1
 	GroupByT1(keySelector func(c.T0) c.T1) map[c.T1]c.SliceT0
-	MapT1(f func(c.T0) c.T1) c.SliceT1
-	ZipT1(other c.SliceT1) c.SliceOfPairT0T1
+	MapT1(f func(c.T0) c.T1) []c.T1
+	ZipT1(other []c.T1) []c.PairSlT0T1
 }
 
 // ISlice2T0 defines the methods to be implemented by the concrete type Slice2T0.

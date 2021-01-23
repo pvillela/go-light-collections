@@ -40,9 +40,9 @@ type ISetT0 interface {
 // ISetT0T1 defines the methods to be implemented by the concrete type c.SetT0 that also
 // depend on type c.T1.
 type ISetT0T1 interface {
-	FlatMapT1(func(c.T0) c.SetT1) c.SetT1
+	FlatMapT1(func(c.T0) map[c.T1]bool) map[c.T1]bool
 	GroupByT1(keySelector func(c.T0) c.T1) map[c.T1]c.SetT0
-	MapT1(f func(c.T0) c.T1) c.SetT1
+	MapT1(f func(c.T0) c.T1) map[c.T1]bool
 }
 
 // ISetOfPairT0T1 defines the methods to be implemented by the concrete type ISliceOfPairT0T1.
