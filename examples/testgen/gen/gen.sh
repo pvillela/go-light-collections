@@ -6,6 +6,10 @@ export PACKAGE=collections
 
 ./copy_aliases.sh
 
+# Preliminaries
+
+./copy_notest.sh prelim dummy
+
 # Slice tests
 
 ./copy_sub.sh slice_0a Dat
@@ -32,3 +36,5 @@ export PACKAGE=collections
 ./copy_sub.sh set_0_test int
 ./copy_sub.sh set_01 int string
 ./copy_sub.sh set_01_test int string
+./copy_sub.sh set_of_pair_01 int string
+./copy_sub.sh set_of_pair_01_test int string

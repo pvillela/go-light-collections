@@ -69,7 +69,7 @@ type ISlice2T0 interface {
 
 // ISliceOfPairT0T1 defines the methods to be implemented by the concrete type ISliceOfPairT0T1.
 type ISliceOfPairT0T1 interface {
-	ToMap() c.MapT0T1
+	ToMap() map[c.T0]c.T1
 }
 
 // Check that the concrete type satisfies the interfaces.

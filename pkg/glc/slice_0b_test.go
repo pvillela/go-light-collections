@@ -13,7 +13,8 @@ func TestSlice_ToSet(t *testing.T) {
 		want     map[T0]bool
 	}{
 		{"ToSet: nonempty receiver", sDat(), map[T0]bool{
-			1: true, 22: true, 333: true, 4444: true}},
+			Dat{1, "w1"}: true, Dat{22, "w22"}: true, Dat{333, "w333"}: true,
+			Dat{4444, "w4444"}: true}},
 		{"ToSet: empty receiver", SliceT0{}, map[T0]bool{}},
 		{"ToSet: nil receiver", nil, nil},
 	}

@@ -17,7 +17,7 @@ type ISetT0 interface {
 	Any(func(c.T0) bool) bool
 	Contains(c.T0) bool
 	ContainsSet(c.SetT0) bool
-	ContainsSlice(c.SliceT0) bool
+	ContainsSlice([]c.T0) bool
 	Count(func(c.T0) bool) int
 	Filter(func(c.T0) bool) c.SetT0
 	FilterNot(func(c.T0) bool) c.SetT0
@@ -32,8 +32,8 @@ type ISetT0 interface {
 	Partition(pred func(c.T0) bool) (c.SetT0, c.SetT0)
 	PlusElement(c.T0) c.SetT0
 	PlusSet(c.SetT0) c.SetT0
-	PlusSlice(c.SliceT0) c.SetT0
-	ToSlice() c.SliceT0
+	PlusSlice([]c.T0) c.SetT0
+	ToSlice() []c.T0
 	Put(c.T0)
 }
 

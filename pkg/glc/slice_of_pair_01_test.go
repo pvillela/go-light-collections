@@ -12,10 +12,10 @@ func TestSlice_ToMap(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver SliceOfPairT0T1
-		want     MapT0T1
+		want     map[T0]T1
 	}{
-		{"ToMap: nonempty receiver", data, MapT0T1{Dat{1, "w1"}: 9, Dat{22, "w22"}: 42}},
-		{"ToMap: empty receiver", SliceOfPairT0T1{}, MapT0T1{}},
+		{"ToMap: nonempty receiver", data, map[T0]T1{Dat{1, "w1"}: 9, Dat{22, "w22"}: 42}},
+		{"ToMap: empty receiver", SliceOfPairT0T1{}, map[T0]T1{}},
 		{"ToMap: nil receiver", nil, nil},
 	}
 

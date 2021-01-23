@@ -208,7 +208,7 @@ func (m MapT0T1) MinusKey(k T0) MapT0T1 {
 	return m1
 }
 
-func (m MapT0T1) MinusKeys(s SliceT0) MapT0T1 {
+func (m MapT0T1) MinusKeys(s []T0) MapT0T1 {
 	m1 := m.Copy()
 	for _, k := range s {
 		delete(m1, k)

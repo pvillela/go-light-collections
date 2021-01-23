@@ -12,7 +12,9 @@ export PACKAGE=coll
 ./copy_sub.sh slice_01a Person String
 ./copy_sub.sh slice_01a Person int
 ./copy_sub.sh slice_0a String
+./copy_sub.sh slice_0a int
 ./copy_sub.sh slice_01a String int
+./copy_sub.sh slice_of_pair_01 String int
 
 # Maps
 

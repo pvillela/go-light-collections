@@ -33,7 +33,7 @@ type IMapT0T1 interface {
 	IsNotEmpty() bool
 	MaxWith(func(c.PairMpT0T1, c.PairMpT0T1) int) (c.PairMpT0T1, error)
 	MinusKey(c.T0) c.MapT0T1
-	MinusKeys(c.SliceT0) c.MapT0T1
+	MinusKeys([]c.T0) c.MapT0T1
 	MinWith(func(c.PairMpT0T1, c.PairMpT0T1) int) (c.PairMpT0T1, error)
 	PlusEntry(c.PairMpT0T1) c.MapT0T1
 	PlusMap(c.MapT0T1) c.MapT0T1

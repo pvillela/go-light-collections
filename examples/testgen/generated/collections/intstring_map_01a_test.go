@@ -46,7 +46,7 @@ func TestMap_Keys(t *testing.T) {
 	}{
 		{"Keys: nonempty map", mBase(), map[int]bool{1: true, 22: true, 333: true, 4444: true}},
 		{"Keys: empty map", Mapintstring{}, map[int]bool{}},
-		{"Keys: nil map", nil, map[int]bool{}},
+		{"Keys: nil map", nil, nil},
 	}
 
 	for _, cs := range cases {
@@ -461,15 +461,15 @@ func TestMap_MinusKeys(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		arg      Sliceint
+		arg      []int
 		want     Mapintstring
 	}{
-		{"MinusKeys: subset", mBase(), Sliceint{22, 333}, Mapintstring{1: "w1", 4444: "w4444"}},
-		{"MinusKeys: intersects", mBase(), Sliceint{0, 22, 9, 333},
+		{"MinusKeys: subset", mBase(), []int{22, 333}, Mapintstring{1: "w1", 4444: "w4444"}},
+		{"MinusKeys: intersects", mBase(), []int{0, 22, 9, 333},
 			Mapintstring{1: "w1", 4444: "w4444"}},
-		{"MinusKeys: disjoint", mBase(), Sliceint{0, 9, 42}, mBase()},
-		{"MinusKeys: empty slice", Mapintstring{}, Sliceint{22, 333}, Mapintstring{}},
-		{"MinusKeys: nil slice", nil, Sliceint{22, 333}, nil},
+		{"MinusKeys: disjoint", mBase(), []int{0, 9, 42}, mBase()},
+		{"MinusKeys: empty slice", Mapintstring{}, []int{22, 333}, Mapintstring{}},
+		{"MinusKeys: nil slice", nil, []int{22, 333}, nil},
 	}
 
 	for _, cs := range cases {

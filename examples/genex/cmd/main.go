@@ -12,20 +12,21 @@ func main() {
 
 	// Examples with various collections involving the Person type.
 
-	persons := coll.SlicePerson{{Name: "John", Age: 80}, {Name: "Paul", Age: 78},
+	var persons coll.SlicePerson = []coll.Person{{Name: "John", Age: 80}, {Name: "Paul", Age: 78},
 		{Name: "George", Age: 77}, {Name: "Ringo", Age: 80}}
 	fmt.Printf("*** persons: %#v\n", persons)
 
 	personsWithEvenNames := persons.Filter(func(p pkga.Person) bool { return len(p.Name)%2 == 0 })
 	fmt.Printf("*** personsWithEvenNames: %#v\n", personsWithEvenNames)
 
-	namesOfPWEN := personsWithEvenNames.MapString(func(p pkga.Person) string { return p.Name })
+	var namesOfPWEN coll.SliceString = personsWithEvenNames.MapString(func(p pkga.Person) string { return p.Name })
 	fmt.Printf("*** namesOfPWEN: %#v\n", namesOfPWEN)
 
-	agesOfPWEN := personsWithEvenNames.Mapint(func(p pkga.Person) int { return p.Age })
+	var agesOfPWEN coll.Sliceint = personsWithEvenNames.Mapint(func(p pkga.Person) int { return p.Age })
 	fmt.Printf("*** agesOfPWEN: %#v\n", agesOfPWEN)
 
-	namesToAgesOfPWEN := namesOfPWEN.Zipint(agesOfPWEN).ToMap()
+	var nameAgePairsOfPWEN coll.SliceOfPairStringint = namesOfPWEN.Zipint(agesOfPWEN)
+	var namesToAgesOfPWEN coll.MapStringint = nameAgePairsOfPWEN.ToMap()
 	fmt.Printf("*** namesToAgesOfPWEN: %#v\n", namesToAgesOfPWEN)
 	fmt.Println(namesToAgesOfPWEN["Paul"])
 	fmt.Println(namesToAgesOfPWEN["Ringo"])
@@ -36,7 +37,7 @@ func main() {
 	beatlesMapEvenAges := beatlesMap.FilterValues(func(age int) bool { return age%2 == 0 })
 	fmt.Printf("*** beatlesMapEvenAges: %#v\n", beatlesMapEvenAges)
 
-	mungedMap := beatlesMapEvenAges.MapValuesint(func(p coll.PairStringint) int { return len(p.X1) + p.X2 })
+	mungedMap := beatlesMapEvenAges.MapValuesint(func(p coll.PairSlStringint) int { return len(p.X1) + p.X2 })
 	fmt.Printf("*** mungedMap: %#v\n", mungedMap)
 
 	// Example with nested collection type.

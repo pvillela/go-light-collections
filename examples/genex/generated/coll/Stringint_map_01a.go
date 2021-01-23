@@ -210,7 +210,7 @@ func (m MapStringint) MinusKey(k String) MapStringint {
 	return m1
 }
 
-func (m MapStringint) MinusKeys(s SliceString) MapStringint {
+func (m MapStringint) MinusKeys(s []String) MapStringint {
 	m1 := m.Copy()
 	for _, k := range s {
 		delete(m1, k)
