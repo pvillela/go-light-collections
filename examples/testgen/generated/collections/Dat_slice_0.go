@@ -8,7 +8,16 @@ import (
 	"sort"
 )
 
-/////////////////////
+////
+// Types
+
+// SliceDat is a type wrapper, implements List interface.
+type SliceDat []Dat
+
+// Slice2Dat is a type wrapper.
+type Slice2Dat []SliceDat
+
+////
 // Methods
 
 // Copy returns a copy fo the receiver.

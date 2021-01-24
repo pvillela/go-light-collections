@@ -8,25 +8,13 @@ import (
 	"github.com/pvillela/go-light-collections/pkg/util/util"
 )
 
-/////////////////////
-// Helper functions
+////
+// Type
 
-/////////////////////
-// Slice method that returns a Set
+// Setint is a type wrapper, implements Set interface.
+type Setint map[int]bool
 
-// ToSet returns a set containing the values in the receiver.
-func (s Sliceint) ToSet() Setint {
-	if s == nil {
-		return nil
-	}
-	set := make(Setint, len(s)) // optimize for speed vs space
-	for _, x := range s {
-		set.Put(x)
-	}
-	return set
-}
-
-/////////////////////
+////
 // Set methods
 
 // Put mutates the receiver by adding the argument if it is not already in the receiver.
@@ -76,7 +64,7 @@ func (s Setint) ContainsSet(elems Setint) bool {
 
 // ContainsSlice returns true if all the elements in the argument slice are in the receiver,
 // false otherwise.
-func (s Setint) ContainsSlice(elems Sliceint) bool {
+func (s Setint) ContainsSlice(elems []int) bool {
 	for _, e := range elems {
 		if !s.Contains(e) {
 			return false
@@ -215,7 +203,7 @@ func (s Setint) MinusSet(other Setint) Setint {
 
 // MinusSlice returns a new set which contains the elements of the receiver except for the
 // elements of the slice.
-func (s Setint) MinusSlice(slice Sliceint) Setint {
+func (s Setint) MinusSlice(slice []int) Setint {
 	s1 := s.Copy()
 	for _, e := range slice {
 		delete(s1, e)
@@ -274,7 +262,7 @@ func (s Setint) PlusSet(other Setint) Setint {
 }
 
 // PlusSlice returns a copy of the receiver with the elements of the slice added to it.
-func (s Setint) PlusSlice(slice Sliceint) Setint {
+func (s Setint) PlusSlice(slice []int) Setint {
 	s1 := s.Copy()
 	if s1 == nil {
 		if slice == nil {
@@ -289,11 +277,11 @@ func (s Setint) PlusSlice(slice Sliceint) Setint {
 }
 
 // ToSlice returns a slice containing the elements of the receiver.
-func (s Setint) ToSlice() Sliceint {
+func (s Setint) ToSlice() []int {
 	if s == nil {
 		return nil
 	}
-	slice := make(Sliceint, len(s))
+	slice := make([]int, len(s))
 	i := 0
 	for e := range s {
 		slice[i] = e

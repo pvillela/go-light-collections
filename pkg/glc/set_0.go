@@ -6,25 +6,13 @@ import (
 	"github.com/pvillela/go-light-collections/pkg/util/util"
 )
 
-/////////////////////
-// Helper functions
+////
+// Type
 
-/////////////////////
-// Slice method that returns a Set
+// SetT0 is a type wrapper, implements Set interface.
+type SetT0 map[T0]bool
 
-// ToSet returns a set containing the values in the receiver.
-func (s SliceT0) ToSet() SetT0 {
-	if s == nil {
-		return nil
-	}
-	set := make(SetT0, len(s)) // optimize for speed vs space
-	for _, x := range s {
-		set.Put(x)
-	}
-	return set
-}
-
-/////////////////////
+////
 // Set methods
 
 // Put mutates the receiver by adding the argument if it is not already in the receiver.
@@ -74,7 +62,7 @@ func (s SetT0) ContainsSet(elems SetT0) bool {
 
 // ContainsSlice returns true if all the elements in the argument slice are in the receiver,
 // false otherwise.
-func (s SetT0) ContainsSlice(elems SliceT0) bool {
+func (s SetT0) ContainsSlice(elems []T0) bool {
 	for _, e := range elems {
 		if !s.Contains(e) {
 			return false
@@ -213,7 +201,7 @@ func (s SetT0) MinusSet(other SetT0) SetT0 {
 
 // MinusSlice returns a new set which contains the elements of the receiver except for the
 // elements of the slice.
-func (s SetT0) MinusSlice(slice SliceT0) SetT0 {
+func (s SetT0) MinusSlice(slice []T0) SetT0 {
 	s1 := s.Copy()
 	for _, e := range slice {
 		delete(s1, e)
@@ -272,7 +260,7 @@ func (s SetT0) PlusSet(other SetT0) SetT0 {
 }
 
 // PlusSlice returns a copy of the receiver with the elements of the slice added to it.
-func (s SetT0) PlusSlice(slice SliceT0) SetT0 {
+func (s SetT0) PlusSlice(slice []T0) SetT0 {
 	s1 := s.Copy()
 	if s1 == nil {
 		if slice == nil {
@@ -287,11 +275,11 @@ func (s SetT0) PlusSlice(slice SliceT0) SetT0 {
 }
 
 // ToSlice returns a slice containing the elements of the receiver.
-func (s SetT0) ToSlice() SliceT0 {
+func (s SetT0) ToSlice() []T0 {
 	if s == nil {
 		return nil
 	}
-	slice := make(SliceT0, len(s))
+	slice := make([]T0, len(s))
 	i := 0
 	for e := range s {
 		slice[i] = e

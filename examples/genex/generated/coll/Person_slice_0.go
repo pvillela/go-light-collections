@@ -8,7 +8,16 @@ import (
 	"sort"
 )
 
-/////////////////////
+////
+// Types
+
+// SlicePerson is a type wrapper, implements List interface.
+type SlicePerson []Person
+
+// Slice2Person is a type wrapper.
+type Slice2Person []SlicePerson
+
+////
 // Methods
 
 // Copy returns a copy fo the receiver.

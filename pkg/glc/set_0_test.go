@@ -15,8 +15,8 @@ func sBase() SetT0 {
 	return SetT0{1: true, 22: true, 333: true, 4444: true}
 }
 
-func sliceBase() SliceT0 {
-	return SliceT0{1, 22, 333, 4444}
+func sliceBase() []T0 {
+	return []T0{1, 22, 333, 4444}
 }
 
 ////
@@ -160,24 +160,24 @@ func TestSet_ContainsSlice(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver SetT0
-		arg      SliceT0
+		arg      []T0
 		want     bool
 	}{
 		{"ContainsSlice: nonempty receiver, elems subset", sBase(),
-			SliceT0{22, 333, 22}, true},
+			[]T0{22, 333, 22}, true},
 		{"ContainsSlice: nonempty receiver, elems intersects", sBase(),
-			SliceT0{22, 25, 333}, false},
+			[]T0{22, 25, 333}, false},
 		{"ContainsSlice: nonempty receiver, elems disjoint", sBase(),
-			SliceT0{11, 25, 33}, false},
-		{"ContainsSlice: nonempty receiver, elems empty", sBase(), SliceT0{}, true},
+			[]T0{11, 25, 33}, false},
+		{"ContainsSlice: nonempty receiver, elems empty", sBase(), []T0{}, true},
 		{"ContainsSlice: nonempty receiver, elems nil", sBase(), nil, true},
 		{"ContainsSlice: empty receiver, elems nonempty", SetT0{},
-			SliceT0{22, 333, 22}, false},
-		{"ContainsSlice: empty receiver, elems empty", SetT0{}, SliceT0{}, true},
+			[]T0{22, 333, 22}, false},
+		{"ContainsSlice: empty receiver, elems empty", SetT0{}, []T0{}, true},
 		{"ContainsSlice: empty receiver, elems nil", SetT0{}, nil, true},
 		{"ContainsSlice: nil receiver, elems nonempty", nil,
-			SliceT0{22, 333, 22}, false},
-		{"ContainsSlice: nil receiver, elems empty", nil, SliceT0{}, true},
+			[]T0{22, 333, 22}, false},
+		{"ContainsSlice: nil receiver, elems empty", nil, []T0{}, true},
 		{"ContainsSlice: nil receiver, elems nil", nil, nil, true},
 	}
 
@@ -416,14 +416,14 @@ func TestSet_MinusSlice(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver SetT0
-		arg      SliceT0
+		arg      []T0
 		want     SetT0
 	}{
-		{"MinusSlice: subset", sBase(), SliceT0{22, 333}, SetT0{1: true, 4444: true}},
-		{"MinusSlice: intersects", sBase(), SliceT0{0, 22, 9, 333}, SetT0{1: true, 4444: true}},
-		{"MinusSlice: disjoint", sBase(), SliceT0{0, 9, 42}, sBase()},
-		{"MinusSlice: empty slice", SetT0{}, SliceT0{22, 333}, SetT0{}},
-		{"MinusSlice: nil slice", nil, SliceT0{22, 333}, nil},
+		{"MinusSlice: subset", sBase(), []T0{22, 333}, SetT0{1: true, 4444: true}},
+		{"MinusSlice: intersects", sBase(), []T0{0, 22, 9, 333}, SetT0{1: true, 4444: true}},
+		{"MinusSlice: disjoint", sBase(), []T0{0, 9, 42}, sBase()},
+		{"MinusSlice: empty slice", SetT0{}, []T0{22, 333}, SetT0{}},
+		{"MinusSlice: nil slice", nil, []T0{22, 333}, nil},
 	}
 
 	for _, cs := range cases {
@@ -532,18 +532,18 @@ func TestSet_PlusSlice(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver SetT0
-		arg      SliceT0
+		arg      []T0
 		want     SetT0
 	}{
-		{"PlusSlice: nonempty + nonempty", sBase(), SliceT0{9, 333},
+		{"PlusSlice: nonempty + nonempty", sBase(), []T0{9, 333},
 			SetT0{1: true, 9: true, 22: true, 333: true, 4444: true}},
-		{"PlusSlice: nonempty + empty", sBase(), SliceT0{}, sBase()},
+		{"PlusSlice: nonempty + empty", sBase(), []T0{}, sBase()},
 		{"PlusSlice: nonempty + nil", sBase(), nil, sBase()},
 		{"PlusSlice: empty + nonempty", SetT0{}, sliceBase(), sBase()},
 		{"PlusSlice: nil + nonempty", nil, sliceBase(), sBase()},
-		{"PlusSlice: empty + empty", SetT0{}, SliceT0{}, SetT0{}},
+		{"PlusSlice: empty + empty", SetT0{}, []T0{}, SetT0{}},
 		{"PlusSlice: empty + nil", SetT0{}, nil, SetT0{}},
-		{"PlusSlice: nil + empty", nil, SliceT0{}, SetT0{}},
+		{"PlusSlice: nil + empty", nil, []T0{}, SetT0{}},
 		{"PlusSlice: nil + nil", nil, nil, nil},
 	}
 
@@ -557,16 +557,16 @@ func TestSet_ToSlice(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver SetT0
-		want     SliceT0
+		want     []T0
 	}{
 		{"ToSlice: nonempty", sBase(), sliceBase()},
-		{"ToSlice: empty", SetT0{}, SliceT0{}},
+		{"ToSlice: empty", SetT0{}, []T0{}},
 		{"ToSlice: nil", nil, nil},
 	}
 
 	for _, cs := range cases {
 		got := cs.receiver.ToSlice()
-		assert.Equal(t, cs.want.ToSet(), got.ToSet(), cs.msg)
+		assert.Equal(t, SetT0{}.PlusSlice(cs.want), SetT0{}.PlusSlice(got), cs.msg)
 	}
 }
 

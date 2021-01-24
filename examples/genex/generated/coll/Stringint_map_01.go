@@ -4,6 +4,15 @@ package coll
 
 import "errors"
 
+// MapStringint is a type wrapper, implements IMap interfaces.
+type MapStringint map[String]int
+
+// PairMpStringint is a type alias used only in Map methods to avoid code generation issues.
+type PairMpStringint = struct {
+	X1 String
+	X2 int
+}
+
 func (m MapStringint) Copy() MapStringint {
 	if m == nil {
 		return nil
@@ -15,20 +24,43 @@ func (m MapStringint) Copy() MapStringint {
 	return m1
 }
 
-func (m MapStringint) Entries() SetOfPairStringint {
-	entries := make(SetOfPairStringint, len(m))
+func (m MapStringint) Entries() []PairMpStringint {
+	if m == nil {
+		return nil
+	}
+	entries := make([]PairMpStringint, len(m))
+	i := 0
 	for k, v := range m {
-		entries[PairStringint{k, v}] = true
+		entries[i] = PairMpStringint{k, v}
+		i++
 	}
 	return entries
 }
 
-func (m MapStringint) Keys() SetString {
-	keys := make(map[String]bool, len(m))
+func (m MapStringint) Keys() []String {
+	if m == nil {
+		return nil
+	}
+	keys := make([]String, len(m))
+	i := 0
 	for k := range m {
-		keys[k] = true
+		keys[i] = k
+		i++
 	}
 	return keys
+}
+
+func (m MapStringint) Values() []int {
+	if m == nil {
+		return nil
+	}
+	values := make([]int, len(m))
+	i := 0
+	for _, v := range m {
+		values[i] = v
+		i++
+	}
+	return values
 }
 
 // Length returns the number of items in the receiver.
@@ -39,14 +71,6 @@ func (m MapStringint) Length() int {
 // Size returns the number of items in the receiver. Same as Length.
 func (m MapStringint) Size() int {
 	return len(m)
-}
-
-func (m MapStringint) Values() Setint {
-	values := make(map[int]bool, len(m))
-	for _, v := range m {
-		values[v] = true
-	}
-	return values
 }
 
 func (m MapStringint) ContainsKey(k String) bool {
@@ -64,10 +88,10 @@ func (m MapStringint) ContainsValue(v int) bool {
 }
 
 // Count returns the number of entries in the receiver that satisfy the predicate.
-func (m MapStringint) Count(pred func(PairStringint) bool) int {
+func (m MapStringint) Count(pred func(PairMpStringint) bool) int {
 	count := 0
 	for k, v := range m {
-		if pred(PairStringint{k, v}) {
+		if pred(PairMpStringint{k, v}) {
 			count++
 		}
 	}
@@ -83,44 +107,44 @@ func (m MapStringint) IsEmpty() bool {
 	return len(m) == 0
 }
 
-func (m MapStringint) All(pred func(PairStringint) bool) bool {
+func (m MapStringint) All(pred func(PairMpStringint) bool) bool {
 	for k, v := range m {
-		if !pred(PairStringint{k, v}) {
+		if !pred(PairMpStringint{k, v}) {
 			return false
 		}
 	}
 	return true
 }
 
-func (m MapStringint) Any(pred func(PairStringint) bool) bool {
+func (m MapStringint) Any(pred func(PairMpStringint) bool) bool {
 	for k, v := range m {
-		if pred(PairStringint{k, v}) {
+		if pred(PairMpStringint{k, v}) {
 			return true
 		}
 	}
 	return false
 }
 
-func (m MapStringint) ToSlice() SliceOfPairStringint {
+func (m MapStringint) ToSlice() []PairMpStringint {
 	if m == nil {
 		return nil
 	}
-	s := make(SliceOfPairStringint, len(m))
+	s := make([]PairMpStringint, len(m))
 	i := 0
 	for k, v := range m {
-		s[i] = PairStringint{k, v}
+		s[i] = PairMpStringint{k, v}
 		i++
 	}
 	return s
 }
 
-func (m MapStringint) Filter(pred func(PairStringint) bool) MapStringint {
+func (m MapStringint) Filter(pred func(PairMpStringint) bool) MapStringint {
 	if m == nil {
 		return nil
 	}
 	m1 := MapStringint{}
 	for k, v := range m {
-		if pred(PairStringint{k, v}) {
+		if pred(PairMpStringint{k, v}) {
 			m1[k] = v
 		}
 	}
@@ -140,13 +164,13 @@ func (m MapStringint) FilterKeys(pred func(String) bool) MapStringint {
 	return m1
 }
 
-func (m MapStringint) FilterNot(pred func(PairStringint) bool) MapStringint {
+func (m MapStringint) FilterNot(pred func(PairMpStringint) bool) MapStringint {
 	if m == nil {
 		return nil
 	}
 	m1 := MapStringint{}
 	for k, v := range m {
-		if !pred(PairStringint{k, v}) {
+		if !pred(PairMpStringint{k, v}) {
 			m1[k] = v
 		}
 	}
@@ -166,9 +190,9 @@ func (m MapStringint) FilterValues(pred func(int) bool) MapStringint {
 	return m1
 }
 
-func (m MapStringint) ForEach(f func(PairStringint)) {
+func (m MapStringint) ForEach(f func(PairMpStringint)) {
 	for k, v := range m {
-		f(PairStringint{k, v})
+		f(PairMpStringint{k, v})
 	}
 }
 
@@ -185,8 +209,8 @@ func (m MapStringint) IsNotEmpty() bool {
 
 // MaxWith returns an entry in the map with maximum value, using a comparator function.
 // Returns an error if the map is empty.
-func (m MapStringint) MaxWith(comparator func(PairStringint, PairStringint) int) (PairStringint, error) {
-	var max PairStringint
+func (m MapStringint) MaxWith(comparator func(PairMpStringint, PairMpStringint) int) (PairMpStringint, error) {
+	var max PairMpStringint
 
 	if len(m) == 0 {
 		return max, errors.New("empty or nil map")
@@ -195,11 +219,11 @@ func (m MapStringint) MaxWith(comparator func(PairStringint, PairStringint) int)
 	first := true
 	for k, v := range m {
 		if first {
-			max = PairStringint{k, v}
+			max = PairMpStringint{k, v}
 			first = false
 			continue
 		}
-		if pair := (PairStringint{k, v}); comparator(max, pair) < 0 {
+		if pair := (PairMpStringint{k, v}); comparator(max, pair) < 0 {
 			max = pair
 		}
 	}
@@ -214,7 +238,7 @@ func (m MapStringint) MinusKey(k String) MapStringint {
 	return m1
 }
 
-func (m MapStringint) MinusKeys(s SliceString) MapStringint {
+func (m MapStringint) MinusKeys(s []String) MapStringint {
 	m1 := m.Copy()
 	for _, k := range s {
 		delete(m1, k)
@@ -222,12 +246,12 @@ func (m MapStringint) MinusKeys(s SliceString) MapStringint {
 	return m1
 }
 
-func (m MapStringint) MinWith(comparator func(PairStringint, PairStringint) int) (PairStringint, error) {
-	reverseComp := func(p1 PairStringint, p2 PairStringint) int { return -comparator(p1, p2) }
+func (m MapStringint) MinWith(comparator func(PairMpStringint, PairMpStringint) int) (PairMpStringint, error) {
+	reverseComp := func(p1 PairMpStringint, p2 PairMpStringint) int { return -comparator(p1, p2) }
 	return m.MaxWith(reverseComp)
 }
 
-func (m MapStringint) PlusEntry(entry PairStringint) MapStringint {
+func (m MapStringint) PlusEntry(entry PairMpStringint) MapStringint {
 	m1 := m.Copy()
 	if m1 == nil {
 		m1 = MapStringint{}
@@ -253,7 +277,7 @@ func (m MapStringint) PlusMap(other MapStringint) MapStringint {
 	return m1
 }
 
-func (m MapStringint) PlusSlice(s SliceOfPairStringint) MapStringint {
+func (m MapStringint) PlusSlice(s []PairMpStringint) MapStringint {
 	var m1 MapStringint
 	switch {
 	case m == nil && s == nil:

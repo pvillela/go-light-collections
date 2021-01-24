@@ -4,6 +4,15 @@ package collections
 
 import "errors"
 
+// Mapintstring is a type wrapper, implements IMap interfaces.
+type Mapintstring map[int]string
+
+// PairMpintstring is a type alias used only in Map methods to avoid code generation issues.
+type PairMpintstring = struct {
+	X1 int
+	X2 string
+}
+
 func (m Mapintstring) Copy() Mapintstring {
 	if m == nil {
 		return nil
@@ -15,20 +24,43 @@ func (m Mapintstring) Copy() Mapintstring {
 	return m1
 }
 
-func (m Mapintstring) Entries() SetOfPairintstring {
-	entries := make(SetOfPairintstring, len(m))
+func (m Mapintstring) Entries() []PairMpintstring {
+	if m == nil {
+		return nil
+	}
+	entries := make([]PairMpintstring, len(m))
+	i := 0
 	for k, v := range m {
-		entries[Pairintstring{k, v}] = true
+		entries[i] = PairMpintstring{k, v}
+		i++
 	}
 	return entries
 }
 
-func (m Mapintstring) Keys() Setint {
-	keys := make(map[int]bool, len(m))
+func (m Mapintstring) Keys() []int {
+	if m == nil {
+		return nil
+	}
+	keys := make([]int, len(m))
+	i := 0
 	for k := range m {
-		keys[k] = true
+		keys[i] = k
+		i++
 	}
 	return keys
+}
+
+func (m Mapintstring) Values() []string {
+	if m == nil {
+		return nil
+	}
+	values := make([]string, len(m))
+	i := 0
+	for _, v := range m {
+		values[i] = v
+		i++
+	}
+	return values
 }
 
 // Length returns the number of items in the receiver.
@@ -39,14 +71,6 @@ func (m Mapintstring) Length() int {
 // Size returns the number of items in the receiver. Same as Length.
 func (m Mapintstring) Size() int {
 	return len(m)
-}
-
-func (m Mapintstring) Values() Setstring {
-	values := make(map[string]bool, len(m))
-	for _, v := range m {
-		values[v] = true
-	}
-	return values
 }
 
 func (m Mapintstring) ContainsKey(k int) bool {
@@ -64,10 +88,10 @@ func (m Mapintstring) ContainsValue(v string) bool {
 }
 
 // Count returns the number of entries in the receiver that satisfy the predicate.
-func (m Mapintstring) Count(pred func(Pairintstring) bool) int {
+func (m Mapintstring) Count(pred func(PairMpintstring) bool) int {
 	count := 0
 	for k, v := range m {
-		if pred(Pairintstring{k, v}) {
+		if pred(PairMpintstring{k, v}) {
 			count++
 		}
 	}
@@ -83,44 +107,44 @@ func (m Mapintstring) IsEmpty() bool {
 	return len(m) == 0
 }
 
-func (m Mapintstring) All(pred func(Pairintstring) bool) bool {
+func (m Mapintstring) All(pred func(PairMpintstring) bool) bool {
 	for k, v := range m {
-		if !pred(Pairintstring{k, v}) {
+		if !pred(PairMpintstring{k, v}) {
 			return false
 		}
 	}
 	return true
 }
 
-func (m Mapintstring) Any(pred func(Pairintstring) bool) bool {
+func (m Mapintstring) Any(pred func(PairMpintstring) bool) bool {
 	for k, v := range m {
-		if pred(Pairintstring{k, v}) {
+		if pred(PairMpintstring{k, v}) {
 			return true
 		}
 	}
 	return false
 }
 
-func (m Mapintstring) ToSlice() SliceOfPairintstring {
+func (m Mapintstring) ToSlice() []PairMpintstring {
 	if m == nil {
 		return nil
 	}
-	s := make(SliceOfPairintstring, len(m))
+	s := make([]PairMpintstring, len(m))
 	i := 0
 	for k, v := range m {
-		s[i] = Pairintstring{k, v}
+		s[i] = PairMpintstring{k, v}
 		i++
 	}
 	return s
 }
 
-func (m Mapintstring) Filter(pred func(Pairintstring) bool) Mapintstring {
+func (m Mapintstring) Filter(pred func(PairMpintstring) bool) Mapintstring {
 	if m == nil {
 		return nil
 	}
 	m1 := Mapintstring{}
 	for k, v := range m {
-		if pred(Pairintstring{k, v}) {
+		if pred(PairMpintstring{k, v}) {
 			m1[k] = v
 		}
 	}
@@ -140,13 +164,13 @@ func (m Mapintstring) FilterKeys(pred func(int) bool) Mapintstring {
 	return m1
 }
 
-func (m Mapintstring) FilterNot(pred func(Pairintstring) bool) Mapintstring {
+func (m Mapintstring) FilterNot(pred func(PairMpintstring) bool) Mapintstring {
 	if m == nil {
 		return nil
 	}
 	m1 := Mapintstring{}
 	for k, v := range m {
-		if !pred(Pairintstring{k, v}) {
+		if !pred(PairMpintstring{k, v}) {
 			m1[k] = v
 		}
 	}
@@ -166,9 +190,9 @@ func (m Mapintstring) FilterValues(pred func(string) bool) Mapintstring {
 	return m1
 }
 
-func (m Mapintstring) ForEach(f func(Pairintstring)) {
+func (m Mapintstring) ForEach(f func(PairMpintstring)) {
 	for k, v := range m {
-		f(Pairintstring{k, v})
+		f(PairMpintstring{k, v})
 	}
 }
 
@@ -185,8 +209,8 @@ func (m Mapintstring) IsNotEmpty() bool {
 
 // MaxWith returns an entry in the map with maximum value, using a comparator function.
 // Returns an error if the map is empty.
-func (m Mapintstring) MaxWith(comparator func(Pairintstring, Pairintstring) int) (Pairintstring, error) {
-	var max Pairintstring
+func (m Mapintstring) MaxWith(comparator func(PairMpintstring, PairMpintstring) int) (PairMpintstring, error) {
+	var max PairMpintstring
 
 	if len(m) == 0 {
 		return max, errors.New("empty or nil map")
@@ -195,11 +219,11 @@ func (m Mapintstring) MaxWith(comparator func(Pairintstring, Pairintstring) int)
 	first := true
 	for k, v := range m {
 		if first {
-			max = Pairintstring{k, v}
+			max = PairMpintstring{k, v}
 			first = false
 			continue
 		}
-		if pair := (Pairintstring{k, v}); comparator(max, pair) < 0 {
+		if pair := (PairMpintstring{k, v}); comparator(max, pair) < 0 {
 			max = pair
 		}
 	}
@@ -214,7 +238,7 @@ func (m Mapintstring) MinusKey(k int) Mapintstring {
 	return m1
 }
 
-func (m Mapintstring) MinusKeys(s Sliceint) Mapintstring {
+func (m Mapintstring) MinusKeys(s []int) Mapintstring {
 	m1 := m.Copy()
 	for _, k := range s {
 		delete(m1, k)
@@ -222,12 +246,12 @@ func (m Mapintstring) MinusKeys(s Sliceint) Mapintstring {
 	return m1
 }
 
-func (m Mapintstring) MinWith(comparator func(Pairintstring, Pairintstring) int) (Pairintstring, error) {
-	reverseComp := func(p1 Pairintstring, p2 Pairintstring) int { return -comparator(p1, p2) }
+func (m Mapintstring) MinWith(comparator func(PairMpintstring, PairMpintstring) int) (PairMpintstring, error) {
+	reverseComp := func(p1 PairMpintstring, p2 PairMpintstring) int { return -comparator(p1, p2) }
 	return m.MaxWith(reverseComp)
 }
 
-func (m Mapintstring) PlusEntry(entry Pairintstring) Mapintstring {
+func (m Mapintstring) PlusEntry(entry PairMpintstring) Mapintstring {
 	m1 := m.Copy()
 	if m1 == nil {
 		m1 = Mapintstring{}
@@ -253,7 +277,7 @@ func (m Mapintstring) PlusMap(other Mapintstring) Mapintstring {
 	return m1
 }
 
-func (m Mapintstring) PlusSlice(s SliceOfPairintstring) Mapintstring {
+func (m Mapintstring) PlusSlice(s []PairMpintstring) Mapintstring {
 	var m1 Mapintstring
 	switch {
 	case m == nil && s == nil:

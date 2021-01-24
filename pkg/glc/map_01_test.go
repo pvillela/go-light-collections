@@ -40,18 +40,17 @@ func TestMap_Entries(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver MapT0T1
-		want     SetOfPairT0T1
+		want     []PairMpT0T1
 	}{
-		{"Entries: nonempty map", mBase(), SetOfPairT0T1{
-			PairT0T1{1, "w1"}: true, PairT0T1{22, "w22"}: true, PairT0T1{333, "w333"}: true,
-			PairT0T1{4444, "w4444"}: true}},
-		{"Entries: empty map", MapT0T1{}, SetOfPairT0T1{}},
-		{"Entries: nil map", nil, SetOfPairT0T1{}},
+		{"Entries: nonempty map", mBase(), []PairMpT0T1{{1, "w1"}, {22, "w22"}, {333, "w333"},
+			{4444, "w4444"}}},
+		{"Entries: empty map", MapT0T1{}, []PairMpT0T1{}},
+		{"Entries: nil map", nil, nil},
 	}
 
 	for _, cs := range cases {
 		got := cs.receiver.Entries()
-		assert.Equal(t, cs.want, got, cs.msg)
+		assert.ElementsMatch(t, cs.want, got, cs.msg)
 	}
 }
 
@@ -59,16 +58,33 @@ func TestMap_Keys(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver MapT0T1
-		want     SetT0
+		want     []T0
 	}{
-		{"Keys: nonempty map", mBase(), SetT0{1: true, 22: true, 333: true, 4444: true}},
-		{"Keys: empty map", MapT0T1{}, SetT0{}},
-		{"Keys: nil map", nil, SetT0{}},
+		{"Keys: nonempty map", mBase(), []T0{1, 22, 333, 4444}},
+		{"Keys: empty map", MapT0T1{}, []T0{}},
+		{"Keys: nil map", nil, nil},
 	}
 
 	for _, cs := range cases {
 		got := cs.receiver.Keys()
-		assert.Equal(t, cs.want, got, cs.msg)
+		assert.ElementsMatch(t, cs.want, got, cs.msg)
+	}
+}
+
+func TestMap_Values(t *testing.T) {
+	cases := []struct {
+		msg      string
+		receiver MapT0T1
+		want     []T1
+	}{
+		{"Values: nonempty map", mBase(), []T1{"w1", "w22", "w333", "w4444"}},
+		{"Values: empty map", MapT0T1{}, []T1{}},
+		{"Values: nil map", nil, nil},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.Values()
+		assert.ElementsMatch(t, cs.want, got, cs.msg)
 	}
 }
 
@@ -88,24 +104,6 @@ func TestMap_LengthSize(t *testing.T) {
 		assert.Equal(t, cs.want, got1, cs.msg)
 		got2 := cs.receiver.Size()
 		assert.Equal(t, cs.want, got2, cs.msg)
-	}
-}
-
-func TestMap_Values(t *testing.T) {
-	cases := []struct {
-		msg      string
-		receiver MapT0T1
-		want     SetT1
-	}{
-		{"Values: nonempty map", mBase(), SetT1{"w1": true, "w22": true, "w333": true,
-			"w4444": true}},
-		{"Values: empty map", MapT0T1{}, SetT1{}},
-		{"Values: nil map", nil, SetT1{}},
-	}
-
-	for _, cs := range cases {
-		got := cs.receiver.Values()
-		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
 
@@ -148,14 +146,14 @@ func TestMap_ContainsValue(t *testing.T) {
 }
 
 func TestMap_Count(t *testing.T) {
-	pred1 := func(a PairT0T1) bool { return toInt(a.X1) > 0 }
-	pred2 := func(a PairT0T1) bool { return toInt(a.X1)%2 == 0 }
-	pred3 := func(a PairT0T1) bool { return toInt(a.X1) < 0 }
+	pred1 := func(a PairMpT0T1) bool { return toInt(a.X1) > 0 }
+	pred2 := func(a PairMpT0T1) bool { return toInt(a.X1)%2 == 0 }
+	pred3 := func(a PairMpT0T1) bool { return toInt(a.X1) < 0 }
 
 	cases := []struct {
 		msg      string
 		receiver MapT0T1
-		arg      func(PairT0T1) bool
+		arg      func(PairMpT0T1) bool
 		want     int
 	}{
 		{"Count: pred matches all", mBase(), pred1, len(mBase())},
@@ -212,14 +210,14 @@ func TestMap_IsEmpty(t *testing.T) {
 }
 
 func TestMap_All(t *testing.T) {
-	pred1 := func(a PairT0T1) bool { return toInt(a.X1) > 0 }
-	pred2 := func(a PairT0T1) bool { return toInt(a.X1)%2 == 0 }
-	pred3 := func(a PairT0T1) bool { return toInt(a.X1) < 0 }
+	pred1 := func(a PairMpT0T1) bool { return toInt(a.X1) > 0 }
+	pred2 := func(a PairMpT0T1) bool { return toInt(a.X1)%2 == 0 }
+	pred3 := func(a PairMpT0T1) bool { return toInt(a.X1) < 0 }
 
 	cases := []struct {
 		msg      string
 		receiver MapT0T1
-		arg      func(PairT0T1) bool
+		arg      func(PairMpT0T1) bool
 		want     bool
 	}{
 		{"All: pred matches all", mBase(), pred1, true},
@@ -236,14 +234,14 @@ func TestMap_All(t *testing.T) {
 }
 
 func TestMap_Any(t *testing.T) {
-	pred1 := func(a PairT0T1) bool { return toInt(a.X1) > 0 }
-	pred2 := func(a PairT0T1) bool { return toInt(a.X1)%2 == 0 }
-	pred3 := func(a PairT0T1) bool { return toInt(a.X1) < 0 }
+	pred1 := func(a PairMpT0T1) bool { return toInt(a.X1) > 0 }
+	pred2 := func(a PairMpT0T1) bool { return toInt(a.X1)%2 == 0 }
+	pred3 := func(a PairMpT0T1) bool { return toInt(a.X1) < 0 }
 
 	cases := []struct {
 		msg      string
 		receiver MapT0T1
-		arg      func(PairT0T1) bool
+		arg      func(PairMpT0T1) bool
 		want     bool
 	}{
 		{"Any: pred matches all", mBase(), pred1, true},
@@ -260,47 +258,33 @@ func TestMap_Any(t *testing.T) {
 }
 
 func TestMap_ToSlice(t *testing.T) {
-	pairsBase := SetOfPairT0T1{
-		PairT0T1{1, "w1"}: true, PairT0T1{22, "w22"}: true, PairT0T1{333, "w333"}: true,
-		PairT0T1{4444, "w4444"}: true,
-	}
-
-	toSet := func(sp SliceOfPairT0T1) SetOfPairT0T1 {
-		if sp == nil {
-			return nil
-		}
-		set := make(SetOfPairT0T1, len(sp))
-		for _, x := range sp {
-			set[x] = true
-		}
-		return set
-	}
+	pairsBase := []PairMpT0T1{{1, "w1"}, {22, "w22"}, {333, "w333"}, {4444, "w4444"}}
 
 	cases := []struct {
 		msg      string
 		receiver MapT0T1
-		want     SetOfPairT0T1
+		want     []PairMpT0T1
 	}{
 		{"ToSlice: nonempty", mBase(), pairsBase},
-		{"ToSlice: empty", MapT0T1{}, SetOfPairT0T1{}},
+		{"ToSlice: empty", MapT0T1{}, []PairMpT0T1{}},
 		{"ToSlice: nil", nil, nil},
 	}
 
 	for _, cs := range cases {
-		got := toSet(cs.receiver.ToSlice())
-		assert.Equal(t, cs.want, got, cs.msg)
+		got := cs.receiver.ToSlice()
+		assert.ElementsMatch(t, cs.want, got, cs.msg)
 	}
 }
 
 func TestMap_Filter(t *testing.T) {
-	pred1 := func(a PairT0T1) bool { return toInt(a.X1) > 0 }
-	pred2 := func(a PairT0T1) bool { return toInt(a.X1)%2 == 0 }
-	pred3 := func(a PairT0T1) bool { return toInt(a.X1) < 0 }
+	pred1 := func(a PairMpT0T1) bool { return toInt(a.X1) > 0 }
+	pred2 := func(a PairMpT0T1) bool { return toInt(a.X1)%2 == 0 }
+	pred3 := func(a PairMpT0T1) bool { return toInt(a.X1) < 0 }
 
 	cases := []struct {
 		msg      string
 		receiver MapT0T1
-		arg      func(PairT0T1) bool
+		arg      func(PairMpT0T1) bool
 		want     MapT0T1
 	}{
 		{"Filter: pred matches all", mBase(), pred1, mBase()},
@@ -341,14 +325,14 @@ func TestMap_FilterKeys(t *testing.T) {
 }
 
 func TestMap_FilterNot(t *testing.T) {
-	pred1 := func(a PairT0T1) bool { return toInt(a.X1) > 0 }
-	pred2 := func(a PairT0T1) bool { return toInt(a.X1)%2 == 1 }
-	pred3 := func(a PairT0T1) bool { return toInt(a.X1) < 0 }
+	pred1 := func(a PairMpT0T1) bool { return toInt(a.X1) > 0 }
+	pred2 := func(a PairMpT0T1) bool { return toInt(a.X1)%2 == 1 }
+	pred3 := func(a PairMpT0T1) bool { return toInt(a.X1) < 0 }
 
 	cases := []struct {
 		msg      string
 		receiver MapT0T1
-		arg      func(PairT0T1) bool
+		arg      func(PairMpT0T1) bool
 		want     MapT0T1
 	}{
 		{"FilterNot: pred matches all", mBase(), pred1, MapT0T1{}},
@@ -402,7 +386,7 @@ func TestMap_ForEach(t *testing.T) {
 
 	for _, cs := range cases {
 		got := map[Any]bool{}
-		f := func(a PairT0T1) {
+		f := func(a PairMpT0T1) {
 			got[a.X1] = true
 		}
 
@@ -450,18 +434,18 @@ func TestMap_IsNotEmpty(t *testing.T) {
 }
 
 func TestMap_MaxWith(t *testing.T) {
-	comp := func(a1 PairT0T1, a2 PairT0T1) int { return toInt(a1.X1) - toInt(a2.X1) }
+	comp := func(a1 PairMpT0T1, a2 PairMpT0T1) int { return toInt(a1.X1) - toInt(a2.X1) }
 
 	cases := []struct {
 		msg      string
 		receiver MapT0T1
-		arg      func(PairT0T1, PairT0T1) int
-		want     PairT0T1
+		arg      func(PairMpT0T1, PairMpT0T1) int
+		want     PairMpT0T1
 		werr     error
 	}{
-		{"MaxWith: nonempty receiver", mBase(), comp, PairT0T1{4444, "w4444"}, nil},
-		{"MaxWith: empty receiver", MapT0T1{}, comp, PairT0T1{}, errors.New("empty or nil map")},
-		{"MaxWith: nil receiver", nil, comp, PairT0T1{}, errors.New("empty or nil map")},
+		{"MaxWith: nonempty receiver", mBase(), comp, PairMpT0T1{4444, "w4444"}, nil},
+		{"MaxWith: empty receiver", MapT0T1{}, comp, PairMpT0T1{}, errors.New("empty or nil map")},
+		{"MaxWith: nil receiver", nil, comp, PairMpT0T1{}, errors.New("empty or nil map")},
 	}
 
 	for _, cs := range cases {
@@ -496,15 +480,15 @@ func TestMap_MinusKeys(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver MapT0T1
-		arg      SliceT0
+		arg      []T0
 		want     MapT0T1
 	}{
-		{"MinusKeys: subset", mBase(), SliceT0{22, 333}, MapT0T1{1: "w1", 4444: "w4444"}},
-		{"MinusKeys: intersects", mBase(), SliceT0{0, 22, 9, 333},
+		{"MinusKeys: subset", mBase(), []T0{22, 333}, MapT0T1{1: "w1", 4444: "w4444"}},
+		{"MinusKeys: intersects", mBase(), []T0{0, 22, 9, 333},
 			MapT0T1{1: "w1", 4444: "w4444"}},
-		{"MinusKeys: disjoint", mBase(), SliceT0{0, 9, 42}, mBase()},
-		{"MinusKeys: empty slice", MapT0T1{}, SliceT0{22, 333}, MapT0T1{}},
-		{"MinusKeys: nil slice", nil, SliceT0{22, 333}, nil},
+		{"MinusKeys: disjoint", mBase(), []T0{0, 9, 42}, mBase()},
+		{"MinusKeys: empty slice", MapT0T1{}, []T0{22, 333}, MapT0T1{}},
+		{"MinusKeys: nil slice", nil, []T0{22, 333}, nil},
 	}
 
 	for _, cs := range cases {
@@ -514,18 +498,18 @@ func TestMap_MinusKeys(t *testing.T) {
 }
 
 func TestMap_MinWith(t *testing.T) {
-	comp := func(a1 PairT0T1, a2 PairT0T1) int { return -(toInt(a1.X1) - toInt(a2.X1)) }
+	comp := func(a1 PairMpT0T1, a2 PairMpT0T1) int { return -(toInt(a1.X1) - toInt(a2.X1)) }
 
 	cases := []struct {
 		msg      string
 		receiver MapT0T1
-		arg      func(PairT0T1, PairT0T1) int
-		want     PairT0T1
+		arg      func(PairMpT0T1, PairMpT0T1) int
+		want     PairMpT0T1
 		werr     error
 	}{
-		{"MinWith: nonempty receiver", mBase(), comp, PairT0T1{4444, "w4444"}, nil},
-		{"MinWith: empty receiver", MapT0T1{}, comp, PairT0T1{}, errors.New("empty or nil map")},
-		{"MinWith: nil receiver", nil, comp, PairT0T1{}, errors.New("empty or nil map")},
+		{"MinWith: nonempty receiver", mBase(), comp, PairMpT0T1{4444, "w4444"}, nil},
+		{"MinWith: empty receiver", MapT0T1{}, comp, PairMpT0T1{}, errors.New("empty or nil map")},
+		{"MinWith: nil receiver", nil, comp, PairMpT0T1{}, errors.New("empty or nil map")},
 	}
 
 	for _, cs := range cases {
@@ -541,13 +525,13 @@ func TestMap_PlusEntry(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver MapT0T1
-		arg      PairT0T1
+		arg      PairMpT0T1
 		want     MapT0T1
 	}{
-		{"PlusEntry: nonempty", MapT0T1{1: "w1", 22: "w22", 4444: "w4444"}, PairT0T1{333, "w333"},
+		{"PlusEntry: nonempty", MapT0T1{1: "w1", 22: "w22", 4444: "w4444"}, PairMpT0T1{333, "w333"},
 			mBase()},
-		{"PlusEntry: empty", MapT0T1{}, PairT0T1{333, "w333"}, MapT0T1{333: "w333"}},
-		{"PlusEntry: nil", nil, PairT0T1{333, "w333"}, MapT0T1{333: "w333"}},
+		{"PlusEntry: empty", MapT0T1{}, PairMpT0T1{333, "w333"}, MapT0T1{333: "w333"}},
+		{"PlusEntry: nil", nil, PairMpT0T1{333, "w333"}, MapT0T1{333: "w333"}},
 	}
 
 	for _, cs := range cases {
@@ -585,19 +569,19 @@ func TestMap_PlusSlice(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver MapT0T1
-		arg      SliceOfPairT0T1
+		arg      []PairMpT0T1
 		want     MapT0T1
 	}{
-		{"PlusSlice: nonempty + nonempty", mBase(), SliceOfPairT0T1{{9, "x9"}, {333, "x3"}},
+		{"PlusSlice: nonempty + nonempty", mBase(), []PairMpT0T1{{9, "x9"}, {333, "x3"}},
 			MapT0T1{1: "w1", 9: "x9", 22: "w22", 333: "x3", 4444: "w4444"}},
-		{"PlusSlice: nonempty + empty", mBase(), SliceOfPairT0T1{}, mBase()},
-		{"PlusSlice: empty + nonempty", MapT0T1{}, SliceOfPairT0T1{{9, "x9"}, {333, "x3"}},
+		{"PlusSlice: nonempty + empty", mBase(), []PairMpT0T1{}, mBase()},
+		{"PlusSlice: empty + nonempty", MapT0T1{}, []PairMpT0T1{{9, "x9"}, {333, "x3"}},
 			MapT0T1{9: "x9", 333: "x3"}},
-		{"PlusSlice: nil + nonempty", nil, SliceOfPairT0T1{{9, "x9"}, {333, "x3"}},
+		{"PlusSlice: nil + nonempty", nil, []PairMpT0T1{{9, "x9"}, {333, "x3"}},
 			MapT0T1{9: "x9", 333: "x3"}},
-		{"PlusSlice: empty + empty", MapT0T1{}, SliceOfPairT0T1{}, MapT0T1{}},
+		{"PlusSlice: empty + empty", MapT0T1{}, []PairMpT0T1{}, MapT0T1{}},
 		{"PlusSlice: empty + nil", MapT0T1{}, nil, MapT0T1{}},
-		{"PlusSlice: nil + empty", nil, SliceOfPairT0T1{}, MapT0T1{}},
+		{"PlusSlice: nil + empty", nil, []PairMpT0T1{}, MapT0T1{}},
 		{"PlusSlice: nil + nil", nil, nil, nil},
 	}
 

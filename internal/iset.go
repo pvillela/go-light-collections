@@ -17,7 +17,7 @@ type ISetT0 interface {
 	Any(func(c.T0) bool) bool
 	Contains(c.T0) bool
 	ContainsSet(c.SetT0) bool
-	ContainsSlice(c.SliceT0) bool
+	ContainsSlice([]c.T0) bool
 	Count(func(c.T0) bool) int
 	Filter(func(c.T0) bool) c.SetT0
 	FilterNot(func(c.T0) bool) c.SetT0
@@ -32,17 +32,17 @@ type ISetT0 interface {
 	Partition(pred func(c.T0) bool) (c.SetT0, c.SetT0)
 	PlusElement(c.T0) c.SetT0
 	PlusSet(c.SetT0) c.SetT0
-	PlusSlice(c.SliceT0) c.SetT0
-	ToSlice() c.SliceT0
+	PlusSlice([]c.T0) c.SetT0
+	ToSlice() []c.T0
 	Put(c.T0)
 }
 
 // ISetT0T1 defines the methods to be implemented by the concrete type c.SetT0 that also
 // depend on type c.T1.
 type ISetT0T1 interface {
-	FlatMapT1(func(c.T0) c.SetT1) c.SetT1
+	FlatMapT1(func(c.T0) map[c.T1]bool) map[c.T1]bool
 	GroupByT1(keySelector func(c.T0) c.T1) map[c.T1]c.SetT0
-	MapT1(f func(c.T0) c.T1) c.SetT1
+	MapT1(f func(c.T0) c.T1) map[c.T1]bool
 }
 
 // ISetOfPairT0T1 defines the methods to be implemented by the concrete type ISliceOfPairT0T1.
