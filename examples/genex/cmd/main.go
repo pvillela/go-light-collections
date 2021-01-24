@@ -12,8 +12,8 @@ func main() {
 
 	// Examples with various collections involving the Person type.
 
-	beatles := []c.Person{{Name: "John", Age: 80}, {Name: "Paul", Age: 78},
-		{Name: "George", Age: 77}, {Name: "Ringo", Age: 80}}
+	beatles := []c.Person{{Name: "John", Year: 1940}, {Name: "Paul", Year: 1942},
+		{Name: "George", Year: 1943}, {Name: "Ringo", Year: 1940}}
 	fmt.Printf("*** beatles: %#v\n", beatles)
 
 	beatlesWithEvenNames :=
@@ -23,25 +23,25 @@ func main() {
 	namesOfBWEN := beatlesWithEvenNames.MapString(func(p pkga.Person) string { return p.Name })
 	fmt.Printf("*** namesOfBWEN: %#v\n", namesOfBWEN)
 
-	agesOfBWEN := beatlesWithEvenNames.Mapint(func(p pkga.Person) int { return p.Age })
+	agesOfBWEN := beatlesWithEvenNames.Mapint(func(p pkga.Person) int { return p.Year })
 	fmt.Printf("*** agesOfBWEN: %#v\n", agesOfBWEN)
 
-	nameAgePairsOfBWEN := c.SliceString(namesOfBWEN).Zipint(agesOfBWEN)
-	fmt.Printf("*** nameAgePairsOfBWEN: %#v\n", nameAgePairsOfBWEN)
+	nameYearPairsOfBWEN := c.SliceString(namesOfBWEN).Zipint(agesOfBWEN)
+	fmt.Printf("*** nameYearPairsOfBWEN: %#v\n", nameYearPairsOfBWEN)
 
-	namesToAgesOfBWEN := c.SliceOfPairStringint(nameAgePairsOfBWEN).ToMap()
-	fmt.Printf("*** namesToAgesOfBWEN: %#v\n", namesToAgesOfBWEN)
-	fmt.Println(namesToAgesOfBWEN["Paul"])
-	fmt.Println(namesToAgesOfBWEN["Ringo"])
+	namesToYearsOfBWEN := c.SliceOfPairStringint(nameYearPairsOfBWEN).ToMap()
+	fmt.Printf("*** namesToYearsOfBWEN: %#v\n", namesToYearsOfBWEN)
+	fmt.Println(namesToYearsOfBWEN["Paul"])
+	fmt.Println(namesToYearsOfBWEN["Ringo"])
 
-	beatlesMap := c.MapStringint(namesToAgesOfBWEN).Add("Ringo", 80)
+	beatlesMap := c.MapStringint(namesToYearsOfBWEN).Add("Ringo", 1940)
 	fmt.Printf("*** beatlesMap: %#v\n", beatlesMap)
 
-	beatlesMapEvenAges := beatlesMap.FilterValues(func(age int) bool { return age%2 == 0 })
-	fmt.Printf("*** beatlesMapEvenAges: %#v\n", beatlesMapEvenAges)
+	beatlesMapEvenYears := beatlesMap.FilterValues(func(age int) bool { return age%2 == 0 })
+	fmt.Printf("*** beatlesMapEvenYears: %#v\n", beatlesMapEvenYears)
 
 	mungedMap :=
-		beatlesMapEvenAges.MapValuesint(func(p c.PairMpStringint) int { return len(p.X1) + p.X2 })
+		beatlesMapEvenYears.MapValuesint(func(p c.PairMpStringint) int { return len(p.X1) + p.X2 })
 	fmt.Printf("*** mungedMap: %#v\n", mungedMap)
 
 	beatlesFullNameMap := beatlesMap.MapKeysString(func(p c.PairMpStringint) string {
@@ -72,7 +72,7 @@ func main() {
 		c.SliceMapStringint(sliceOfMaps).FlatMapPerson(func(m c.MapStringint) []c.Person {
 			var pairs c.SlicePairMpStringint = m.ToSlice()
 			return pairs.MapPerson(func(p c.PairMpStringint) c.Person {
-				return c.Person{Name: p.X1, Age: p.X2}
+				return c.Person{Name: p.X1, Year: p.X2}
 			})
 		})
 	fmt.Printf("*** sliceOfPerson: %#v\n", sliceOfPerson)
