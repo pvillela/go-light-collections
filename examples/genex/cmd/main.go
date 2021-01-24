@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/pvillela/go-light-collections/examples/genex/generated/coll"
+	c "github.com/pvillela/go-light-collections/examples/genex/generated/coll"
 	"github.com/pvillela/go-light-collections/examples/genex/pkga"
 )
 
@@ -12,33 +12,68 @@ func main() {
 
 	// Examples with various collections involving the Person type.
 
-	var persons coll.SlicePerson = []coll.Person{{Name: "John", Age: 80}, {Name: "Paul", Age: 78},
+	beatles := []c.Person{{Name: "John", Age: 80}, {Name: "Paul", Age: 78},
 		{Name: "George", Age: 77}, {Name: "Ringo", Age: 80}}
-	fmt.Printf("*** persons: %#v\n", persons)
+	fmt.Printf("*** beatles: %#v\n", beatles)
 
-	personsWithEvenNames := persons.Filter(func(p pkga.Person) bool { return len(p.Name)%2 == 0 })
-	fmt.Printf("*** personsWithEvenNames: %#v\n", personsWithEvenNames)
+	beatlesWithEvenNames :=
+		c.SlicePerson(beatles).Filter(func(p pkga.Person) bool { return len(p.Name)%2 == 0 })
+	fmt.Printf("*** beatlesWithEvenNames: %#v\n", beatlesWithEvenNames)
 
-	var namesOfPWEN coll.SliceString = personsWithEvenNames.MapString(func(p pkga.Person) string { return p.Name })
-	fmt.Printf("*** namesOfPWEN: %#v\n", namesOfPWEN)
+	namesOfBWEN := beatlesWithEvenNames.MapString(func(p pkga.Person) string { return p.Name })
+	fmt.Printf("*** namesOfBWEN: %#v\n", namesOfBWEN)
 
-	var agesOfPWEN coll.Sliceint = personsWithEvenNames.Mapint(func(p pkga.Person) int { return p.Age })
-	fmt.Printf("*** agesOfPWEN: %#v\n", agesOfPWEN)
+	agesOfBWEN := beatlesWithEvenNames.Mapint(func(p pkga.Person) int { return p.Age })
+	fmt.Printf("*** agesOfBWEN: %#v\n", agesOfBWEN)
 
-	var nameAgePairsOfPWEN coll.SliceOfPairStringint = namesOfPWEN.Zipint(agesOfPWEN)
-	var namesToAgesOfPWEN coll.MapStringint = nameAgePairsOfPWEN.ToMap()
-	fmt.Printf("*** namesToAgesOfPWEN: %#v\n", namesToAgesOfPWEN)
-	fmt.Println(namesToAgesOfPWEN["Paul"])
-	fmt.Println(namesToAgesOfPWEN["Ringo"])
+	nameAgePairsOfBWEN := c.SliceString(namesOfBWEN).Zipint(agesOfBWEN)
+	fmt.Printf("*** nameAgePairsOfBWEN: %#v\n", nameAgePairsOfBWEN)
 
-	beatlesMap := namesToAgesOfPWEN.Add("Ringo", 80)
+	namesToAgesOfBWEN := c.SliceOfPairStringint(nameAgePairsOfBWEN).ToMap()
+	fmt.Printf("*** namesToAgesOfBWEN: %#v\n", namesToAgesOfBWEN)
+	fmt.Println(namesToAgesOfBWEN["Paul"])
+	fmt.Println(namesToAgesOfBWEN["Ringo"])
+
+	beatlesMap := c.MapStringint(namesToAgesOfBWEN).Add("Ringo", 80)
 	fmt.Printf("*** beatlesMap: %#v\n", beatlesMap)
 
 	beatlesMapEvenAges := beatlesMap.FilterValues(func(age int) bool { return age%2 == 0 })
 	fmt.Printf("*** beatlesMapEvenAges: %#v\n", beatlesMapEvenAges)
 
-	mungedMap := beatlesMapEvenAges.MapValuesint(func(p coll.PairSlStringint) int { return len(p.X1) + p.X2 })
+	mungedMap :=
+		beatlesMapEvenAges.MapValuesint(func(p c.PairMpStringint) int { return len(p.X1) + p.X2 })
 	fmt.Printf("*** mungedMap: %#v\n", mungedMap)
 
+	beatlesFullNameMap := beatlesMap.MapKeysString(func(p c.PairMpStringint) string {
+		switch p.X1 {
+		case "John":
+			return "John Lennon"
+		case "Paul":
+			return "Paul McCartney"
+		case "George":
+			return "George Harrison"
+		case "Ringo":
+			return "Ringo Starr"
+		default:
+			return "Mick Jagger"
+		}
+	})
+	fmt.Printf("*** beatlesFullNameMap: %#v\n", beatlesFullNameMap)
+
+	comboMap := c.MapStringint(beatlesFullNameMap).PlusMap(mungedMap)
+	fmt.Printf("*** comboMap: %#v\n", comboMap)
+
 	// Example with nested collection type.
+
+	sliceOfMaps := []c.MapStringint{beatlesMap, mungedMap}
+	fmt.Printf("*** sliceOfMaps: %#v\n", sliceOfMaps)
+
+	sliceOfPerson :=
+		c.SliceMapStringint(sliceOfMaps).FlatMapPerson(func(m c.MapStringint) []c.Person {
+			var pairs c.SlicePairMpStringint = m.ToSlice()
+			return pairs.MapPerson(func(p c.PairMpStringint) c.Person {
+				return c.Person{Name: p.X1, Age: p.X2}
+			})
+		})
+	fmt.Printf("*** sliceOfPerson: %#v\n", sliceOfPerson)
 }

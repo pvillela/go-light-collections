@@ -11,11 +11,11 @@ import c "github.com/pvillela/go-light-collections/pkg/glc"
 // depend on types c.T0 and c.T1.
 type IMapT0T1 interface {
 	Copy() c.MapT0T1
-	Entries() map[c.PairMpT0T1]bool
-	Keys() map[c.T0]bool
+	Entries() []c.PairMpT0T1
+	Keys() []c.T0
 	Length() int
 	Size() int
-	Values() map[c.T1]bool
+	Values() []c.T1
 	ContainsKey(c.T0) bool
 	ContainsValue(c.T1) bool
 	Count(func(c.PairMpT0T1) bool) int

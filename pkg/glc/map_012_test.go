@@ -7,20 +7,6 @@ import (
 )
 
 ////
-// Preliminaries
-
-func _map012_sliceToSet(s []T2) map[T2]bool {
-	if s == nil {
-		return nil
-	}
-	set := make(map[T2]bool, len(s))
-	for _, x := range s {
-		set[x] = true
-	}
-	return set
-}
-
-////
 // Tests
 
 func TestMap_FlatMapT2(t *testing.T) {
@@ -32,8 +18,6 @@ func TestMap_FlatMapT2(t *testing.T) {
 		}
 		return s
 	}
-
-	toSet := _map012_sliceToSet
 
 	cases := []struct {
 		msg      string
@@ -48,14 +32,12 @@ func TestMap_FlatMapT2(t *testing.T) {
 
 	for _, cs := range cases {
 		got := cs.receiver.FlatMapT2(cs.arg)
-		assert.Equal(t, toSet(cs.want), toSet(got), cs.msg)
+		assert.ElementsMatch(t, cs.want, got, cs.msg)
 	}
 }
 
 func TestMap_MapT2(t *testing.T) {
 	f := func(a PairMpT0T1) T2 { return toInt(a.X1) + 1 }
-
-	toSet := _map012_sliceToSet
 
 	cases := []struct {
 		msg      string
@@ -70,7 +52,7 @@ func TestMap_MapT2(t *testing.T) {
 
 	for _, cs := range cases {
 		got := cs.receiver.MapT2(cs.arg)
-		assert.Equal(t, toSet(cs.want), toSet(got), cs.msg)
+		assert.ElementsMatch(t, cs.want, got, cs.msg)
 	}
 }
 

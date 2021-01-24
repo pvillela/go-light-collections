@@ -38,20 +38,55 @@ func TestMap_Copy(t *testing.T) {
 	}
 }
 
+func TestMap_Entries(t *testing.T) {
+	cases := []struct {
+		msg      string
+		receiver Mapintstring
+		want     []PairMpintstring
+	}{
+		{"Entries: nonempty map", mBase(), []PairMpintstring{{1, "w1"}, {22, "w22"}, {333, "w333"},
+			{4444, "w4444"}}},
+		{"Entries: empty map", Mapintstring{}, []PairMpintstring{}},
+		{"Entries: nil map", nil, nil},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.Entries()
+		assert.ElementsMatch(t, cs.want, got, cs.msg)
+	}
+}
+
 func TestMap_Keys(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		want     map[int]bool
+		want     []int
 	}{
-		{"Keys: nonempty map", mBase(), map[int]bool{1: true, 22: true, 333: true, 4444: true}},
-		{"Keys: empty map", Mapintstring{}, map[int]bool{}},
+		{"Keys: nonempty map", mBase(), []int{1, 22, 333, 4444}},
+		{"Keys: empty map", Mapintstring{}, []int{}},
 		{"Keys: nil map", nil, nil},
 	}
 
 	for _, cs := range cases {
 		got := cs.receiver.Keys()
-		assert.Equal(t, cs.want, got, cs.msg)
+		assert.ElementsMatch(t, cs.want, got, cs.msg)
+	}
+}
+
+func TestMap_Values(t *testing.T) {
+	cases := []struct {
+		msg      string
+		receiver Mapintstring
+		want     []string
+	}{
+		{"Values: nonempty map", mBase(), []string{"w1", "w22", "w333", "w4444"}},
+		{"Values: empty map", Mapintstring{}, []string{}},
+		{"Values: nil map", nil, nil},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.Values()
+		assert.ElementsMatch(t, cs.want, got, cs.msg)
 	}
 }
 
@@ -225,35 +260,21 @@ func TestMap_Any(t *testing.T) {
 }
 
 func TestMap_ToSlice(t *testing.T) {
-	pairsBase := map[PairMpintstring]bool{
-		{1, "w1"}: true, {22, "w22"}: true, {333, "w333"}: true,
-		{4444, "w4444"}: true,
-	}
-
-	toSet := func(sp []PairMpintstring) map[PairMpintstring]bool {
-		if sp == nil {
-			return nil
-		}
-		set := make(map[PairMpintstring]bool, len(sp))
-		for _, x := range sp {
-			set[x] = true
-		}
-		return set
-	}
+	pairsBase := []PairMpintstring{{1, "w1"}, {22, "w22"}, {333, "w333"}, {4444, "w4444"}}
 
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		want     map[PairMpintstring]bool
+		want     []PairMpintstring
 	}{
 		{"ToSlice: nonempty", mBase(), pairsBase},
-		{"ToSlice: empty", Mapintstring{}, map[PairMpintstring]bool{}},
+		{"ToSlice: empty", Mapintstring{}, []PairMpintstring{}},
 		{"ToSlice: nil", nil, nil},
 	}
 
 	for _, cs := range cases {
-		got := toSet(cs.receiver.ToSlice())
-		assert.Equal(t, cs.want, got, cs.msg)
+		got := cs.receiver.ToSlice()
+		assert.ElementsMatch(t, cs.want, got, cs.msg)
 	}
 }
 

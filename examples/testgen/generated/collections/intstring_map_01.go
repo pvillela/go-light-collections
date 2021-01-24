@@ -24,15 +24,43 @@ func (m Mapintstring) Copy() Mapintstring {
 	return m1
 }
 
-func (m Mapintstring) Keys() map[int]bool {
+func (m Mapintstring) Entries() []PairMpintstring {
 	if m == nil {
 		return nil
 	}
-	keys := make(map[int]bool, len(m))
+	entries := make([]PairMpintstring, len(m))
+	i := 0
+	for k, v := range m {
+		entries[i] = PairMpintstring{k, v}
+		i++
+	}
+	return entries
+}
+
+func (m Mapintstring) Keys() []int {
+	if m == nil {
+		return nil
+	}
+	keys := make([]int, len(m))
+	i := 0
 	for k := range m {
-		keys[k] = true
+		keys[i] = k
+		i++
 	}
 	return keys
+}
+
+func (m Mapintstring) Values() []string {
+	if m == nil {
+		return nil
+	}
+	values := make([]string, len(m))
+	i := 0
+	for _, v := range m {
+		values[i] = v
+		i++
+	}
+	return values
 }
 
 // Length returns the number of items in the receiver.

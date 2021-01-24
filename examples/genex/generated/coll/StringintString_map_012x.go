@@ -2,11 +2,11 @@
 
 package coll
 
-func (m MapStringint) MapKeysint(f func(PairMpStringint) int) map[int]int {
+func (m MapStringint) MapKeysString(f func(PairMpStringint) String) map[String]int {
 	if m == nil {
 		return nil
 	}
-	r := make(map[int]int)
+	r := make(map[String]int)
 	for k, v := range m {
 		r[f(PairMpStringint{k, v})] = v
 	}

@@ -24,15 +24,43 @@ func (m MapStringint) Copy() MapStringint {
 	return m1
 }
 
-func (m MapStringint) Keys() map[String]bool {
+func (m MapStringint) Entries() []PairMpStringint {
 	if m == nil {
 		return nil
 	}
-	keys := make(map[String]bool, len(m))
+	entries := make([]PairMpStringint, len(m))
+	i := 0
+	for k, v := range m {
+		entries[i] = PairMpStringint{k, v}
+		i++
+	}
+	return entries
+}
+
+func (m MapStringint) Keys() []String {
+	if m == nil {
+		return nil
+	}
+	keys := make([]String, len(m))
+	i := 0
 	for k := range m {
-		keys[k] = true
+		keys[i] = k
+		i++
 	}
 	return keys
+}
+
+func (m MapStringint) Values() []int {
+	if m == nil {
+		return nil
+	}
+	values := make([]int, len(m))
+	i := 0
+	for _, v := range m {
+		values[i] = v
+		i++
+	}
+	return values
 }
 
 // Length returns the number of items in the receiver.

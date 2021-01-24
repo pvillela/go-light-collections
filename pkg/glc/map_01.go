@@ -22,15 +22,43 @@ func (m MapT0T1) Copy() MapT0T1 {
 	return m1
 }
 
-func (m MapT0T1) Keys() map[T0]bool {
+func (m MapT0T1) Entries() []PairMpT0T1 {
 	if m == nil {
 		return nil
 	}
-	keys := make(map[T0]bool, len(m))
+	entries := make([]PairMpT0T1, len(m))
+	i := 0
+	for k, v := range m {
+		entries[i] = PairMpT0T1{k, v}
+		i++
+	}
+	return entries
+}
+
+func (m MapT0T1) Keys() []T0 {
+	if m == nil {
+		return nil
+	}
+	keys := make([]T0, len(m))
+	i := 0
 	for k := range m {
-		keys[k] = true
+		keys[i] = k
+		i++
 	}
 	return keys
+}
+
+func (m MapT0T1) Values() []T1 {
+	if m == nil {
+		return nil
+	}
+	values := make([]T1, len(m))
+	i := 0
+	for _, v := range m {
+		values[i] = v
+		i++
+	}
+	return values
 }
 
 // Length returns the number of items in the receiver.
