@@ -6,7 +6,16 @@ import (
 	"sort"
 )
 
-/////////////////////
+////
+// Types
+
+// SliceT0 is a type wrapper, implements List interface.
+type SliceT0 []T0
+
+// Slice2T0 is a type wrapper.
+type Slice2T0 []SliceT0
+
+////
 // Methods
 
 // Copy returns a copy fo the receiver.

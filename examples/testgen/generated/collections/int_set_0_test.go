@@ -22,7 +22,26 @@ func sliceBase() Sliceint {
 }
 
 ////
-// TestMaps
+// Test sets
+
+func TestSlice_ToSet(t *testing.T) {
+	slice := Sliceint{1, 22, 333, 4444}
+
+	cases := []struct {
+		msg      string
+		receiver Sliceint
+		want     map[int]bool
+	}{
+		{"ToSet: nonempty receiver", slice, sBase()},
+		{"ToSet: empty receiver", Sliceint{}, map[int]bool{}},
+		{"ToSet: nil receiver", nil, nil},
+	}
+
+	for _, cs := range cases {
+		got := cs.receiver.ToSet()
+		assert.Equal(t, cs.want, got, cs.msg)
+	}
+}
 
 func TestSet_Copy(t *testing.T) {
 	cases := []struct {

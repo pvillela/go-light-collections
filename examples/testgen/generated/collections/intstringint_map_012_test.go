@@ -11,11 +11,11 @@ import (
 ////
 // Preliminaries
 
-func _map012_sliceToSet(s Sliceint) Setint {
+func _map012_sliceToSet(s []int) map[int]bool {
 	if s == nil {
 		return nil
 	}
-	set := make(Setint, len(s))
+	set := make(map[int]bool, len(s))
 	for _, x := range s {
 		set[x] = true
 	}
@@ -26,7 +26,7 @@ func _map012_sliceToSet(s Sliceint) Setint {
 // Tests
 
 func TestMap_FlatMapint(t *testing.T) {
-	f := func(a Pairintstring) Sliceint {
+	f := func(a PairMpintstring) Sliceint {
 		n := toInt(a.X1) % 10
 		s := make(Sliceint, n)
 		for i := range s {
@@ -40,7 +40,7 @@ func TestMap_FlatMapint(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		arg      func(Pairintstring) Sliceint
+		arg      func(PairMpintstring) Sliceint
 		want     Sliceint
 	}{
 		{"FlatMapint: nonempty receiver", mBase(), f, Sliceint{1, 2, 2, 3, 3, 3, 4, 4, 4, 4}},
@@ -55,14 +55,14 @@ func TestMap_FlatMapint(t *testing.T) {
 }
 
 func TestMap_Mapint(t *testing.T) {
-	f := func(a Pairintstring) int { return toInt(a.X1) + 1 }
+	f := func(a PairMpintstring) int { return toInt(a.X1) + 1 }
 
 	toSet := _map012_sliceToSet
 
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		arg      func(Pairintstring) int
+		arg      func(PairMpintstring) int
 		want     Sliceint
 	}{
 		{"Mapint: nonempty receiver", mBase(), f, Sliceint{2, 23, 334, 4445}},
@@ -77,12 +77,12 @@ func TestMap_Mapint(t *testing.T) {
 }
 
 func TestMap_MapKeysint(t *testing.T) {
-	f := func(a Pairintstring) int { return toInt(a.X1) + 1 }
+	f := func(a PairMpintstring) int { return toInt(a.X1) + 1 }
 
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		arg      func(Pairintstring) int
+		arg      func(PairMpintstring) int
 		want     map[int]string
 	}{
 		{"MapKeysint: nonempty receiver", mBase(), f, map[int]string{2: "w1", 23: "w22", 334: "w333",
@@ -98,12 +98,12 @@ func TestMap_MapKeysint(t *testing.T) {
 }
 
 func TestMap_MapValuesint(t *testing.T) {
-	f := func(a Pairintstring) int { return toInt(a.X1) + len(toString(a.X2)) }
+	f := func(a PairMpintstring) int { return toInt(a.X1) + len(toString(a.X2)) }
 
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		arg      func(Pairintstring) int
+		arg      func(PairMpintstring) int
 		want     map[int]int
 	}{
 		{"MapValuesint: nonempty receiver", mBase(), f, map[int]int{1: 3, 22: 25, 333: 337,

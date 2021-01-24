@@ -42,13 +42,12 @@ func TestMap_Entries(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		want     SetOfPairintstring
+		want     []PairMpintstring
 	}{
-		{"Entries: nonempty map", mBase(), SetOfPairintstring{
-			Pairintstring{1, "w1"}: true, Pairintstring{22, "w22"}: true, Pairintstring{333, "w333"}: true,
-			Pairintstring{4444, "w4444"}: true}},
-		{"Entries: empty map", Mapintstring{}, SetOfPairintstring{}},
-		{"Entries: nil map", nil, SetOfPairintstring{}},
+		{"Entries: nonempty map", mBase(), []PairMpintstring{{1, "w1"}, {22, "w22"}, {333, "w333"},
+			{4444, "w4444"}}},
+		{"Entries: empty map", Mapintstring{}, []PairMpintstring{}},
+		{"Entries: nil map", nil, nil},
 	}
 
 	for _, cs := range cases {
@@ -61,11 +60,11 @@ func TestMap_Keys(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		want     Setint
+		want     Sliceint
 	}{
-		{"Keys: nonempty map", mBase(), Setint{1: true, 22: true, 333: true, 4444: true}},
-		{"Keys: empty map", Mapintstring{}, Setint{}},
-		{"Keys: nil map", nil, Setint{}},
+		{"Keys: nonempty map", mBase(), Sliceint{1, 22, 333, 4444}},
+		{"Keys: empty map", Mapintstring{}, Sliceint{}},
+		{"Keys: nil map", nil, nil},
 	}
 
 	for _, cs := range cases {
@@ -97,12 +96,11 @@ func TestMap_Values(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		want     Setstring
+		want     Slicestring
 	}{
-		{"Values: nonempty map", mBase(), Setstring{"w1": true, "w22": true, "w333": true,
-			"w4444": true}},
-		{"Values: empty map", Mapintstring{}, Setstring{}},
-		{"Values: nil map", nil, Setstring{}},
+		{"Values: nonempty map", mBase(), Slicestring{"w1", "w22", "w333", "w4444"}},
+		{"Values: empty map", Mapintstring{}, Slicestring{}},
+		{"Values: nil map", nil, nil},
 	}
 
 	for _, cs := range cases {
@@ -150,14 +148,14 @@ func TestMap_ContainsValue(t *testing.T) {
 }
 
 func TestMap_Count(t *testing.T) {
-	pred1 := func(a Pairintstring) bool { return toInt(a.X1) > 0 }
-	pred2 := func(a Pairintstring) bool { return toInt(a.X1)%2 == 0 }
-	pred3 := func(a Pairintstring) bool { return toInt(a.X1) < 0 }
+	pred1 := func(a PairMpintstring) bool { return toInt(a.X1) > 0 }
+	pred2 := func(a PairMpintstring) bool { return toInt(a.X1)%2 == 0 }
+	pred3 := func(a PairMpintstring) bool { return toInt(a.X1) < 0 }
 
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		arg      func(Pairintstring) bool
+		arg      func(PairMpintstring) bool
 		want     int
 	}{
 		{"Count: pred matches all", mBase(), pred1, len(mBase())},
@@ -214,14 +212,14 @@ func TestMap_IsEmpty(t *testing.T) {
 }
 
 func TestMap_All(t *testing.T) {
-	pred1 := func(a Pairintstring) bool { return toInt(a.X1) > 0 }
-	pred2 := func(a Pairintstring) bool { return toInt(a.X1)%2 == 0 }
-	pred3 := func(a Pairintstring) bool { return toInt(a.X1) < 0 }
+	pred1 := func(a PairMpintstring) bool { return toInt(a.X1) > 0 }
+	pred2 := func(a PairMpintstring) bool { return toInt(a.X1)%2 == 0 }
+	pred3 := func(a PairMpintstring) bool { return toInt(a.X1) < 0 }
 
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		arg      func(Pairintstring) bool
+		arg      func(PairMpintstring) bool
 		want     bool
 	}{
 		{"All: pred matches all", mBase(), pred1, true},
@@ -238,14 +236,14 @@ func TestMap_All(t *testing.T) {
 }
 
 func TestMap_Any(t *testing.T) {
-	pred1 := func(a Pairintstring) bool { return toInt(a.X1) > 0 }
-	pred2 := func(a Pairintstring) bool { return toInt(a.X1)%2 == 0 }
-	pred3 := func(a Pairintstring) bool { return toInt(a.X1) < 0 }
+	pred1 := func(a PairMpintstring) bool { return toInt(a.X1) > 0 }
+	pred2 := func(a PairMpintstring) bool { return toInt(a.X1)%2 == 0 }
+	pred3 := func(a PairMpintstring) bool { return toInt(a.X1) < 0 }
 
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		arg      func(Pairintstring) bool
+		arg      func(PairMpintstring) bool
 		want     bool
 	}{
 		{"Any: pred matches all", mBase(), pred1, true},
@@ -262,16 +260,16 @@ func TestMap_Any(t *testing.T) {
 }
 
 func TestMap_ToSlice(t *testing.T) {
-	pairsBase := SetOfPairintstring{
-		Pairintstring{1, "w1"}: true, Pairintstring{22, "w22"}: true, Pairintstring{333, "w333"}: true,
-		Pairintstring{4444, "w4444"}: true,
+	pairsBase := map[PairMpintstring]bool{
+		{1, "w1"}: true, {22, "w22"}: true, {333, "w333"}: true,
+		{4444, "w4444"}: true,
 	}
 
-	toSet := func(sp SliceOfPairintstring) SetOfPairintstring {
+	toSet := func(sp []PairMpintstring) map[PairMpintstring]bool {
 		if sp == nil {
 			return nil
 		}
-		set := make(SetOfPairintstring, len(sp))
+		set := make(map[PairMpintstring]bool, len(sp))
 		for _, x := range sp {
 			set[x] = true
 		}
@@ -281,10 +279,10 @@ func TestMap_ToSlice(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		want     SetOfPairintstring
+		want     map[PairMpintstring]bool
 	}{
 		{"ToSlice: nonempty", mBase(), pairsBase},
-		{"ToSlice: empty", Mapintstring{}, SetOfPairintstring{}},
+		{"ToSlice: empty", Mapintstring{}, map[PairMpintstring]bool{}},
 		{"ToSlice: nil", nil, nil},
 	}
 
@@ -295,14 +293,14 @@ func TestMap_ToSlice(t *testing.T) {
 }
 
 func TestMap_Filter(t *testing.T) {
-	pred1 := func(a Pairintstring) bool { return toInt(a.X1) > 0 }
-	pred2 := func(a Pairintstring) bool { return toInt(a.X1)%2 == 0 }
-	pred3 := func(a Pairintstring) bool { return toInt(a.X1) < 0 }
+	pred1 := func(a PairMpintstring) bool { return toInt(a.X1) > 0 }
+	pred2 := func(a PairMpintstring) bool { return toInt(a.X1)%2 == 0 }
+	pred3 := func(a PairMpintstring) bool { return toInt(a.X1) < 0 }
 
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		arg      func(Pairintstring) bool
+		arg      func(PairMpintstring) bool
 		want     Mapintstring
 	}{
 		{"Filter: pred matches all", mBase(), pred1, mBase()},
@@ -343,14 +341,14 @@ func TestMap_FilterKeys(t *testing.T) {
 }
 
 func TestMap_FilterNot(t *testing.T) {
-	pred1 := func(a Pairintstring) bool { return toInt(a.X1) > 0 }
-	pred2 := func(a Pairintstring) bool { return toInt(a.X1)%2 == 1 }
-	pred3 := func(a Pairintstring) bool { return toInt(a.X1) < 0 }
+	pred1 := func(a PairMpintstring) bool { return toInt(a.X1) > 0 }
+	pred2 := func(a PairMpintstring) bool { return toInt(a.X1)%2 == 1 }
+	pred3 := func(a PairMpintstring) bool { return toInt(a.X1) < 0 }
 
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		arg      func(Pairintstring) bool
+		arg      func(PairMpintstring) bool
 		want     Mapintstring
 	}{
 		{"FilterNot: pred matches all", mBase(), pred1, Mapintstring{}},
@@ -404,7 +402,7 @@ func TestMap_ForEach(t *testing.T) {
 
 	for _, cs := range cases {
 		got := map[Any]bool{}
-		f := func(a Pairintstring) {
+		f := func(a PairMpintstring) {
 			got[a.X1] = true
 		}
 
@@ -452,18 +450,18 @@ func TestMap_IsNotEmpty(t *testing.T) {
 }
 
 func TestMap_MaxWith(t *testing.T) {
-	comp := func(a1 Pairintstring, a2 Pairintstring) int { return toInt(a1.X1) - toInt(a2.X1) }
+	comp := func(a1 PairMpintstring, a2 PairMpintstring) int { return toInt(a1.X1) - toInt(a2.X1) }
 
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		arg      func(Pairintstring, Pairintstring) int
-		want     Pairintstring
+		arg      func(PairMpintstring, PairMpintstring) int
+		want     PairMpintstring
 		werr     error
 	}{
-		{"MaxWith: nonempty receiver", mBase(), comp, Pairintstring{4444, "w4444"}, nil},
-		{"MaxWith: empty receiver", Mapintstring{}, comp, Pairintstring{}, errors.New("empty or nil map")},
-		{"MaxWith: nil receiver", nil, comp, Pairintstring{}, errors.New("empty or nil map")},
+		{"MaxWith: nonempty receiver", mBase(), comp, PairMpintstring{4444, "w4444"}, nil},
+		{"MaxWith: empty receiver", Mapintstring{}, comp, PairMpintstring{}, errors.New("empty or nil map")},
+		{"MaxWith: nil receiver", nil, comp, PairMpintstring{}, errors.New("empty or nil map")},
 	}
 
 	for _, cs := range cases {
@@ -516,18 +514,18 @@ func TestMap_MinusKeys(t *testing.T) {
 }
 
 func TestMap_MinWith(t *testing.T) {
-	comp := func(a1 Pairintstring, a2 Pairintstring) int { return -(toInt(a1.X1) - toInt(a2.X1)) }
+	comp := func(a1 PairMpintstring, a2 PairMpintstring) int { return -(toInt(a1.X1) - toInt(a2.X1)) }
 
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		arg      func(Pairintstring, Pairintstring) int
-		want     Pairintstring
+		arg      func(PairMpintstring, PairMpintstring) int
+		want     PairMpintstring
 		werr     error
 	}{
-		{"MinWith: nonempty receiver", mBase(), comp, Pairintstring{4444, "w4444"}, nil},
-		{"MinWith: empty receiver", Mapintstring{}, comp, Pairintstring{}, errors.New("empty or nil map")},
-		{"MinWith: nil receiver", nil, comp, Pairintstring{}, errors.New("empty or nil map")},
+		{"MinWith: nonempty receiver", mBase(), comp, PairMpintstring{4444, "w4444"}, nil},
+		{"MinWith: empty receiver", Mapintstring{}, comp, PairMpintstring{}, errors.New("empty or nil map")},
+		{"MinWith: nil receiver", nil, comp, PairMpintstring{}, errors.New("empty or nil map")},
 	}
 
 	for _, cs := range cases {
@@ -543,13 +541,13 @@ func TestMap_PlusEntry(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		arg      Pairintstring
+		arg      PairMpintstring
 		want     Mapintstring
 	}{
-		{"PlusEntry: nonempty", Mapintstring{1: "w1", 22: "w22", 4444: "w4444"}, Pairintstring{333, "w333"},
+		{"PlusEntry: nonempty", Mapintstring{1: "w1", 22: "w22", 4444: "w4444"}, PairMpintstring{333, "w333"},
 			mBase()},
-		{"PlusEntry: empty", Mapintstring{}, Pairintstring{333, "w333"}, Mapintstring{333: "w333"}},
-		{"PlusEntry: nil", nil, Pairintstring{333, "w333"}, Mapintstring{333: "w333"}},
+		{"PlusEntry: empty", Mapintstring{}, PairMpintstring{333, "w333"}, Mapintstring{333: "w333"}},
+		{"PlusEntry: nil", nil, PairMpintstring{333, "w333"}, Mapintstring{333: "w333"}},
 	}
 
 	for _, cs := range cases {
@@ -587,19 +585,19 @@ func TestMap_PlusSlice(t *testing.T) {
 	cases := []struct {
 		msg      string
 		receiver Mapintstring
-		arg      SliceOfPairintstring
+		arg      []PairMpintstring
 		want     Mapintstring
 	}{
-		{"PlusSlice: nonempty + nonempty", mBase(), SliceOfPairintstring{{9, "x9"}, {333, "x3"}},
+		{"PlusSlice: nonempty + nonempty", mBase(), []PairMpintstring{{9, "x9"}, {333, "x3"}},
 			Mapintstring{1: "w1", 9: "x9", 22: "w22", 333: "x3", 4444: "w4444"}},
-		{"PlusSlice: nonempty + empty", mBase(), SliceOfPairintstring{}, mBase()},
-		{"PlusSlice: empty + nonempty", Mapintstring{}, SliceOfPairintstring{{9, "x9"}, {333, "x3"}},
+		{"PlusSlice: nonempty + empty", mBase(), []PairMpintstring{}, mBase()},
+		{"PlusSlice: empty + nonempty", Mapintstring{}, []PairMpintstring{{9, "x9"}, {333, "x3"}},
 			Mapintstring{9: "x9", 333: "x3"}},
-		{"PlusSlice: nil + nonempty", nil, SliceOfPairintstring{{9, "x9"}, {333, "x3"}},
+		{"PlusSlice: nil + nonempty", nil, []PairMpintstring{{9, "x9"}, {333, "x3"}},
 			Mapintstring{9: "x9", 333: "x3"}},
-		{"PlusSlice: empty + empty", Mapintstring{}, SliceOfPairintstring{}, Mapintstring{}},
+		{"PlusSlice: empty + empty", Mapintstring{}, []PairMpintstring{}, Mapintstring{}},
 		{"PlusSlice: empty + nil", Mapintstring{}, nil, Mapintstring{}},
-		{"PlusSlice: nil + empty", nil, SliceOfPairintstring{}, Mapintstring{}},
+		{"PlusSlice: nil + empty", nil, []PairMpintstring{}, Mapintstring{}},
 		{"PlusSlice: nil + nil", nil, nil, nil},
 	}
 

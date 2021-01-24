@@ -105,18 +105,18 @@ func TestSlice_ZipT1(t *testing.T) {
 		msg      string
 		receiver SliceT0
 		arg      SliceT1
-		want     SliceOfPairT0T1
+		want     []PairSlT0T1
 	}{
 		{"ZipT1: nonempty receiver, shorter other", sDat(), shorterOther,
-			SliceOfPairT0T1{{Dat{1, "w1"}, 1}, {Dat{22, "w22"}, 2}, {Dat{333, "w333"}, 3}}},
+			[]PairSlT0T1{{Dat{1, "w1"}, 1}, {Dat{22, "w22"}, 2}, {Dat{333, "w333"}, 3}}},
 		{"ZipT1: nonempty receiver, longer other", sDat(), longerOther,
-			SliceOfPairT0T1{{Dat{1, "w1"}, 1}, {Dat{22, "w22"}, 2}, {Dat{333, "w333"}, 3},
+			[]PairSlT0T1{{Dat{1, "w1"}, 1}, {Dat{22, "w22"}, 2}, {Dat{333, "w333"}, 3},
 				{Dat{4444, "w4444"}, 4}, {Dat{22, "w22"}, 5}}},
-		{"ZipT1: nonempty receiver, empty other", sDat(), SliceT1{}, SliceOfPairT0T1{}},
-		{"ZipT1: nonempty receiver, nil other", sDat(), SliceT1{}, SliceOfPairT0T1{}},
-		{"ZipT1: empty receiver, nonempty other", SliceT0{}, shorterOther, SliceOfPairT0T1{}},
-		{"ZipT1: empty receiver, empty other", SliceT0{}, SliceT1{}, SliceOfPairT0T1{}},
-		{"ZipT1: empty receiver, nil other", SliceT0{}, SliceT1{}, SliceOfPairT0T1{}},
+		{"ZipT1: nonempty receiver, empty other", sDat(), SliceT1{}, []PairSlT0T1{}},
+		{"ZipT1: nonempty receiver, nil other", sDat(), SliceT1{}, []PairSlT0T1{}},
+		{"ZipT1: empty receiver, nonempty other", SliceT0{}, shorterOther, []PairSlT0T1{}},
+		{"ZipT1: empty receiver, empty other", SliceT0{}, SliceT1{}, []PairSlT0T1{}},
+		{"ZipT1: empty receiver, nil other", SliceT0{}, SliceT1{}, []PairSlT0T1{}},
 		{"ZipT1: nil receiver, nonempty other", nil, shorterOther, nil},
 		{"ZipT1: nil receiver, empty other", nil, SliceT1{}, nil},
 		{"ZipT1: nil receiver, nil other", nil, nil, nil},
@@ -124,25 +124,6 @@ func TestSlice_ZipT1(t *testing.T) {
 
 	for _, cs := range cases {
 		got := cs.receiver.ZipT1(cs.arg)
-		assert.Equal(t, cs.want, got, cs.msg)
-	}
-}
-
-func TestSlice_ToMap(t *testing.T) {
-	data := SliceOfPairT0T1{{Dat{1, "w1"}, 10}, {Dat{22, "w22"}, 42}, {Dat{1, "w1"}, 9}}
-
-	cases := []struct {
-		msg      string
-		receiver SliceOfPairT0T1
-		want     MapT0T1
-	}{
-		{"ToMap: nonempty receiver", data, MapT0T1{Dat{1, "w1"}: 9, Dat{22, "w22"}: 42}},
-		{"ToMap: empty receiver", SliceOfPairT0T1{}, MapT0T1{}},
-		{"ToMap: nil receiver", nil, nil},
-	}
-
-	for _, cs := range cases {
-		got := cs.receiver.ToMap()
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }

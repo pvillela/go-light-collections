@@ -47,18 +47,3 @@ func (s SetT0) MapT1(f func(T0) T1) SetT1 {
 	}
 	return r
 }
-
-// ToMap returns a map whose keys are the first components in the elements of the receiver and
-// whose values are the corresonding second components in the elements of the receiver.
-// If multiple elements in the receiver have the same first component, the corresponding
-// value in the resulting map will be picked from one of them.
-func (s SetOfPairT0T1) ToMap() MapT0T1 {
-	if s == nil {
-		return nil
-	}
-	m := make(map[T0]T1, len(s))
-	for p := range s {
-		m[p.X1] = p.X2
-	}
-	return m
-}

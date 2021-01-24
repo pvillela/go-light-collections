@@ -1,6 +1,6 @@
 // Code generated -- DO NOT EDIT.
 
-package coll
+package collections
 
 import (
 	"errors"
@@ -11,43 +11,43 @@ import (
 ////
 // Types
 
-// SlicePerson is a type wrapper, implements List interface.
-type SlicePerson []Person
+// Slicestring is a type wrapper, implements List interface.
+type Slicestring []string
 
-// Slice2Person is a type wrapper.
-type Slice2Person []SlicePerson
+// Slice2string is a type wrapper.
+type Slice2string []Slicestring
 
 ////
 // Methods
 
 // Copy returns a copy fo the receiver.
-func (s SlicePerson) Copy() SlicePerson {
+func (s Slicestring) Copy() Slicestring {
 	if s == nil {
 		return nil
 	}
-	s1 := make(SlicePerson, len(s))
+	s1 := make(Slicestring, len(s))
 	copy(s1, s)
 	return s1
 }
 
 // Length returns the number of items in the receiver.
-func (s SlicePerson) Length() int {
+func (s Slicestring) Length() int {
 	return len(s)
 }
 
 // Size returns the number of items in the receiver. Same as Length.
-func (s SlicePerson) Size() int {
+func (s Slicestring) Size() int {
 	return len(s)
 }
 
 // Contains returns true if the element argment is in the receiver, false otherwise.
-func (s SlicePerson) Contains(elem Person) bool {
+func (s Slicestring) Contains(elem string) bool {
 	return s.IndexOf(elem) >= 0
 }
 
 // ContainsSlice returns true if all the elements in the argument slice are in the receiver,
 // false otherwise.
-func (s SlicePerson) ContainsAll(elems SlicePerson) bool {
+func (s Slicestring) ContainsAll(elems Slicestring) bool {
 	for _, e := range elems {
 		if !s.Contains(e) {
 			return false
@@ -58,42 +58,42 @@ func (s SlicePerson) ContainsAll(elems SlicePerson) bool {
 
 // Get returns the element at the specified index and true if index is within the bounds of
 // the slice.
-// Returns the Person zero value and false if the index is outside the bounds of the slice.
-func (s SlicePerson) Get(index int) (Person, bool) {
+// Returns the string zero value and false if the index is outside the bounds of the slice.
+func (s Slicestring) Get(index int) (string, bool) {
 	if 0 <= index && index < len(s) {
 		return s[index], true
 	}
-	var zero Person
+	var zero string
 	return zero, false
 }
 
 // IndexOf -- if the argument element is in the receiver, this function returns the
 // first index with which the element appears in the slice; otherwise, returns -1.
-func (s SlicePerson) IndexOf(elem Person) int {
-	pred := func(a Person) bool { return reflect.DeepEqual(elem, a) }
+func (s Slicestring) IndexOf(elem string) int {
+	pred := func(a string) bool { return reflect.DeepEqual(elem, a) }
 	return s.IndexOfFirst(pred)
 }
 
 // IsEmpty returns true if the receiver is empty, false otherwise.
-func (s SlicePerson) IsEmpty() bool {
+func (s Slicestring) IsEmpty() bool {
 	return len(s) == 0
 }
 
 // LastIndexOf -- if the argument element is in the receiver, this function returns the
 // first index with which the element appears in the slice; otherwise, returns -1.
-func (s SlicePerson) LastIndexOf(elem Person) int {
-	pred := func(a Person) bool { return reflect.DeepEqual(elem, a) }
+func (s Slicestring) LastIndexOf(elem string) int {
+	pred := func(a string) bool { return reflect.DeepEqual(elem, a) }
 	return s.IndexOfLast(pred)
 }
 
 // SubSlice returns a copy of the sub-slice of the receiver for the index arguments.
 // Panics if the index arguments do not form a valid sub-slice.
-func (s SlicePerson) SubSlice(fromIndex int, toIndex int) SlicePerson {
+func (s Slicestring) SubSlice(fromIndex int, toIndex int) Slicestring {
 	return s[fromIndex:toIndex].Copy()
 }
 
 // All returns true if all elements in the receiver satisfy the predicate, false otherwise.
-func (s SlicePerson) All(pred func(Person) bool) bool {
+func (s Slicestring) All(pred func(string) bool) bool {
 	for _, x := range s {
 		if !pred(x) {
 			return false
@@ -103,7 +103,7 @@ func (s SlicePerson) All(pred func(Person) bool) bool {
 }
 
 // Any returns true if at least one element in the receiver satisfy the predicate, false otherwise.
-func (s SlicePerson) Any(pred func(Person) bool) bool {
+func (s Slicestring) Any(pred func(string) bool) bool {
 	for _, x := range s {
 		if pred(x) {
 			return true
@@ -113,7 +113,7 @@ func (s SlicePerson) Any(pred func(Person) bool) bool {
 }
 
 // Count returns the number of items in the receiver that satisfy the predicate.
-func (s SlicePerson) Count(pred func(Person) bool) int {
+func (s Slicestring) Count(pred func(string) bool) int {
 	count := 0
 	for _, x := range s {
 		if pred(x) {
@@ -125,7 +125,7 @@ func (s SlicePerson) Count(pred func(Person) bool) int {
 
 // Drop returns a copy of the receiver with the first n elements removed.  If n is greater
 // than the length of the receiver then the empty slice is returned.
-func (s SlicePerson) Drop(n int) SlicePerson {
+func (s Slicestring) Drop(n int) Slicestring {
 	if n > len(s) {
 		return s[:0].Copy()
 	}
@@ -134,7 +134,7 @@ func (s SlicePerson) Drop(n int) SlicePerson {
 
 // DropLast returns a copy of the receiver with the last n elements removed.  If n is greater
 // than the length of the receiver then the empty slice is returned.
-func (s SlicePerson) DropLast(n int) SlicePerson {
+func (s Slicestring) DropLast(n int) Slicestring {
 	if n > len(s) {
 		return s[:0].Copy()
 	}
@@ -143,7 +143,7 @@ func (s SlicePerson) DropLast(n int) SlicePerson {
 
 // DropLastWhile returns a copy of the receiver minus all the contiguous elements at the
 // end of the slice that satisfy the predicate.
-func (s SlicePerson) DropLastWhile(pred func(Person) bool) SlicePerson {
+func (s Slicestring) DropLastWhile(pred func(string) bool) Slicestring {
 	last := len(s)
 	for i := len(s) - 1; i >= 0 && pred(s[i]); i-- {
 		last = i
@@ -153,7 +153,7 @@ func (s SlicePerson) DropLastWhile(pred func(Person) bool) SlicePerson {
 
 // DropWhile returns a copy of the receiver minus all the contiguous elements at the
 // beginning of the slice that satisfy the predicate.
-func (s SlicePerson) DropWhile(pred func(Person) bool) SlicePerson {
+func (s Slicestring) DropWhile(pred func(string) bool) Slicestring {
 	first := 0
 	for i := 0; i < len(s) && pred(s[i]); i++ {
 		first = i + 1
@@ -163,11 +163,11 @@ func (s SlicePerson) DropWhile(pred func(Person) bool) SlicePerson {
 
 // Filter returns a new slice containing only the elements in the receiver that
 // satisfy the predicate.
-func (s SlicePerson) Filter(pred func(Person) bool) SlicePerson {
+func (s Slicestring) Filter(pred func(string) bool) Slicestring {
 	if s == nil {
 		return nil
 	}
-	output := make(SlicePerson, 0, len(s)/2) // optimizing for speed vs space
+	output := make(Slicestring, 0, len(s)/2) // optimizing for speed vs space
 	for i, a := range s {
 		if pred(s[i]) {
 			output = append(output, a)
@@ -178,21 +178,21 @@ func (s SlicePerson) Filter(pred func(Person) bool) SlicePerson {
 
 // FilterNot returns a new slice containing only the elements in the receiver that
 // do not satisfy the predicate.
-func (s SlicePerson) FilterNot(pred func(Person) bool) SlicePerson {
-	return s.Filter(func(a Person) bool { return !pred(a) })
+func (s Slicestring) FilterNot(pred func(string) bool) Slicestring {
+	return s.Filter(func(a string) bool { return !pred(a) })
 }
 
 // First returns the first element in the slice, error if the slice is empty/nil.
-func (s SlicePerson) First() (Person, error) {
+func (s Slicestring) First() (string, error) {
 	if len(s) == 0 {
-		var zero Person
+		var zero string
 		return zero, errors.New("empty or nil slice")
 	}
 	return s[0], nil
 }
 
 // ForEach applies the argument function to each item in the receiver.
-func (s SlicePerson) ForEach(f func(Person)) {
+func (s Slicestring) ForEach(f func(string)) {
 	for _, x := range s {
 		f(x)
 	}
@@ -200,7 +200,7 @@ func (s SlicePerson) ForEach(f func(Person)) {
 
 // IndexOfFirst -- if some item in the receiver satisfies the argument predicate then this
 // function returns the index of the first such item; otherwise, it returns -1.
-func (s SlicePerson) IndexOfFirst(pred func(Person) bool) int {
+func (s Slicestring) IndexOfFirst(pred func(string) bool) int {
 	for i, x := range s {
 		if pred(x) {
 			return i
@@ -211,7 +211,7 @@ func (s SlicePerson) IndexOfFirst(pred func(Person) bool) int {
 
 // IndexOfLast -- if some item in the receiver satisfies the argument predicate then this
 // function returns the index of the last such item; otherwise, it returns -1.
-func (s SlicePerson) IndexOfLast(pred func(Person) bool) int {
+func (s Slicestring) IndexOfLast(pred func(string) bool) int {
 	for i := len(s) - 1; i >= 0; i-- {
 		if pred(s[i]) {
 			return i
@@ -221,14 +221,14 @@ func (s SlicePerson) IndexOfLast(pred func(Person) bool) int {
 }
 
 // IsNotEmpty returns true if the receiver is not empty, false otherwise.
-func (s SlicePerson) IsNotEmpty() bool {
+func (s Slicestring) IsNotEmpty() bool {
 	return !s.IsEmpty()
 }
 
 // Last returns the last element in the slice, error if the slice is empty/nil.
-func (s SlicePerson) Last() (Person, error) {
+func (s Slicestring) Last() (string, error) {
 	if len(s) == 0 {
-		var zero Person
+		var zero string
 		return zero, errors.New("empty or nil slice")
 	}
 	return s[len(s)-1], nil
@@ -237,9 +237,9 @@ func (s SlicePerson) Last() (Person, error) {
 // MaxWith uses a comparator function to determine the maximum value. If the slice is
 // nonempty, returns the first element in the slice with maximum value.
 // Otherwise, returns an error.
-func (s SlicePerson) MaxWith(comparator func(Person, Person) int) (Person, error) {
+func (s Slicestring) MaxWith(comparator func(string, string) int) (string, error) {
 	if len(s) == 0 {
-		var zero Person
+		var zero string
 		return zero, errors.New("empty or nil slice")
 	}
 	max := s[0]
@@ -251,13 +251,13 @@ func (s SlicePerson) MaxWith(comparator func(Person, Person) int) (Person, error
 	return max, nil
 }
 
-func (s SlicePerson) minusAllElement(elem Person) SlicePerson {
-	return s.FilterNot(func(a Person) bool { return reflect.DeepEqual(a, elem) })
+func (s Slicestring) minusAllElement(elem string) Slicestring {
+	return s.FilterNot(func(a string) bool { return reflect.DeepEqual(a, elem) })
 }
 
 // MinusSlice returns a new slice which contains the elements of the receiver except for all
 // instances of the elements of the other slice.
-func (s SlicePerson) MinusSlice(other SlicePerson) SlicePerson {
+func (s Slicestring) MinusSlice(other Slicestring) Slicestring {
 	if len(other) == 0 {
 		return s.Copy()
 	}
@@ -271,8 +271,8 @@ func (s SlicePerson) MinusSlice(other SlicePerson) SlicePerson {
 // MinusElement -- if the element passed as an argument is present in the receiver, this
 // function returns a new slice with the contents of the receiver minus the first occurrence of
 // that element.  Otherwise, it returns a copy of the original slice.
-func (s SlicePerson) MinusElement(elem Person) SlicePerson {
-	index := s.IndexOfFirst(func(a Person) bool { return reflect.DeepEqual(a, elem) })
+func (s Slicestring) MinusElement(elem string) Slicestring {
+	index := s.IndexOfFirst(func(a string) bool { return reflect.DeepEqual(a, elem) })
 	if index == -1 {
 		return s.Copy()
 	}
@@ -282,16 +282,16 @@ func (s SlicePerson) MinusElement(elem Person) SlicePerson {
 // MinWith uses a comparator function to determine the maximum value. If the slice is
 // nonempty, returns the first element in the slice with minimum value.
 // Returns an error if the slice is empty.
-func (s SlicePerson) MinWith(comparator func(Person, Person) int) (Person, error) {
-	reverseComp := func(a1 Person, a2 Person) int { return -comparator(a1, a2) }
+func (s Slicestring) MinWith(comparator func(string, string) int) (string, error) {
+	reverseComp := func(a1 string, a2 string) int { return -comparator(a1, a2) }
 	return s.MaxWith(reverseComp)
 }
 
 // Partition returns two slices, the first containing all items in the receiver that
 // satisfy the argument predicate and the second containing all other items in the receiver.
-func (s SlicePerson) Partition(pred func(Person) bool) (SlicePerson, SlicePerson) {
-	output1 := make(SlicePerson, 0, len(s)/2) // optimizing for speed vs space
-	output2 := make(SlicePerson, 0, len(s)/2) // optimizing for speed vs space
+func (s Slicestring) Partition(pred func(string) bool) (Slicestring, Slicestring) {
+	output1 := make(Slicestring, 0, len(s)/2) // optimizing for speed vs space
+	output2 := make(Slicestring, 0, len(s)/2) // optimizing for speed vs space
 	for i, a := range s {
 		if pred(s[i]) {
 			output1 = append(output1, a)
@@ -303,12 +303,12 @@ func (s SlicePerson) Partition(pred func(Person) bool) (SlicePerson, SlicePerson
 }
 
 // PlusElement returns a copy of the receiver with the element appended to it.
-func (s SlicePerson) PlusElement(elem Person) SlicePerson {
+func (s Slicestring) PlusElement(elem string) Slicestring {
 	return append(s.Copy(), elem)
 }
 
 // PlusSlice returns a copy of the receiver with the elements of the other slice appended to it.
-func (s SlicePerson) PlusSlice(other SlicePerson) SlicePerson {
+func (s Slicestring) PlusSlice(other Slicestring) Slicestring {
 	return append(s.Copy(), other...)
 }
 
@@ -319,9 +319,9 @@ func (s SlicePerson) PlusSlice(other SlicePerson) SlicePerson {
 // It is a special case of Fold where the z value is the first element of the receiver and
 // the fold is executed on the original slice minus the first element.
 // If the slice is empty, returns an error.
-func (s SlicePerson) Reduce(op func(Person, Person) Person) (Person, error) {
+func (s Slicestring) Reduce(op func(string, string) string) (string, error) {
 	if len(s) == 0 {
-		var zero Person
+		var zero string
 		return zero, errors.New("empty or nil slice")
 	}
 	z := s[0]
@@ -332,11 +332,11 @@ func (s SlicePerson) Reduce(op func(Person, Person) Person) (Person, error) {
 }
 
 // Reversed returns a copy of the receiver with the elements in reverse sequence.
-func (s SlicePerson) Reversed() SlicePerson {
+func (s Slicestring) Reversed() Slicestring {
 	if s == nil {
 		return nil
 	}
-	r := make(SlicePerson, len(s))
+	r := make(Slicestring, len(s))
 	size := len(s)
 	for i, x := range s {
 		r[size-i-1] = x
@@ -344,27 +344,27 @@ func (s SlicePerson) Reversed() SlicePerson {
 	return r
 }
 
-type sortablePerson struct {
-	comparator func(Person, Person) int
-	slice      SlicePerson
+type sortablestring struct {
+	comparator func(string, string) int
+	slice      Slicestring
 }
 
-func (x sortablePerson) Len() int               { return len(x.slice) }
-func (x sortablePerson) Less(i int, j int) bool { return x.comparator(x.slice[i], x.slice[j]) < 0 }
-func (x sortablePerson) Swap(i int, j int)      { x.slice[i], x.slice[j] = x.slice[j], x.slice[i] }
+func (x sortablestring) Len() int               { return len(x.slice) }
+func (x sortablestring) Less(i int, j int) bool { return x.comparator(x.slice[i], x.slice[j]) < 0 }
+func (x sortablestring) Swap(i int, j int)      { x.slice[i], x.slice[j] = x.slice[j], x.slice[i] }
 
 // SortedWith returns a copy of the receiver with its elements sorted in increasing order
 // based on the comparator argument.
-func (s SlicePerson) SortedWith(comparator func(Person, Person) int) SlicePerson {
+func (s Slicestring) SortedWith(comparator func(string, string) int) Slicestring {
 	r := s.Copy()
-	srt := sortablePerson{comparator: comparator, slice: r}
+	srt := sortablestring{comparator: comparator, slice: r}
 	sort.Sort(srt)
 	return r
 }
 
 // Take returns a copy of the receiver containing the first n elements. If n is greater
 // than the length of the receiver then a copy of the receiver is returned.
-func (s SlicePerson) Take(n int) SlicePerson {
+func (s Slicestring) Take(n int) Slicestring {
 	if n > len(s) {
 		return s.Copy()
 	}
@@ -373,7 +373,7 @@ func (s SlicePerson) Take(n int) SlicePerson {
 
 // TakeLast returns a copy of the receiver containing the last n elements. If n is greater
 // than the length of the receiver then a copy of the receiver is returned.
-func (s SlicePerson) TakeLast(n int) SlicePerson {
+func (s Slicestring) TakeLast(n int) Slicestring {
 	if n > len(s) {
 		return s.Copy()
 	}
@@ -382,7 +382,7 @@ func (s SlicePerson) TakeLast(n int) SlicePerson {
 
 // TakeLastWhile returns a copy of the receiver containing all the contiguous elements at the
 // end of the slice that satisfy the predicate.
-func (s SlicePerson) TakeLastWhile(pred func(Person) bool) SlicePerson {
+func (s Slicestring) TakeLastWhile(pred func(string) bool) Slicestring {
 	first := len(s)
 	for i := len(s) - 1; i >= 0 && pred(s[i]); i-- {
 		first = i
@@ -392,7 +392,7 @@ func (s SlicePerson) TakeLastWhile(pred func(Person) bool) SlicePerson {
 
 // TakeWhile returns a copy of the receiver containing all the contiguous elements at the
 // beginning of the slice that satisfy the predicate.
-func (s SlicePerson) TakeWhile(pred func(Person) bool) SlicePerson {
+func (s Slicestring) TakeWhile(pred func(string) bool) Slicestring {
 	last := 0
 	for i := 0; i < len(s) && pred(s[i]); i++ {
 		last = i + 1
@@ -400,11 +400,11 @@ func (s SlicePerson) TakeWhile(pred func(Person) bool) SlicePerson {
 	return s[:last].Copy()
 }
 
-func (s Slice2Person) Flatten() SlicePerson {
+func (s Slice2string) Flatten() Slicestring {
 	if s == nil {
 		return nil
 	}
-	r := make([]Person, 0, len(s)) // optimizing for speed vs space
+	r := make([]string, 0, len(s)) // optimizing for speed vs space
 	for _, x := range s {
 		r = append(r, x...)
 	}

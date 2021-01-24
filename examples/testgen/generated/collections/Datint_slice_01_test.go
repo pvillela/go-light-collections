@@ -107,18 +107,18 @@ func TestSlice_Zipint(t *testing.T) {
 		msg      string
 		receiver SliceDat
 		arg      Sliceint
-		want     SliceOfPairDatint
+		want     []PairSlDatint
 	}{
 		{"Zipint: nonempty receiver, shorter other", sDat(), shorterOther,
-			SliceOfPairDatint{{Dat{1, "w1"}, 1}, {Dat{22, "w22"}, 2}, {Dat{333, "w333"}, 3}}},
+			[]PairSlDatint{{Dat{1, "w1"}, 1}, {Dat{22, "w22"}, 2}, {Dat{333, "w333"}, 3}}},
 		{"Zipint: nonempty receiver, longer other", sDat(), longerOther,
-			SliceOfPairDatint{{Dat{1, "w1"}, 1}, {Dat{22, "w22"}, 2}, {Dat{333, "w333"}, 3},
+			[]PairSlDatint{{Dat{1, "w1"}, 1}, {Dat{22, "w22"}, 2}, {Dat{333, "w333"}, 3},
 				{Dat{4444, "w4444"}, 4}, {Dat{22, "w22"}, 5}}},
-		{"Zipint: nonempty receiver, empty other", sDat(), Sliceint{}, SliceOfPairDatint{}},
-		{"Zipint: nonempty receiver, nil other", sDat(), Sliceint{}, SliceOfPairDatint{}},
-		{"Zipint: empty receiver, nonempty other", SliceDat{}, shorterOther, SliceOfPairDatint{}},
-		{"Zipint: empty receiver, empty other", SliceDat{}, Sliceint{}, SliceOfPairDatint{}},
-		{"Zipint: empty receiver, nil other", SliceDat{}, Sliceint{}, SliceOfPairDatint{}},
+		{"Zipint: nonempty receiver, empty other", sDat(), Sliceint{}, []PairSlDatint{}},
+		{"Zipint: nonempty receiver, nil other", sDat(), Sliceint{}, []PairSlDatint{}},
+		{"Zipint: empty receiver, nonempty other", SliceDat{}, shorterOther, []PairSlDatint{}},
+		{"Zipint: empty receiver, empty other", SliceDat{}, Sliceint{}, []PairSlDatint{}},
+		{"Zipint: empty receiver, nil other", SliceDat{}, Sliceint{}, []PairSlDatint{}},
 		{"Zipint: nil receiver, nonempty other", nil, shorterOther, nil},
 		{"Zipint: nil receiver, empty other", nil, Sliceint{}, nil},
 		{"Zipint: nil receiver, nil other", nil, nil, nil},
@@ -126,25 +126,6 @@ func TestSlice_Zipint(t *testing.T) {
 
 	for _, cs := range cases {
 		got := cs.receiver.Zipint(cs.arg)
-		assert.Equal(t, cs.want, got, cs.msg)
-	}
-}
-
-func TestSlice_ToMap(t *testing.T) {
-	data := SliceOfPairDatint{{Dat{1, "w1"}, 10}, {Dat{22, "w22"}, 42}, {Dat{1, "w1"}, 9}}
-
-	cases := []struct {
-		msg      string
-		receiver SliceOfPairDatint
-		want     MapDatint
-	}{
-		{"ToMap: nonempty receiver", data, MapDatint{Dat{1, "w1"}: 9, Dat{22, "w22"}: 42}},
-		{"ToMap: empty receiver", SliceOfPairDatint{}, MapDatint{}},
-		{"ToMap: nil receiver", nil, nil},
-	}
-
-	for _, cs := range cases {
-		got := cs.receiver.ToMap()
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }

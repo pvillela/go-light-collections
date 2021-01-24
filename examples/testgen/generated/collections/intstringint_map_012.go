@@ -2,46 +2,35 @@
 
 package collections
 
-func (m Mapintstring) FlatMapint(f func(Pairintstring) Sliceint) Sliceint {
+func (m Mapintstring) FlatMapint(f func(PairMpintstring) Sliceint) Sliceint {
 	if m == nil {
 		return nil
 	}
 	r := make(Sliceint, 0, len(m)) // optimizing for speed vs space
 	for k, v := range m {
-		r = append(r, f(Pairintstring{k, v})...)
+		r = append(r, f(PairMpintstring{k, v})...)
 	}
 	return r
 }
 
-func (m Mapintstring) Mapint(f func(Pairintstring) int) Sliceint {
+func (m Mapintstring) Mapint(f func(PairMpintstring) int) Sliceint {
 	if m == nil {
 		return nil
 	}
 	r := make(Sliceint, 0, len(m)) // optimizing for speed vs space
 	for k, v := range m {
-		r = append(r, f(Pairintstring{k, v}))
+		r = append(r, f(PairMpintstring{k, v}))
 	}
 	return r
 }
 
-func (m Mapintstring) MapKeysint(f func(Pairintstring) int) map[int]string {
-	if m == nil {
-		return nil
-	}
-	r := make(map[int]string)
-	for k, v := range m {
-		r[f(Pairintstring{k, v})] = v
-	}
-	return r
-}
-
-func (m Mapintstring) MapValuesint(f func(Pairintstring) int) map[int]int {
+func (m Mapintstring) MapValuesint(f func(PairMpintstring) int) map[int]int {
 	if m == nil {
 		return nil
 	}
 	r := make(map[int]int)
 	for k, v := range m {
-		r[k] = f(Pairintstring{k, v})
+		r[k] = f(PairMpintstring{k, v})
 	}
 	return r
 }

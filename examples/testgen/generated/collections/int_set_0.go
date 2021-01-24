@@ -8,8 +8,11 @@ import (
 	"github.com/pvillela/go-light-collections/pkg/util/util"
 )
 
-/////////////////////
-// Helper functions
+////
+// Type
+
+// Setint is a type wrapper, implements Set interface.
+type Setint map[int]bool
 
 /////////////////////
 // Slice method that returns a Set

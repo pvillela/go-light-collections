@@ -59,7 +59,7 @@ type ISliceT0T1 interface {
 	FoldT1(z c.T1, op func(c.T1, c.T0) c.T1) c.T1
 	GroupByT1(keySelector func(c.T0) c.T1) map[c.T1]c.SliceT0
 	MapT1(f func(c.T0) c.T1) c.SliceT1
-	ZipT1(other c.SliceT1) c.SliceOfPairT0T1
+	ZipT1(other c.SliceT1) []c.PairSlT0T1
 }
 
 // ISlice2T0 defines the methods to be implemented by the concrete type Slice2T0.
@@ -69,7 +69,7 @@ type ISlice2T0 interface {
 
 // ISliceOfPairT0T1 defines the methods to be implemented by the concrete type ISliceOfPairT0T1.
 type ISliceOfPairT0T1 interface {
-	ToMap() c.MapT0T1
+	ToMap() map[c.T0]c.T1
 }
 
 // Check that the concrete type satisfies the interfaces.
