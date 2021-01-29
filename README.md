@@ -14,6 +14,9 @@ process.
 
 This library is extensively tested, including 100% test coverage for the core code and the execution of the tests with code generation.
 
+## g2lc branch
+
+The g2lc package in the g2lc branch contains a draft implementation of this framework using Go2 generics.  The implementation compiles correctly with the go2go tool.  The go2go translation process needs to be applied to each package, with translation of a package taking place only after its dependencies have been translated.  In order to satisfy the go2go tool limitations, differnt collection types had to be moved to different packages.
 
 ## To-dos
 
