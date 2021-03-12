@@ -1,10 +1,17 @@
+/*
+ * Copyright © 2021 Paulo Villela. All rights reserved.
+ * Use of this source code is governed by the Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
+
 package slice
 
 import (
 	"errors"
-	"github.com/pvillela/go-light-collections/pkg/g2lc/pair"
 	"reflect"
 	"sort"
+
+	"github.com/pvillela/go-light-collections/pkg/g2lc/pair"
 	//"sort"
 )
 
