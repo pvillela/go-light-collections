@@ -8,9 +8,8 @@ package glc_test
 
 import (
 	"fmt"
-
-	c "github.com/pvillela/go-light-collections/pkg/glc"
-	"github.com/pvillela/go-light-collections/pkg/util/assert"
+	"github.com/pvillela/go-light-collections/legacy/pkg/glc"
+	"github.com/pvillela/go-light-collections/legacy/pkg/util/assert"
 )
 
 /////////////////////
@@ -26,9 +25,9 @@ var xinP SlicePFoo = xin.toP()
 
 func (s SliceFoo) MapInt(f func(Foo) int) []int {
 	sa := s.ToSliceAny()
-	fa := func(a c.Any) c.Any { return f(a.(Foo)) }
+	fa := func(a glc.Any) glc.Any { return f(a.(Foo)) }
 	ra := sa.Map(fa)
-	return c.ToSliceInt(ra)
+	return glc.ToSliceInt(ra)
 }
 
 func example_SliceFoo_MapInt() {
@@ -43,7 +42,7 @@ func example_SliceFoo_MapInt() {
 
 func (s SliceFoo) MapBar(f func(Foo) Bar) []Bar {
 	sa := s.ToSliceAny()
-	fa := func(a c.Any) c.Any { return f(a.(Foo)) }
+	fa := func(a glc.Any) glc.Any { return f(a.(Foo)) }
 	ra := sa.Map(fa)
 	return ToSliceBar(ra)
 }
@@ -60,7 +59,7 @@ func example_SliceFoo_MapBar() {
 
 func (s SlicePFoo) MapPBar(f func(*Foo) *Bar) []*Bar {
 	sa := s.ToSliceAny()
-	fa := func(a c.Any) c.Any { return f(a.(*Foo)) }
+	fa := func(a glc.Any) glc.Any { return f(a.(*Foo)) }
 	ra := sa.Map(fa)
 	return ToSlicePBar(ra)
 }
@@ -79,7 +78,7 @@ func example_SlicePFoo_MapPBar() {
 
 func (s SliceFoo) Filter(pred func(Foo) bool) SliceFoo {
 	sa := s.ToSliceAny()
-	preda := func(a c.Any) bool { return pred(a.(Foo)) }
+	preda := func(a glc.Any) bool { return pred(a.(Foo)) }
 	ra := sa.Filter(preda)
 	return ToSliceFoo(ra)
 }
@@ -96,7 +95,7 @@ func example_SliceFoo_Filter() {
 
 func (s SliceFoo) FoldInt(z int, op func(int, Foo) int) int {
 	sa := s.ToSliceAny()
-	opa := func(z c.Any, a c.Any) c.Any { return op(z.(int), a.(Foo)) }
+	opa := func(z glc.Any, a glc.Any) glc.Any { return op(z.(int), a.(Foo)) }
 	ra := sa.Fold(z, opa)
 	return ra.(int)
 }

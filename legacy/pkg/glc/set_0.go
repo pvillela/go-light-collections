@@ -1,40 +1,37 @@
-// Code generated -- DO NOT EDIT.
-
 /*
  * Copyright © 2021 Paulo Villela. All rights reserved.
  * Use of this source code is governed by the Apache 2.0 license
  * that can be found in the LICENSE file.
  */
 
-package collections
+package glc
 
 import (
 	"errors"
-
-	"github.com/pvillela/go-light-collections/pkg/util/util"
+	"github.com/pvillela/go-light-collections/legacy/pkg/util/util"
 )
 
 ////
 // Type
 
-// Setint is a type wrapper, implements Set interface.
-type Setint map[int]bool
+// SetT0 is a type wrapper, implements Set interface.
+type SetT0 map[T0]bool
 
 ////
 // Set methods
 
 // Put mutates the receiver by adding the argument if it is not already in the receiver.
 // Panics if the receiver is nil.
-func (s Setint) Put(e int) {
+func (s SetT0) Put(e T0) {
 	s[e] = true
 }
 
 // Copy returns a copy fo the receiver.
-func (s Setint) Copy() Setint {
+func (s SetT0) Copy() SetT0 {
 	if s == nil {
 		return nil
 	}
-	s1 := make(Setint, len(s))
+	s1 := make(SetT0, len(s))
 	for e := range s {
 		s1[e] = true
 	}
@@ -42,24 +39,24 @@ func (s Setint) Copy() Setint {
 }
 
 // Length returns the number of items in the receiver.
-func (s Setint) Length() int {
+func (s SetT0) Length() int {
 	return len(s)
 }
 
 // Size returns the number of items in the receiver. Same as Length.
-func (s Setint) Size() int {
+func (s SetT0) Size() int {
 	return len(s)
 }
 
 // Contains returns true if the element argment is in the receiver, false otherwise.
-func (s Setint) Contains(elem int) bool {
+func (s SetT0) Contains(elem T0) bool {
 	_, ok := s[elem]
 	return ok
 }
 
 // ContainsSet returns true if all the elements in the argument set are in the receiver,
 // false otherwise.
-func (s Setint) ContainsSet(elems Setint) bool {
+func (s SetT0) ContainsSet(elems SetT0) bool {
 	for e := range elems {
 		if !s.Contains(e) {
 			return false
@@ -70,7 +67,7 @@ func (s Setint) ContainsSet(elems Setint) bool {
 
 // ContainsSlice returns true if all the elements in the argument slice are in the receiver,
 // false otherwise.
-func (s Setint) ContainsSlice(elems []int) bool {
+func (s SetT0) ContainsSlice(elems []T0) bool {
 	for _, e := range elems {
 		if !s.Contains(e) {
 			return false
@@ -80,12 +77,12 @@ func (s Setint) ContainsSlice(elems []int) bool {
 }
 
 // IsEmpty returns true if the receiver is empty, false otherwise.
-func (s Setint) IsEmpty() bool {
+func (s SetT0) IsEmpty() bool {
 	return s == nil || len(s) == 0
 }
 
 // All returns true if all elements in the receiver satisfy the predicate, false otherwise.
-func (s Setint) All(pred func(int) bool) bool {
+func (s SetT0) All(pred func(T0) bool) bool {
 	for e := range s {
 		if !pred(e) {
 			return false
@@ -95,7 +92,7 @@ func (s Setint) All(pred func(int) bool) bool {
 }
 
 // Any returns true if at least one element in the receiver satisfy the predicate, false otherwise.
-func (s Setint) Any(pred func(int) bool) bool {
+func (s SetT0) Any(pred func(T0) bool) bool {
 	for e := range s {
 		if pred(e) {
 			return true
@@ -105,7 +102,7 @@ func (s Setint) Any(pred func(int) bool) bool {
 }
 
 // Count returns the number of items in the receiver that satisfy the predicate.
-func (s Setint) Count(pred func(int) bool) int {
+func (s SetT0) Count(pred func(T0) bool) int {
 	count := 0
 	for e := range s {
 		if pred(e) {
@@ -117,11 +114,11 @@ func (s Setint) Count(pred func(int) bool) int {
 
 // Filter returns a new set containing only the elements in the receiver that
 // satisfy the predicate.
-func (s Setint) Filter(pred func(int) bool) Setint {
+func (s SetT0) Filter(pred func(T0) bool) SetT0 {
 	if s == nil {
 		return nil
 	}
-	output := make(Setint, len(s)/2) // optimizing for speed vs space
+	output := make(SetT0, len(s)/2) // optimizing for speed vs space
 	for e := range s {
 		if pred(e) {
 			output[e] = true
@@ -132,12 +129,12 @@ func (s Setint) Filter(pred func(int) bool) Setint {
 
 // FilterNot returns a new set containing only the elements in the receiver that
 // do not satisfy the predicate.
-func (s Setint) FilterNot(pred func(int) bool) Setint {
-	return s.Filter(func(a int) bool { return !pred(a) })
+func (s SetT0) FilterNot(pred func(T0) bool) SetT0 {
+	return s.Filter(func(a T0) bool { return !pred(a) })
 }
 
 // ForEach applies the argument function to each item in the receiver.
-func (s Setint) ForEach(f func(int)) {
+func (s SetT0) ForEach(f func(T0)) {
 	for e := range s {
 		f(e)
 	}
@@ -145,11 +142,11 @@ func (s Setint) ForEach(f func(int)) {
 
 // Intersect returns a new set that contains the elements that are in both the receiver
 // and the other set.
-func (s Setint) Intersect(other Setint) Setint {
+func (s SetT0) Intersect(other SetT0) SetT0 {
 	if s == nil {
 		return nil
 	}
-	s1 := make(Setint, util.MinInt(len(s), len(other)))
+	s1 := make(SetT0, util.MinInt(len(s), len(other)))
 	for e := range other {
 		_, ok := s[e]
 		if ok {
@@ -160,15 +157,15 @@ func (s Setint) Intersect(other Setint) Setint {
 }
 
 // IsNotEmpty returns true if the receiver is not empty, false otherwise.
-func (s Setint) IsNotEmpty() bool {
+func (s SetT0) IsNotEmpty() bool {
 	return !s.IsEmpty()
 }
 
 // MaxWith uses a comparator function to determine the maximum value. If the set is
 // nonempty, returns the element in the set with maximum value.
 // Otherwise, returns an error.
-func (s Setint) MaxWith(comparator func(int, int) int) (int, error) {
-	var max int
+func (s SetT0) MaxWith(comparator func(T0, T0) int) (T0, error) {
+	var max T0
 
 	if len(s) == 0 {
 		return max, errors.New("empty or nil set")
@@ -191,7 +188,7 @@ func (s Setint) MaxWith(comparator func(int, int) int) (int, error) {
 // MinusElement -- if the element passed as an argument is present in the receiver, this
 // function returns a new set with the contents of the receiver minus that element.
 // Otherwise, it returns a copy of the original set.
-func (s Setint) MinusElement(elem int) Setint {
+func (s SetT0) MinusElement(elem T0) SetT0 {
 	s1 := s.Copy()
 	delete(s1, elem)
 	return s1
@@ -199,7 +196,7 @@ func (s Setint) MinusElement(elem int) Setint {
 
 // MinusSet returns a new set which contains the elements of the receiver except for the
 // elements of the other set.
-func (s Setint) MinusSet(other Setint) Setint {
+func (s SetT0) MinusSet(other SetT0) SetT0 {
 	s1 := s.Copy()
 	for e := range other {
 		delete(s1, e)
@@ -209,7 +206,7 @@ func (s Setint) MinusSet(other Setint) Setint {
 
 // MinusSlice returns a new set which contains the elements of the receiver except for the
 // elements of the slice.
-func (s Setint) MinusSlice(slice []int) Setint {
+func (s SetT0) MinusSlice(slice []T0) SetT0 {
 	s1 := s.Copy()
 	for _, e := range slice {
 		delete(s1, e)
@@ -220,16 +217,16 @@ func (s Setint) MinusSlice(slice []int) Setint {
 // MinWith uses a comparator function to determine the maximum value. If the set is
 // nonempty, returns theelement in the set with minimum value.
 // Returns an error if the set is empty.
-func (s Setint) MinWith(comparator func(int, int) int) (int, error) {
-	reverseComp := func(a1 int, a2 int) int { return -comparator(a1, a2) }
+func (s SetT0) MinWith(comparator func(T0, T0) int) (T0, error) {
+	reverseComp := func(a1 T0, a2 T0) int { return -comparator(a1, a2) }
 	return s.MaxWith(reverseComp)
 }
 
 // Partition returns two sets, the first containing all items in the receiver that
 // satisfy the argument predicate and the second containing all other items in the receiver.
-func (s Setint) Partition(pred func(int) bool) (Setint, Setint) {
-	output1 := make(Setint, len(s)/2) // optimizing for speed vs space
-	output2 := make(Setint, len(s)/2) // optimizing for speed vs space
+func (s SetT0) Partition(pred func(T0) bool) (SetT0, SetT0) {
+	output1 := make(SetT0, len(s)/2) // optimizing for speed vs space
+	output2 := make(SetT0, len(s)/2) // optimizing for speed vs space
 	for e := range s {
 		if pred(e) {
 			output1[e] = true
@@ -243,23 +240,23 @@ func (s Setint) Partition(pred func(int) bool) (Setint, Setint) {
 // PlusElement returns a copy of the receiver with the element added to it if the element
 // is not already in the receiver. If the element is already in the receiver, returns a
 // copy of the receiver.
-func (s Setint) PlusElement(elem int) Setint {
+func (s SetT0) PlusElement(elem T0) SetT0 {
 	s1 := s.Copy()
 	if s1 == nil {
-		s1 = Setint{}
+		s1 = SetT0{}
 	}
 	s1[elem] = true
 	return s1
 }
 
 // PlusSet returns a copy of the receiver with the elements of the other set added to it.
-func (s Setint) PlusSet(other Setint) Setint {
+func (s SetT0) PlusSet(other SetT0) SetT0 {
 	s1 := s.Copy()
 	if s1 == nil {
 		if other == nil {
 			return nil
 		}
-		s1 = Setint{}
+		s1 = SetT0{}
 	}
 	for e := range other {
 		s1[e] = true
@@ -268,13 +265,13 @@ func (s Setint) PlusSet(other Setint) Setint {
 }
 
 // PlusSlice returns a copy of the receiver with the elements of the slice added to it.
-func (s Setint) PlusSlice(slice []int) Setint {
+func (s SetT0) PlusSlice(slice []T0) SetT0 {
 	s1 := s.Copy()
 	if s1 == nil {
 		if slice == nil {
 			return nil
 		}
-		s1 = Setint{}
+		s1 = SetT0{}
 	}
 	for _, e := range slice {
 		s1[e] = true
@@ -283,11 +280,11 @@ func (s Setint) PlusSlice(slice []int) Setint {
 }
 
 // ToSlice returns a slice containing the elements of the receiver.
-func (s Setint) ToSlice() []int {
+func (s SetT0) ToSlice() []T0 {
 	if s == nil {
 		return nil
 	}
-	slice := make([]int, len(s))
+	slice := make([]T0, len(s))
 	i := 0
 	for e := range s {
 		slice[i] = e

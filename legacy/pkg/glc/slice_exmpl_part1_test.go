@@ -8,8 +8,7 @@ package glc_test
 
 import (
 	"fmt"
-
-	c "github.com/pvillela/go-light-collections/pkg/glc"
+	c "github.com/pvillela/go-light-collections/legacy/pkg/glc"
 )
 
 /////////////////////

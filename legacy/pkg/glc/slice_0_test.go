@@ -4,33 +4,22 @@
  * that can be found in the LICENSE file.
  */
 
-package g2lc
+package glc
 
 import (
 	"errors"
-	"github.com/pvillela/go-light-collections/pkg/g2lc/pair"
-	"github.com/pvillela/go-light-collections/pkg/g2lc/slice"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-// Hack
-func xslice_0_test[T any]() {}
-
 ////
 // Preliminaries
 
-// Dat is an example data structure.
-type Dat struct {
-	V1 int
-	V2 string
-}
-
 // Slice used in tests. Cloned each time to avoid nasty side-effects.
 
-func sDat() slice.Slice[Dat] {
-	return slice.Slice[Dat]{Dat{1, "w1"}, Dat{22, "w22"}, Dat{333, "w333"}, Dat{4444, "w4444"},
+func sDat() SliceT0 {
+	return SliceT0{Dat{1, "w1"}, Dat{22, "w22"}, Dat{333, "w333"}, Dat{4444, "w4444"},
 		Dat{22, "w22"}}
 }
 
@@ -40,10 +29,10 @@ func sDat() slice.Slice[Dat] {
 func TestSlice_Copy(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
+		receiver SliceT0
 	}{
 		{"Copy: nonempty slice", sDat()},
-		{"Copy: empty slice", slice.Slice[Dat]{}},
+		{"Copy: empty slice", SliceT0{}},
 		{"Copy: nil slice", nil},
 	}
 
@@ -57,11 +46,11 @@ func TestSlice_Copy(t *testing.T) {
 func TestSlice_LengthSize(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
+		receiver SliceT0
 		want     int
 	}{
 		{"Length and Size: nonempty slice", sDat(), 5},
-		{"Length and Size: empty slice", slice.Slice[Dat]{}, 0},
+		{"Length and Size: empty slice", SliceT0{}, 0},
 		{"Length and Size: nil slice", nil, 0},
 	}
 
@@ -76,13 +65,13 @@ func TestSlice_LengthSize(t *testing.T) {
 func TestSlice_Contains(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
+		receiver SliceT0
 		arg      Dat
 		want     bool
 	}{
 		{"Contains: present", sDat(), Dat{22, "w22"}, true},
 		{"Contains: absent", sDat(), Dat{22, "xyz"}, false},
-		{"Contains: empty slice", slice.Slice[Dat]{}, Dat{22, "w22"}, false},
+		{"Contains: empty slice", SliceT0{}, Dat{22, "w22"}, false},
 		{"Contains: nil slice", nil, Dat{22, "w22"}, false},
 	}
 
@@ -95,8 +84,8 @@ func TestSlice_Contains(t *testing.T) {
 func TestSlice_ContainsAll(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      slice.Slice[Dat]
+		receiver SliceT0
+		arg      SliceT0
 		want     bool
 	}{
 		{"ContainsAll: nonempty receiver, other subset", sDat(),
@@ -104,14 +93,14 @@ func TestSlice_ContainsAll(t *testing.T) {
 		{"ContainsAll: nonempty receiver, other intersects", sDat(),
 			append(sDat()[1:2], Dat{22, "xyz"}), false},
 		{"ContainsAll: nonempty receiver, other disjoint", sDat(),
-			slice.Slice[Dat]{Dat{22, "xyz"}, Dat{0, "abc"}}, false},
-		{"ContainsAll: nonempty receiver, other empty", sDat(), slice.Slice[Dat]{}, true},
+			SliceT0{Dat{22, "xyz"}, Dat{0, "abc"}}, false},
+		{"ContainsAll: nonempty receiver, other empty", sDat(), SliceT0{}, true},
 		{"ContainsAll: nonempty receiver, other nil", sDat(), nil, true},
-		{"ContainsAll: empty receiver, other nonempty", slice.Slice[Dat]{}, append(sDat()[2:3], sDat()[1]), false},
-		{"ContainsAll: empty receiver, other empty", slice.Slice[Dat]{}, slice.Slice[Dat]{}, true},
-		{"ContainsAll: empty receiver, other nil", slice.Slice[Dat]{}, nil, true},
+		{"ContainsAll: empty receiver, other nonempty", SliceT0{}, append(sDat()[2:3], sDat()[1]), false},
+		{"ContainsAll: empty receiver, other empty", SliceT0{}, SliceT0{}, true},
+		{"ContainsAll: empty receiver, other nil", SliceT0{}, nil, true},
 		{"ContainsAll: nil receiver, other nonempty", nil, append(sDat()[2:3], sDat()[1]), false},
-		{"ContainsAll: nil receiver, other empty", nil, slice.Slice[Dat]{}, true},
+		{"ContainsAll: nil receiver, other empty", nil, SliceT0{}, true},
 		{"ContainsAll: nil receiver, other nil", nil, nil, true},
 	}
 
@@ -125,16 +114,16 @@ func TestSlice_Get(t *testing.T) {
 	size := len(sDat())
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
+		receiver SliceT0
 		arg      int
-		want     Dat
+		want     T0
 		wok      bool
 	}{
 		{"Get: from middle", sDat(), 2, sDat()[2], true},
 		{"Get: from beginning", sDat(), 0, sDat()[0], true},
 		{"Get: from end", sDat(), size - 1, sDat()[size-1], true},
 		{"Get: outside range", sDat(), size, Dat{}, false},
-		{"Get: empty slice", slice.Slice[Dat]{}, 0, Dat{}, false},
+		{"Get: empty slice", SliceT0{}, 0, Dat{}, false},
 		{"Get: nil slice", nil, 0, Dat{}, false},
 	}
 
@@ -150,13 +139,13 @@ func TestSlice_Get(t *testing.T) {
 func TestSlice_IndexOf(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
+		receiver SliceT0
 		arg      Dat
 		want     int
 	}{
 		{"IndexOf: nonempty, present", sDat(), Dat{22, "w22"}, 1},
 		{"IndexOf: nonempty, absent", sDat(), Dat{0, "xyz"}, -1},
-		{"IndexOf: empty", slice.Slice[Dat]{}, Dat{0, "xyz"}, -1},
+		{"IndexOf: empty", SliceT0{}, Dat{0, "xyz"}, -1},
 		{"IndexOf: nil", nil, Dat{0, "xyz"}, -1},
 	}
 
@@ -169,11 +158,11 @@ func TestSlice_IndexOf(t *testing.T) {
 func TestSlice_IsEmpty(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
+		receiver SliceT0
 		want     bool
 	}{
 		{"IsEmpty: nonempty", sDat(), false},
-		{"IsEmpty: empty", slice.Slice[Dat]{}, true},
+		{"IsEmpty: empty", SliceT0{}, true},
 		{"IsEmpty: nil", nil, true},
 	}
 
@@ -186,13 +175,13 @@ func TestSlice_IsEmpty(t *testing.T) {
 func TestSlice_LastIndexOf(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
+		receiver SliceT0
 		arg      Dat
 		want     int
 	}{
 		{"LastIndexOf: nonempty, present", sDat(), Dat{22, "w22"}, 4},
 		{"LastIndexOf: nonempty, absent", sDat(), Dat{0, "xyz"}, -1},
-		{"LastIndexOf: empty", slice.Slice[Dat]{}, Dat{0, "xyz"}, -1},
+		{"LastIndexOf: empty", SliceT0{}, Dat{0, "xyz"}, -1},
 		{"LastIndexOf: nil", nil, Dat{0, "xyz"}, -1},
 	}
 
@@ -206,19 +195,19 @@ func TestSlice_SubSlice(t *testing.T) {
 	size := len(sDat())
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
+		receiver SliceT0
 		arg1     int
 		arg2     int
-		want     slice.Slice[Dat]
+		want     SliceT0
 		succeeds bool
 	}{
 		{"SubSlice: nonempty - from beginning", sDat(), 0, 2, sDat()[:2], true},
 		{"SubSlice: nonempty - from middle", sDat(), 1, 3, sDat()[1:3], true},
 		{"SubSlice: nonempty - from end", sDat(), size - 3, size, sDat()[size-3:], true},
-		{"SubSlice: nonempty - empty sub-slice", sDat(), 2, 2, slice.Slice[Dat]{}, true},
-		{"SubSlice: nonempty - invalid indices", sDat(), 5, 6, slice.Slice[Dat]{}, false},
-		{"SubSlice: empty - empty sub-slice", slice.Slice[Dat]{}, 0, 0, slice.Slice[Dat]{}, true},
-		{"SubSlice: empty - invalid indices", slice.Slice[Dat]{}, 1, 1, slice.Slice[Dat]{}, false},
+		{"SubSlice: nonempty - empty sub-slice", sDat(), 2, 2, SliceT0{}, true},
+		{"SubSlice: nonempty - invalid indices", sDat(), 5, 6, SliceT0{}, false},
+		{"SubSlice: empty - empty sub-slice", SliceT0{}, 0, 0, SliceT0{}, true},
+		{"SubSlice: empty - invalid indices", SliceT0{}, 1, 1, SliceT0{}, false},
 		{"SubSlice: nil - empty sub-slice", nil, 0, 0, nil, true},
 		{"SubSlice: nil - invalid indices", nil, 1, 1, nil, false},
 	}
@@ -235,20 +224,20 @@ func TestSlice_SubSlice(t *testing.T) {
 }
 
 func TestSlice_All(t *testing.T) {
-	pred1 := func(a Dat) bool { return a.V1 > 0 }
-	pred2 := func(a Dat) bool { return a.V1%2 == 0 }
-	pred3 := func(a Dat) bool { return a.V1 < 0 }
+	pred1 := func(a T0) bool { return toDat(a).V1 > 0 }
+	pred2 := func(a T0) bool { return toDat(a).V1%2 == 0 }
+	pred3 := func(a T0) bool { return toDat(a).V1 < 0 }
 
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat) bool
+		receiver SliceT0
+		arg      func(T0) bool
 		want     bool
 	}{
 		{"All: pred matches all", sDat(), pred1, true},
 		{"All: pred matches some", sDat(), pred2, false},
 		{"All: pred matches none", sDat(), pred3, false},
-		{"All: empty receiver", slice.Slice[Dat]{}, pred2, true},
+		{"All: empty receiver", SliceT0{}, pred2, true},
 		{"All: nil receiver", nil, pred2, true},
 	}
 
@@ -259,20 +248,20 @@ func TestSlice_All(t *testing.T) {
 }
 
 func TestSlice_Any(t *testing.T) {
-	pred1 := func(a Dat) bool { return a.V1 > 0 }
-	pred2 := func(a Dat) bool { return a.V1%2 == 0 }
-	pred3 := func(a Dat) bool { return a.V1 < 0 }
+	pred1 := func(a T0) bool { return toDat(a).V1 > 0 }
+	pred2 := func(a T0) bool { return toDat(a).V1%2 == 0 }
+	pred3 := func(a T0) bool { return toDat(a).V1 < 0 }
 
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat) bool
+		receiver SliceT0
+		arg      func(T0) bool
 		want     bool
 	}{
 		{"Any: pred matches all", sDat(), pred1, true},
 		{"Any: pred matches some", sDat(), pred2, true},
 		{"Any: pred matches none", sDat(), pred3, false},
-		{"Any: empty receiver", slice.Slice[Dat]{}, pred2, false},
+		{"Any: empty receiver", SliceT0{}, pred2, false},
 		{"Any: nil receiver", nil, pred2, false},
 	}
 
@@ -283,20 +272,20 @@ func TestSlice_Any(t *testing.T) {
 }
 
 func TestSlice_Count(t *testing.T) {
-	pred1 := func(a Dat) bool { return a.V1 > 0 }
-	pred2 := func(a Dat) bool { return a.V1%2 == 0 }
-	pred3 := func(a Dat) bool { return a.V1 < 0 }
+	pred1 := func(a T0) bool { return toDat(a).V1 > 0 }
+	pred2 := func(a T0) bool { return toDat(a).V1%2 == 0 }
+	pred3 := func(a T0) bool { return toDat(a).V1 < 0 }
 
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat) bool
+		receiver SliceT0
+		arg      func(T0) bool
 		want     int
 	}{
 		{"Count: pred matches all", sDat(), pred1, len(sDat())},
 		{"Count: pred matches some", sDat(), pred2, 3},
 		{"Count: pred matches none", sDat(), pred3, 0},
-		{"Count: empty receiver", slice.Slice[Dat]{}, pred2, 0},
+		{"Count: empty receiver", SliceT0{}, pred2, 0},
 		{"Count: nil receiver", nil, pred2, 0},
 	}
 
@@ -310,15 +299,15 @@ func TestSlice_Drop(t *testing.T) {
 	size := len(sDat())
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
+		receiver SliceT0
 		arg      int
-		want     slice.Slice[Dat]
+		want     SliceT0
 	}{
 		{"Drop: some", sDat(), 2, sDat()[2:]},
-		{"Drop: all", sDat(), size, slice.Slice[Dat]{}},
+		{"Drop: all", sDat(), size, SliceT0{}},
 		{"Drop: none", sDat(), 0, sDat()},
-		{"Drop: more than length", sDat(), size + 5, slice.Slice[Dat]{}},
-		{"Drop: empty receiver", slice.Slice[Dat]{}, 1, slice.Slice[Dat]{}},
+		{"Drop: more than length", sDat(), size + 5, SliceT0{}},
+		{"Drop: empty receiver", SliceT0{}, 1, SliceT0{}},
 		{"Drop: nil receiver", nil, 1, nil},
 	}
 
@@ -332,15 +321,15 @@ func TestSlice_DropLast(t *testing.T) {
 	size := len(sDat())
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
+		receiver SliceT0
 		arg      int
-		want     slice.Slice[Dat]
+		want     SliceT0
 	}{
 		{"DropLast: some", sDat(), 2, sDat()[:size-2]},
-		{"DropLast: all", sDat(), size, slice.Slice[Dat]{}},
+		{"DropLast: all", sDat(), size, SliceT0{}},
 		{"DropLast: none", sDat(), 0, sDat()},
-		{"DropLast: more than length", sDat(), size + 5, slice.Slice[Dat]{}},
-		{"DropLast: empty receiver", slice.Slice[Dat]{}, 1, slice.Slice[Dat]{}},
+		{"DropLast: more than length", sDat(), size + 5, SliceT0{}},
+		{"DropLast: empty receiver", SliceT0{}, 1, SliceT0{}},
 		{"DropLast: nil receiver", nil, 1, nil},
 	}
 
@@ -351,21 +340,21 @@ func TestSlice_DropLast(t *testing.T) {
 }
 
 func TestSlice_DropLastWhile(t *testing.T) {
-	pred1 := func(a Dat) bool { return a.V1 > 0 }
-	pred2 := func(a Dat) bool { return a.V1%2 == 0 }
-	pred3 := func(a Dat) bool { return a.V1 < 0 }
+	pred1 := func(a T0) bool { return toDat(a).V1 > 0 }
+	pred2 := func(a T0) bool { return toDat(a).V1%2 == 0 }
+	pred3 := func(a T0) bool { return toDat(a).V1 < 0 }
 
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat) bool
-		want     slice.Slice[Dat]
+		receiver SliceT0
+		arg      func(T0) bool
+		want     SliceT0
 	}{
-		{"DropLastWhile: pred matches all", sDat(), pred1, slice.Slice[Dat]{}},
+		{"DropLastWhile: pred matches all", sDat(), pred1, SliceT0{}},
 		{"DropLastWhile: pred matches some", sDat(), pred2,
-			slice.Slice[Dat]{Dat{1, "w1"}, Dat{22, "w22"}, Dat{333, "w333"}}},
+			SliceT0{Dat{1, "w1"}, Dat{22, "w22"}, Dat{333, "w333"}}},
 		{"DropLastWhile: pred matches none", sDat(), pred3, sDat()},
-		{"DropLastWhile: empty receiver", slice.Slice[Dat]{}, pred2, slice.Slice[Dat]{}},
+		{"DropLastWhile: empty receiver", SliceT0{}, pred2, SliceT0{}},
 		{"DropLastWhile: nil receiver", nil, pred2, nil},
 	}
 
@@ -376,21 +365,21 @@ func TestSlice_DropLastWhile(t *testing.T) {
 }
 
 func TestSlice_DropWhile(t *testing.T) {
-	pred1 := func(a Dat) bool { return a.V1 > 0 }
-	pred2 := func(a Dat) bool { return a.V1%2 == 1 }
-	pred3 := func(a Dat) bool { return a.V1 < 0 }
+	pred1 := func(a T0) bool { return toDat(a).V1 > 0 }
+	pred2 := func(a T0) bool { return toDat(a).V1%2 == 1 }
+	pred3 := func(a T0) bool { return toDat(a).V1 < 0 }
 
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat) bool
-		want     slice.Slice[Dat]
+		receiver SliceT0
+		arg      func(T0) bool
+		want     SliceT0
 	}{
-		{"DropWhile: pred matches all", sDat(), pred1, slice.Slice[Dat]{}},
+		{"DropWhile: pred matches all", sDat(), pred1, SliceT0{}},
 		{"DropWhile: pred matches some", sDat(), pred2,
-			slice.Slice[Dat]{Dat{22, "w22"}, Dat{333, "w333"}, Dat{4444, "w4444"}, Dat{22, "w22"}}},
+			SliceT0{Dat{22, "w22"}, Dat{333, "w333"}, Dat{4444, "w4444"}, Dat{22, "w22"}}},
 		{"DropWhile: pred matches none", sDat(), pred3, sDat()},
-		{"DropWhile: empty receiver", slice.Slice[Dat]{}, pred2, slice.Slice[Dat]{}},
+		{"DropWhile: empty receiver", SliceT0{}, pred2, SliceT0{}},
 		{"DropWhile: nil receiver", nil, pred2, nil},
 	}
 
@@ -401,21 +390,21 @@ func TestSlice_DropWhile(t *testing.T) {
 }
 
 func TestSlice_Filter(t *testing.T) {
-	pred1 := func(a Dat) bool { return a.V1 > 0 }
-	pred2 := func(a Dat) bool { return a.V1%2 == 0 }
-	pred3 := func(a Dat) bool { return a.V1 < 0 }
+	pred1 := func(a T0) bool { return toDat(a).V1 > 0 }
+	pred2 := func(a T0) bool { return toDat(a).V1%2 == 0 }
+	pred3 := func(a T0) bool { return toDat(a).V1 < 0 }
 
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat) bool
-		want     slice.Slice[Dat]
+		receiver SliceT0
+		arg      func(T0) bool
+		want     SliceT0
 	}{
 		{"Filter: pred matches all", sDat(), pred1, sDat()},
 		{"Filter: pred matches some", sDat(), pred2,
-			slice.Slice[Dat]{Dat{22, "w22"}, Dat{4444, "w4444"}, Dat{22, "w22"}}},
-		{"Filter: pred matches none", sDat(), pred3, slice.Slice[Dat]{}},
-		{"Filter: empty receiver", slice.Slice[Dat]{}, pred2, slice.Slice[Dat]{}},
+			SliceT0{Dat{22, "w22"}, Dat{4444, "w4444"}, Dat{22, "w22"}}},
+		{"Filter: pred matches none", sDat(), pred3, SliceT0{}},
+		{"Filter: empty receiver", SliceT0{}, pred2, SliceT0{}},
 		{"Filter: nil receiver", nil, pred2, nil},
 	}
 
@@ -426,21 +415,21 @@ func TestSlice_Filter(t *testing.T) {
 }
 
 func TestSlice_FilterNot(t *testing.T) {
-	pred1 := func(a Dat) bool { return a.V1 > 0 }
-	pred2 := func(a Dat) bool { return a.V1%2 == 1 }
-	pred3 := func(a Dat) bool { return a.V1 < 0 }
+	pred1 := func(a T0) bool { return toDat(a).V1 > 0 }
+	pred2 := func(a T0) bool { return toDat(a).V1%2 == 1 }
+	pred3 := func(a T0) bool { return toDat(a).V1 < 0 }
 
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat) bool
-		want     slice.Slice[Dat]
+		receiver SliceT0
+		arg      func(T0) bool
+		want     SliceT0
 	}{
-		{"FilterNot: pred matches all", sDat(), pred1, slice.Slice[Dat]{}},
+		{"FilterNot: pred matches all", sDat(), pred1, SliceT0{}},
 		{"FilterNot: pred matches some", sDat(), pred2,
-			slice.Slice[Dat]{Dat{22, "w22"}, Dat{4444, "w4444"}, Dat{22, "w22"}}},
+			SliceT0{Dat{22, "w22"}, Dat{4444, "w4444"}, Dat{22, "w22"}}},
 		{"FilterNot: pred matches none", sDat(), pred3, sDat()},
-		{"FilterNot: empty receiver", slice.Slice[Dat]{}, pred2, slice.Slice[Dat]{}},
+		{"FilterNot: empty receiver", SliceT0{}, pred2, SliceT0{}},
 		{"FilterNot: nil receiver", nil, pred2, nil},
 	}
 
@@ -453,12 +442,12 @@ func TestSlice_FilterNot(t *testing.T) {
 func TestSlice_First(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		want     Dat
+		receiver SliceT0
+		want     T0
 		werr     error
 	}{
 		{"First: nonempty", sDat(), Dat{1, "w1"}, nil},
-		{"First: empty", slice.Slice[Dat]{}, Dat{}, errors.New("empty or nil slice")},
+		{"First: empty", SliceT0{}, Dat{}, errors.New("empty or nil slice")},
 		{"First: nil", nil, Dat{}, errors.New("empty or nil slice")},
 	}
 
@@ -474,18 +463,18 @@ func TestSlice_First(t *testing.T) {
 func TestSlice_ForEach(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
+		receiver SliceT0
 		want     []int
 	}{
 		{"ForEach: nonempty receiver", sDat(), []int{1, 22, 333, 4444, 22}},
-		{"ForEach: empty receiver", slice.Slice[Dat]{}, []int{}},
+		{"ForEach: empty receiver", SliceT0{}, []int{}},
 		{"ForEach: nil receiver", nil, []int{}},
 	}
 
 	for _, cs := range cases {
 		got := []int{}
-		f := func(a Dat) {
-			got = append(got, a.V1)
+		f := func(a T0) {
+			got = append(got, toDat(a).V1)
 		}
 
 		cs.receiver.ForEach(f)
@@ -494,20 +483,20 @@ func TestSlice_ForEach(t *testing.T) {
 }
 
 func TestSlice_IndexOfFirst(t *testing.T) {
-	pred1 := func(a Dat) bool { return a.V1 > 0 }
-	pred2 := func(a Dat) bool { return a.V1%2 == 0 }
-	pred3 := func(a Dat) bool { return a.V1 < 0 }
+	pred1 := func(a T0) bool { return toDat(a).V1 > 0 }
+	pred2 := func(a T0) bool { return toDat(a).V1%2 == 0 }
+	pred3 := func(a T0) bool { return toDat(a).V1 < 0 }
 
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat) bool
+		receiver SliceT0
+		arg      func(T0) bool
 		want     int
 	}{
 		{"IndexOfFirst: match all", sDat(), pred1, 0},
 		{"IndexOfFirst: match some", sDat(), pred2, 1},
 		{"IndexOfFirst: match none", sDat(), pred3, -1},
-		{"IndexOfFirst: empty", slice.Slice[Dat]{}, pred1, -1},
+		{"IndexOfFirst: empty", SliceT0{}, pred1, -1},
 		{"IndexOfFirst: nil", nil, pred1, -1},
 	}
 
@@ -518,20 +507,20 @@ func TestSlice_IndexOfFirst(t *testing.T) {
 }
 
 func TestSlice_IndexOfLast(t *testing.T) {
-	pred1 := func(a Dat) bool { return a.V1 > 0 }
-	pred2 := func(a Dat) bool { return a.V1%2 == 1 }
-	pred3 := func(a Dat) bool { return a.V1 < 0 }
+	pred1 := func(a T0) bool { return toDat(a).V1 > 0 }
+	pred2 := func(a T0) bool { return toDat(a).V1%2 == 1 }
+	pred3 := func(a T0) bool { return toDat(a).V1 < 0 }
 
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat) bool
+		receiver SliceT0
+		arg      func(T0) bool
 		want     int
 	}{
 		{"IndexOfLast: match all", sDat(), pred1, 4},
 		{"IndexOfLast: match some", sDat(), pred2, 2},
 		{"IndexOfLast: match none", sDat(), pred3, -1},
-		{"IndexOfLast: empty", slice.Slice[Dat]{}, pred1, -1},
+		{"IndexOfLast: empty", SliceT0{}, pred1, -1},
 		{"IndexOfLast: nil", nil, pred1, -1},
 	}
 
@@ -544,11 +533,11 @@ func TestSlice_IndexOfLast(t *testing.T) {
 func TestSlice_IsNotEmpty(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
+		receiver SliceT0
 		want     bool
 	}{
 		{"IsNotEmpty: nonempty", sDat(), true},
-		{"IsNotEmpty: empty", slice.Slice[Dat]{}, false},
+		{"IsNotEmpty: empty", SliceT0{}, false},
 		{"IsNotEmpty: nil", nil, false},
 	}
 
@@ -561,12 +550,12 @@ func TestSlice_IsNotEmpty(t *testing.T) {
 func TestSlice_Last(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		want     Dat
+		receiver SliceT0
+		want     T0
 		werr     error
 	}{
 		{"Last: nonempty", sDat(), Dat{22, "w22"}, nil},
-		{"Last: empty", slice.Slice[Dat]{}, Dat{}, errors.New("empty or nil slice")},
+		{"Last: empty", SliceT0{}, Dat{}, errors.New("empty or nil slice")},
 		{"Last: nil", nil, Dat{}, errors.New("empty or nil slice")},
 	}
 
@@ -580,17 +569,17 @@ func TestSlice_Last(t *testing.T) {
 }
 
 func TestSlice_MaxWith(t *testing.T) {
-	comp := func(a1 Dat, a2 Dat) int { return a1.V1 - a2.V1 }
+	comp := func(a1 T0, a2 T0) int { return toDat(a1).V1 - toDat(a2).V1 }
 
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat, Dat) int
-		want     Dat
+		receiver SliceT0
+		arg      func(T0, T0) int
+		want     T0
 		werr     error
 	}{
 		{"MaxWith: nonempty receiver", sDat(), comp, Dat{4444, "w4444"}, nil},
-		{"MaxWith: empty receiver", slice.Slice[Dat]{}, comp, Dat{}, errors.New("empty or nil slice")},
+		{"MaxWith: empty receiver", SliceT0{}, comp, Dat{}, errors.New("empty or nil slice")},
 		{"MaxWith: nil receiver", nil, comp, Dat{}, errors.New("empty or nil slice")},
 	}
 
@@ -606,9 +595,9 @@ func TestSlice_MaxWith(t *testing.T) {
 func TestSlice_MinusSlice(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      slice.Slice[Dat]
-		want     slice.Slice[Dat]
+		receiver SliceT0
+		arg      SliceT0
+		want     SliceT0
 	}{
 		{"MinusSlice: nonempty receiver, other subset", sDat(),
 			append(sDat()[3:4], sDat()[1]), append(sDat()[0:1], sDat()[2])},
@@ -616,9 +605,9 @@ func TestSlice_MinusSlice(t *testing.T) {
 			append(sDat()[1:2], Dat{22, "xyz"}), append(sDat()[0:1], sDat()[2], sDat()[3])},
 		{"MinusSlice: nonempty receiver, other disjoint", sDat(),
 			append(sDat()[:0], Dat{22, "xyz"}, Dat{0, "abc"}), sDat()},
-		{"MinusSlice: nonempty receiver, other empty", sDat(), slice.Slice[Dat]{}, sDat()},
+		{"MinusSlice: nonempty receiver, other empty", sDat(), SliceT0{}, sDat()},
 		{"MinusSlice: nonempty receiver, other nil", sDat(), nil, sDat()},
-		{"MinusSlice: empty slice", slice.Slice[Dat]{}, append(sDat()[2:2], sDat()[1]), slice.Slice[Dat]{}},
+		{"MinusSlice: empty slice", SliceT0{}, append(sDat()[2:2], sDat()[1]), SliceT0{}},
 		{"MinusSlice: nil slice", nil, append(sDat()[2:2], sDat()[1]), nil},
 	}
 
@@ -631,13 +620,13 @@ func TestSlice_MinusSlice(t *testing.T) {
 func TestSlice_MinusElement(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
+		receiver SliceT0
 		arg      Dat
-		want     slice.Slice[Dat]
+		want     SliceT0
 	}{
 		{"MinusElement: present", sDat(), Dat{22, "w22"}, append(sDat()[0:1], sDat()[2:]...)},
 		{"MinusElement: absent", sDat(), Dat{22, "xyz"}, sDat()},
-		{"MinusElement: empty slice", slice.Slice[Dat]{}, Dat{22, "xyz"}, slice.Slice[Dat]{}},
+		{"MinusElement: empty slice", SliceT0{}, Dat{22, "xyz"}, SliceT0{}},
 		{"MinusElement: nil slice", nil, Dat{22, "xyz"}, nil},
 	}
 
@@ -648,17 +637,17 @@ func TestSlice_MinusElement(t *testing.T) {
 }
 
 func TestSlice_MinWith(t *testing.T) {
-	comp := func(a1 Dat, a2 Dat) int { return -(a1.V1 - a2.V1) }
+	comp := func(a1 T0, a2 T0) int { return -(toDat(a1).V1 - toDat(a2).V1) }
 
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat, Dat) int
-		want     Dat
+		receiver SliceT0
+		arg      func(T0, T0) int
+		want     T0
 		werr     error
 	}{
 		{"MinWith: nonempty receiver", sDat(), comp, Dat{4444, "w4444"}, nil},
-		{"MinWith: empty receiver", slice.Slice[Dat]{}, comp, Dat{}, errors.New("empty or nil slice")},
+		{"MinWith: empty receiver", SliceT0{}, comp, Dat{}, errors.New("empty or nil slice")},
 		{"MinWith: nil receiver", nil, comp, Dat{}, errors.New("empty or nil slice")},
 	}
 
@@ -672,22 +661,22 @@ func TestSlice_MinWith(t *testing.T) {
 }
 
 func TestSlice_Partition(t *testing.T) {
-	pred1 := func(a Dat) bool { return a.V1 > 0 }
-	pred2 := func(a Dat) bool { return a.V1%2 == 0 }
-	pred3 := func(a Dat) bool { return a.V1 < 0 }
+	pred1 := func(a T0) bool { return toDat(a).V1 > 0 }
+	pred2 := func(a T0) bool { return toDat(a).V1%2 == 0 }
+	pred3 := func(a T0) bool { return toDat(a).V1 < 0 }
 
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat) bool
-		want1    slice.Slice[Dat]
-		want2    slice.Slice[Dat]
+		receiver SliceT0
+		arg      func(T0) bool
+		want1    SliceT0
+		want2    SliceT0
 	}{
-		{"Partition: match all", sDat(), pred1, sDat(), slice.Slice[Dat]{}},
+		{"Partition: match all", sDat(), pred1, sDat(), SliceT0{}},
 		{"Partition: match some", sDat(), pred2, append(sDat()[1:2], sDat()[3], sDat()[4]), append(sDat()[0:1], sDat()[2])},
-		{"Partition: match none", sDat(), pred3, slice.Slice[Dat]{}, sDat()},
-		{"Partition: empty", slice.Slice[Dat]{}, pred1, slice.Slice[Dat]{}, slice.Slice[Dat]{}},
-		{"Partition: nil", nil, pred1, slice.Slice[Dat]{}, slice.Slice[Dat]{}},
+		{"Partition: match none", sDat(), pred3, SliceT0{}, sDat()},
+		{"Partition: empty", SliceT0{}, pred1, SliceT0{}, SliceT0{}},
+		{"Partition: nil", nil, pred1, SliceT0{}, SliceT0{}},
 	}
 
 	for _, cs := range cases {
@@ -700,17 +689,17 @@ func TestSlice_Partition(t *testing.T) {
 func TestSlice_PlusSlice(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      slice.Slice[Dat]
-		want     slice.Slice[Dat]
+		receiver SliceT0
+		arg      SliceT0
+		want     SliceT0
 	}{
 		{"PlusSlice: nonempty + nonempty", sDat()[:3], sDat()[3:], sDat()},
-		{"PlusSlice: nonempty + empty", sDat()[:3], slice.Slice[Dat]{}, sDat()[:3]},
-		{"PlusSlice: empty + nonempty", slice.Slice[Dat]{}, sDat()[3:], sDat()[3:]},
+		{"PlusSlice: nonempty + empty", sDat()[:3], SliceT0{}, sDat()[:3]},
+		{"PlusSlice: empty + nonempty", SliceT0{}, sDat()[3:], sDat()[3:]},
 		{"PlusSlice: nil + nonempty", nil, sDat()[3:], sDat()[3:]},
-		{"PlusSlice: empty + empty", slice.Slice[Dat]{}, slice.Slice[Dat]{}, slice.Slice[Dat]{}},
-		{"PlusSlice: empty + nil", slice.Slice[Dat]{}, nil, slice.Slice[Dat]{}},
-		{"PlusSlice: nil + empty", nil, slice.Slice[Dat]{}, nil},
+		{"PlusSlice: empty + empty", SliceT0{}, SliceT0{}, SliceT0{}},
+		{"PlusSlice: empty + nil", SliceT0{}, nil, SliceT0{}},
+		{"PlusSlice: nil + empty", nil, SliceT0{}, nil},
 		{"PlusSlice: nil + nil", nil, nil, nil},
 	}
 
@@ -723,12 +712,12 @@ func TestSlice_PlusSlice(t *testing.T) {
 func TestSlice_PlusElement(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      Dat
-		want     slice.Slice[Dat]
+		receiver SliceT0
+		arg      T0
+		want     SliceT0
 	}{
 		{"PlusElement: nonempty", sDat()[:4], sDat()[4], sDat()},
-		{"PlusElement: empty", slice.Slice[Dat]{}, sDat()[4], sDat()[4:5]},
+		{"PlusElement: empty", SliceT0{}, sDat()[4], sDat()[4:5]},
 		{"PlusElement: nil", nil, sDat()[4], sDat()[4:5]},
 	}
 
@@ -739,23 +728,23 @@ func TestSlice_PlusElement(t *testing.T) {
 }
 
 func TestSlice_Reduce(t *testing.T) {
-	op := func(a1 Dat, a2 Dat) Dat {
-		foo1 := a1
-		foo2 := a2
+	op := func(a1 T0, a2 T0) T0 {
+		foo1 := toDat(a1)
+		foo2 := toDat(a2)
 		return Dat{foo1.V1 + foo2.V1, foo1.V2 + foo2.V2}
 	}
 
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat, Dat) Dat
-		want     Dat
+		receiver SliceT0
+		arg      func(T0, T0) T0
+		want     T0
 		werr     error
 	}{
 		{"Reduce: receiver length > 1", sDat(), op,
 			Dat{1 + 22 + 333 + 4444 + 22, "w1w22w333w4444w22"}, nil},
 		{"Reduce: receiver length = 1", sDat()[2:3], op, sDat()[2], nil},
-		{"Reduce: empty receiver", slice.Slice[Dat]{}, op, Dat{}, errors.New("empty or nil slice")},
+		{"Reduce: empty receiver", SliceT0{}, op, Dat{}, errors.New("empty or nil slice")},
 		{"Reduce: nil receiver", nil, op, Dat{}, errors.New("empty or nil slice")},
 	}
 
@@ -769,16 +758,16 @@ func TestSlice_Reduce(t *testing.T) {
 }
 
 func TestSlice_Reversed(t *testing.T) {
-	rev := slice.Slice[Dat]{Dat{22, "w22"}, Dat{4444, "w4444"}, Dat{333, "w333"}, Dat{22, "w22"},
+	rev := SliceT0{Dat{22, "w22"}, Dat{4444, "w4444"}, Dat{333, "w333"}, Dat{22, "w22"},
 		Dat{1, "w1"}}
 
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		want     slice.Slice[Dat]
+		receiver SliceT0
+		want     SliceT0
 	}{
 		{"Reversed: nonempty slice", sDat(), rev},
-		{"Reversed: empty slice", slice.Slice[Dat]{}, slice.Slice[Dat]{}},
+		{"Reversed: empty slice", SliceT0{}, SliceT0{}},
 		{"Reversed: nil slice", nil, nil},
 	}
 
@@ -789,19 +778,19 @@ func TestSlice_Reversed(t *testing.T) {
 }
 
 func TestSlice_SortedWith(t *testing.T) {
-	comp := func(a1 Dat, a2 Dat) int { return -(a1.V1 - a2.V1) }
+	comp := func(a1 T0, a2 T0) int { return -(toDat(a1).V1 - toDat(a2).V1) }
 
-	sorted := slice.Slice[Dat]{Dat{4444, "w4444"}, Dat{333, "w333"}, Dat{22, "w22"},
+	sorted := SliceT0{Dat{4444, "w4444"}, Dat{333, "w333"}, Dat{22, "w22"},
 		Dat{22, "w22"}, Dat{1, "w1"}}
 
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat, Dat) int
-		want     slice.Slice[Dat]
+		receiver SliceT0
+		arg      func(T0, T0) int
+		want     SliceT0
 	}{
 		{"SortedWith: nonempty receiver", sDat(), comp, sorted},
-		{"SortedWith: empty receiver", slice.Slice[Dat]{}, comp, slice.Slice[Dat]{}},
+		{"SortedWith: empty receiver", SliceT0{}, comp, SliceT0{}},
 		{"SortedWith: nil receiver", nil, comp, nil},
 	}
 
@@ -815,15 +804,15 @@ func TestSlice_Take(t *testing.T) {
 	size := len(sDat())
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
+		receiver SliceT0
 		arg      int
-		want     slice.Slice[Dat]
+		want     SliceT0
 	}{
 		{"Take: some", sDat(), 2, sDat()[:2]},
 		{"Take: all", sDat(), size, sDat()},
-		{"Take: none", sDat(), 0, slice.Slice[Dat]{}},
+		{"Take: none", sDat(), 0, SliceT0{}},
 		{"Take: more than length", sDat(), size + 5, sDat()},
-		{"Take: empty receiver", slice.Slice[Dat]{}, 1, slice.Slice[Dat]{}},
+		{"Take: empty receiver", SliceT0{}, 1, SliceT0{}},
 		{"Take: nil receiver", nil, 1, nil},
 	}
 
@@ -837,15 +826,15 @@ func TestSlice_TakeLast(t *testing.T) {
 	size := len(sDat())
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
+		receiver SliceT0
 		arg      int
-		want     slice.Slice[Dat]
+		want     SliceT0
 	}{
 		{"TakeLast: some", sDat(), 2, sDat()[size-2:]},
 		{"TakeLast: all", sDat(), size, sDat()},
-		{"TakeLast: none", sDat(), 0, slice.Slice[Dat]{}},
+		{"TakeLast: none", sDat(), 0, SliceT0{}},
 		{"TakeLast: more than length", sDat(), size + 5, sDat()},
-		{"TakeLast: empty receiver", slice.Slice[Dat]{}, 1, slice.Slice[Dat]{}},
+		{"TakeLast: empty receiver", SliceT0{}, 1, SliceT0{}},
 		{"TakeLast: nil receiver", nil, 1, nil},
 	}
 
@@ -856,21 +845,21 @@ func TestSlice_TakeLast(t *testing.T) {
 }
 
 func TestSlice_TakeLastWhile(t *testing.T) {
-	pred1 := func(a Dat) bool { return a.V1 > 0 }
-	pred2 := func(a Dat) bool { return a.V1%2 == 0 }
-	pred3 := func(a Dat) bool { return a.V1 < 0 }
+	pred1 := func(a T0) bool { return toDat(a).V1 > 0 }
+	pred2 := func(a T0) bool { return toDat(a).V1%2 == 0 }
+	pred3 := func(a T0) bool { return toDat(a).V1 < 0 }
 
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat) bool
-		want     slice.Slice[Dat]
+		receiver SliceT0
+		arg      func(T0) bool
+		want     SliceT0
 	}{
 		{"TakeLastWhile: pred matches all", sDat(), pred1, sDat()},
 		{"TakeLastWhile: pred matches some", sDat(), pred2,
-			slice.Slice[Dat]{Dat{4444, "w4444"}, Dat{22, "w22"}}},
-		{"TakeLastWhile: pred matches none", sDat(), pred3, slice.Slice[Dat]{}},
-		{"TakeLastWhile: empty receiver", slice.Slice[Dat]{}, pred2, slice.Slice[Dat]{}},
+			SliceT0{Dat{4444, "w4444"}, Dat{22, "w22"}}},
+		{"TakeLastWhile: pred matches none", sDat(), pred3, SliceT0{}},
+		{"TakeLastWhile: empty receiver", SliceT0{}, pred2, SliceT0{}},
 		{"TakeLastWhile: nil receiver", nil, pred2, nil},
 	}
 
@@ -881,20 +870,20 @@ func TestSlice_TakeLastWhile(t *testing.T) {
 }
 
 func TestSlice_TakeWhile(t *testing.T) {
-	pred1 := func(a Dat) bool { return a.V1 > 0 }
-	pred2 := func(a Dat) bool { return a.V1%2 == 1 }
-	pred3 := func(a Dat) bool { return a.V1 < 0 }
+	pred1 := func(a T0) bool { return toDat(a).V1 > 0 }
+	pred2 := func(a T0) bool { return toDat(a).V1%2 == 1 }
+	pred3 := func(a T0) bool { return toDat(a).V1 < 0 }
 
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat) bool
-		want     slice.Slice[Dat]
+		receiver SliceT0
+		arg      func(T0) bool
+		want     SliceT0
 	}{
 		{"TakeWhile: pred matches all", sDat(), pred1, sDat()},
-		{"TakeWhile: pred matches some", sDat(), pred2, slice.Slice[Dat]{Dat{1, "w1"}}},
-		{"TakeWhile: pred matches none", sDat(), pred3, slice.Slice[Dat]{}},
-		{"TakeWhile: empty receiver", slice.Slice[Dat]{}, pred2, slice.Slice[Dat]{}},
+		{"TakeWhile: pred matches some", sDat(), pred2, SliceT0{Dat{1, "w1"}}},
+		{"TakeWhile: pred matches none", sDat(), pred3, SliceT0{}},
+		{"TakeWhile: empty receiver", SliceT0{}, pred2, SliceT0{}},
 		{"TakeWhile: nil receiver", nil, pred2, nil},
 	}
 
@@ -904,184 +893,24 @@ func TestSlice_TakeWhile(t *testing.T) {
 	}
 }
 
-func TestSlice_ToSet(t *testing.T) {
-	cases := []struct {
-		msg      string
-		receiver slice.Slice[Dat]
-		want     map[Dat]bool
-	}{
-		{"ToSet: nonempty receiver", sDat(), map[Dat]bool{
-			{1, "w1"}: true, {22, "w22"}: true, {333, "w333"}: true,
-			{4444, "w4444"}: true}},
-		{"ToSet: empty receiver", slice.Slice[Dat]{}, map[Dat]bool{}},
-		{"ToSet: nil receiver", nil, nil},
-	}
-
-	for _, cs := range cases {
-		got := slice.SliceToSet(cs.receiver)
-		assert.Equal(t, cs.want, got, cs.msg)
-	}
-}
-
 func TestSlice_Flatten(t *testing.T) {
-	data := slice.Slice[slice.Slice[Dat]]{{Dat{1, "w1"}, Dat{2, "w2"}}, {Dat{22, "w22"}},
+	data := Slice2T0{{Dat{1, "w1"}, Dat{2, "w2"}}, {Dat{22, "w22"}},
 		{Dat{333, "w333"}, Dat{334, "w334"}, Dat{335, "w335"}}, {Dat{4444, "w4444"}},
 		{Dat{22, "w22"}}}
 	cases := []struct {
 		msg      string
-		receiver slice.Slice[slice.Slice[Dat]]
-		want     slice.Slice[Dat]
+		receiver Slice2T0
+		want     SliceT0
 	}{
-		{"Flatten: nonempty", data, slice.Slice[Dat]{Dat{1, "w1"}, Dat{2, "w2"}, Dat{22, "w22"},
+		{"Flatten: nonempty", data, SliceT0{Dat{1, "w1"}, Dat{2, "w2"}, Dat{22, "w22"},
 			Dat{333, "w333"}, Dat{334, "w334"}, Dat{335, "w335"}, Dat{4444, "w4444"},
 			Dat{22, "w22"}}},
-		{"Flatten: empty", slice.Slice[slice.Slice[Dat]]{}, slice.Slice[Dat]{}},
+		{"Flatten: empty", Slice2T0{}, SliceT0{}},
 		{"Flatten: nil", nil, nil},
 	}
 
 	for _, cs := range cases {
-		got := slice.SliceFlatten(cs.receiver)
-		assert.Equal(t, cs.want, got, cs.msg)
-	}
-}
-
-func TestSlice_FlatMap(t *testing.T) {
-	f := func(a Dat) []int {
-		n := a.V1 % 10
-		s := make([]int, n)
-		for i := range s {
-			s[i] = n
-		}
-		return s
-	}
-
-	cases := []struct {
-		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat) []int
-		want     []int
-	}{
-		{"FlatMap: nonempty receiver", sDat(), f, []int{1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 2, 2}},
-		{"FlatMap: empty receiver", slice.Slice[Dat]{}, f, []int{}},
-		{"FlatMap: nil receiver", nil, f, nil},
-	}
-
-	for _, cs := range cases {
-		got := slice.SliceFlatMap(cs.receiver, cs.arg)
-		assert.Equal(t, cs.want, got, cs.msg)
-	}
-}
-
-func TestSlice_Fold(t *testing.T) {
-	op := func(z int, a Dat) int { return z + a.V1 }
-
-	cases := []struct {
-		msg      string
-		receiver slice.Slice[Dat]
-		arg1     int
-		arg2     func(z int, a Dat) int
-		want     int
-	}{
-		{"Fold: nonempty receiver", sDat(), 1, op, 1 + 1 + 22 + 333 + 4444 + 22},
-		{"Fold: empty receiver", slice.Slice[Dat]{}, 42, op, 42},
-		{"Fold: nil receiver", nil, 42, op, 42},
-	}
-
-	for _, cs := range cases {
-		got := slice.SliceFold(cs.receiver, cs.arg1, cs.arg2)
-		assert.Equal(t, cs.want, got, cs.msg)
-	}
-}
-
-func TestSlice_Map(t *testing.T) {
-	f := func(a Dat) int { return a.V1 + 1 }
-
-	cases := []struct {
-		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat) int
-		want     []int
-	}{
-		{"Map: nonempty receiver", sDat(), f, []int{2, 23, 334, 4445, 23}},
-		{"Map: empty receiver", slice.Slice[Dat]{}, f, []int{}},
-		{"Map: nil receiver", nil, f, nil},
-	}
-
-	for _, cs := range cases {
-		got := slice.SliceMap(cs.receiver, cs.arg)
-		assert.Equal(t, cs.want, got, cs.msg)
-	}
-}
-
-func TestSlice_Zip(t *testing.T) {
-	shorterOther := []int{1, 2, 3}
-	longerOther := []int{1, 2, 3, 4, 5, 6, 7}
-
-	cases := []struct {
-		msg      string
-		receiver slice.Slice[Dat]
-		arg      []int
-		want     []pair.Pair[Dat, int]
-	}{
-		{"Zip: nonempty receiver, shorter other", sDat(), shorterOther,
-			[]pair.Pair[Dat, int]{{Dat{1, "w1"}, 1}, {Dat{22, "w22"}, 2}, {Dat{333, "w333"}, 3}}},
-		{"Zip: nonempty receiver, longer other", sDat(), longerOther,
-			[]pair.Pair[Dat, int]{{Dat{1, "w1"}, 1}, {Dat{22, "w22"}, 2}, {Dat{333, "w333"}, 3},
-				{Dat{4444, "w4444"}, 4}, {Dat{22, "w22"}, 5}}},
-		{"Zip: nonempty receiver, empty other", sDat(), []int{}, []pair.Pair[Dat, int]{}},
-		{"Zip: nonempty receiver, nil other", sDat(), []int{}, []pair.Pair[Dat, int]{}},
-		{"Zip: empty receiver, nonempty other", slice.Slice[Dat]{}, shorterOther, []pair.Pair[Dat, int]{}},
-		{"Zip: empty receiver, empty other", slice.Slice[Dat]{}, []int{}, []pair.Pair[Dat, int]{}},
-		{"Zip: empty receiver, nil other", slice.Slice[Dat]{}, []int{}, []pair.Pair[Dat, int]{}},
-		{"Zip: nil receiver, nonempty other", nil, shorterOther, nil},
-		{"Zip: nil receiver, empty other", nil, []int{}, nil},
-		{"Zip: nil receiver, nil other", nil, nil, nil},
-	}
-
-	for _, cs := range cases {
-		got := slice.SliceZip(cs.receiver, cs.arg)
-		assert.Equal(t, cs.want, got, cs.msg)
-	}
-}
-
-func TestSlice_GroupBy(t *testing.T) {
-	f := func(a Dat) int { return a.V1 % 2 }
-
-	cases := []struct {
-		msg      string
-		receiver slice.Slice[Dat]
-		arg      func(Dat) int
-		want     map[int]slice.Slice[Dat]
-	}{
-		{"GroupBy: nonempty receiver", sDat(), f, map[int]slice.Slice[Dat]{
-			0: {Dat{22, "w22"}, Dat{4444, "w4444"}, Dat{22, "w22"}},
-			1: {Dat{1, "w1"}, Dat{333, "w333"}},
-		}},
-		{"GroupBy: empty receiver", slice.Slice[Dat]{}, f, map[int]slice.Slice[Dat]{}},
-		{"GroupBy: nil receiver", nil, f, nil},
-	}
-
-	for _, cs := range cases {
-		got := slice.SliceGroupBy(cs.receiver, cs.arg)
-		assert.Equal(t, cs.want, got, cs.msg)
-	}
-}
-
-func TestSlice_ToMap(t *testing.T) {
-	data := slice.Slice[pair.Pair[Dat, int]]{{Dat{1, "w1"}, 10}, {Dat{22, "w22"}, 42}, {Dat{1, "w1"}, 9}}
-
-	cases := []struct {
-		msg      string
-		receiver slice.Slice[pair.Pair[Dat, int]]
-		want     map[Dat]int
-	}{
-		{"ToMap: nonempty receiver", data, map[Dat]int{{1, "w1"}: 9, {22, "w22"}: 42}},
-		{"ToMap: empty receiver", slice.Slice[pair.Pair[Dat, int]]{}, map[Dat]int{}},
-		{"ToMap: nil receiver", nil, nil},
-	}
-
-	for _, cs := range cases {
-		got := slice.SliceToMap(cs.receiver)
+		got := cs.receiver.Flatten()
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }

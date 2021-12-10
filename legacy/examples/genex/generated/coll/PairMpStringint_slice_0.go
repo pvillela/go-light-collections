@@ -355,9 +355,9 @@ type sortablePairMpStringint struct {
 	slice      SlicePairMpStringint
 }
 
-func (x sortablePairMpStringint) Len() int               { return len(x.slice) }
+func (x sortablePairMpStringint) Len() int          { return len(x.slice) }
 func (x sortablePairMpStringint) Less(i int, j int) bool { return x.comparator(x.slice[i], x.slice[j]) < 0 }
-func (x sortablePairMpStringint) Swap(i int, j int)      { x.slice[i], x.slice[j] = x.slice[j], x.slice[i] }
+func (x sortablePairMpStringint) Swap(i int, j int) { x.slice[i], x.slice[j] = x.slice[j], x.slice[i] }
 
 // SortedWith returns a copy of the receiver with its elements sorted in increasing order
 // based on the comparator argument.

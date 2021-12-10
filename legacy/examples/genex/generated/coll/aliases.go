@@ -7,7 +7,7 @@
 package coll
 
 import (
-	"github.com/pvillela/go-light-collections/examples/genex/pkga"
+	"github.com/pvillela/go-light-collections/legacy/examples/genex/pkga"
 )
 
 // Person is a type alias.
