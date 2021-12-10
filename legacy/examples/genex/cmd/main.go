@@ -8,6 +8,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/pvillela/go-light-collections/legacy/examples/genex/generated/coll"
 	"github.com/pvillela/go-light-collections/legacy/examples/genex/pkga"
 )
