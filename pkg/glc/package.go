@@ -7,4 +7,4 @@
 // This package is an implementation of generic types Slice (array list), Map, and Set with a rich
 // set of methods and functions to enable functional-style programming with these types,
 // inspired by the Kotlin standard library.
-package g2lc
+package glc

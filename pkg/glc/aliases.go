@@ -4,16 +4,9 @@
  * that can be found in the LICENSE file.
  */
 
-package g2lc
+package glc
 
-import (
-	"github.com/pvillela/go-light-collections/pkg/g2lc/m"
-	"github.com/pvillela/go-light-collections/pkg/g2lc/pair"
-	"github.com/pvillela/go-light-collections/pkg/g2lc/set"
-	"github.com/pvillela/go-light-collections/pkg/g2lc/slice"
-)
-
-type Map = m.Map
-type Pair = pair.Pair
-type Set = set.Set
-type Slice = slice.Slice
+type Map = Map
+type Pair = Pair
+type Set = Set
+type Slice = Slice

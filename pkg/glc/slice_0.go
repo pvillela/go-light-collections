@@ -1,17 +1,15 @@
 /*
- * Copyright © 2021 Paulo Villela. All rights reserved.
- * Use of this source code is governed by the Apache 2.0 license
- * that can be found in the LICENSE file.
+ *  Copyright © 2021 Paulo Villela. All rights reserved.
+ *  Use of this source code is governed by the Apache 2.0 license
+ *  that can be found in the LICENSE file.
  */
 
-package slice
+package glc
 
 import (
 	"errors"
 	"reflect"
 	"sort"
-
-	"github.com/pvillela/go-light-collections/pkg/g2lc/pair"
 	//"sort"
 )
 
@@ -465,7 +463,7 @@ func SliceMap[T0 any, T1 any](s Slice[T0], f func(T0) T1) []T1 {
 	return r
 }
 
-func SliceZip[T0 any, T1 any](s Slice[T0], other []T1) []pair.Pair[T0, T1] {
+func SliceZip[T0 any, T1 any](s Slice[T0], other []T1) []Pair[T0, T1] {
 	if s == nil {
 		return nil
 	}
@@ -473,9 +471,9 @@ func SliceZip[T0 any, T1 any](s Slice[T0], other []T1) []pair.Pair[T0, T1] {
 	if size > len(other) {
 		size = len(other)
 	}
-	r := make([]pair.Pair[T0, T1], size)
+	r := make([]Pair[T0, T1], size)
 	for i := 0; i < size; i++ {
-		r[i] = pair.Pair[T0, T1]{s[i], other[i]}
+		r[i] = Pair[T0, T1]{s[i], other[i]}
 	}
 	return r
 }
@@ -504,7 +502,7 @@ func SliceGroupBy[T0 any, T1 comparable](s Slice[T0], keySelector func(T0) T1) m
 // whose values are the corresonding second components in the items of the receiver.
 // If multiple items in the receiver have the same first component, the corresponding
 // value in the resulting map will be taken from the last such item in the receiver.
-func SliceToMap[T0 comparable, T1 comparable](s Slice[pair.Pair[T0, T1]]) map[T0]T1 {
+func SliceToMap[T0 comparable, T1 comparable](s Slice[Pair[T0, T1]]) map[T0]T1 {
 	if s == nil {
 		return nil
 	}

@@ -1,17 +1,14 @@
 /*
- * Copyright © 2021 Paulo Villela. All rights reserved.
- * Use of this source code is governed by the Apache 2.0 license
- * that can be found in the LICENSE file.
+ *  Copyright © 2021 Paulo Villela. All rights reserved.
+ *  Use of this source code is governed by the Apache 2.0 license
+ *  that can be found in the LICENSE file.
  */
 
-package set
+package glc
 
 import (
 	"errors"
 	"github.com/pvillela/go-light-collections/legacy/pkg/util/util"
-
-	"github.com/pvillela/go-light-collections/pkg/g2lc/m"
-	"github.com/pvillela/go-light-collections/pkg/g2lc/pair"
 )
 
 ////
@@ -348,7 +345,7 @@ func SetMap[T0 comparable, T1 comparable](s Set[T0], f func(T0) T1) map[T1]bool 
 // whose values are the corresonding second components in the elements of the receiver.
 // If multiple elements in the receiver have the same first component, the corresponding
 // value in the resulting map will be picked from one of them.
-func SetToMap[T0 comparable, T1 comparable](s Set[pair.Pair[T0, T1]]) m.Map[T0, T1] {
+func SetToMap[T0 comparable, T1 comparable](s Set[Pair[T0, T1]]) Map[T0, T1] {
 	if s == nil {
 		return nil
 	}

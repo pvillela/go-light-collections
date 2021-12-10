@@ -1,15 +1,13 @@
 /*
- * Copyright © 2021 Paulo Villela. All rights reserved.
- * Use of this source code is governed by the Apache 2.0 license
- * that can be found in the LICENSE file.
+ *  Copyright © 2021 Paulo Villela. All rights reserved.
+ *  Use of this source code is governed by the Apache 2.0 license
+ *  that can be found in the LICENSE file.
  */
 
-package m
+package glc
 
 import (
 	"errors"
-
-	"github.com/pvillela/go-light-collections/pkg/g2lc/pair"
 )
 
 // Map[T0, T1] is a type wrapper, implements IMap interfaces.
@@ -26,14 +24,14 @@ func (m Map[T0, T1]) Copy() Map[T0, T1] {
 	return m1
 }
 
-func (m Map[T0, T1]) Entries() []pair.Pair[T0, T1] {
+func (m Map[T0, T1]) Entries() []Pair[T0, T1] {
 	if m == nil {
 		return nil
 	}
-	entries := make([]pair.Pair[T0, T1], len(m))
+	entries := make([]Pair[T0, T1], len(m))
 	i := 0
 	for k, v := range m {
-		entries[i] = pair.Pair[T0, T1]{k, v}
+		entries[i] = Pair[T0, T1]{k, v}
 		i++
 	}
 	return entries
@@ -90,10 +88,10 @@ func MapContainsValue[T0 comparable, T1 comparable](m Map[T0, T1], v T1) bool {
 }
 
 // Count returns the number of entries in the receiver that satisfy the predicate.
-func (m Map[T0, T1]) Count(pred func(pair.Pair[T0, T1]) bool) int {
+func (m Map[T0, T1]) Count(pred func(Pair[T0, T1]) bool) int {
 	count := 0
 	for k, v := range m {
-		if pred(pair.Pair[T0, T1]{k, v}) {
+		if pred(Pair[T0, T1]{k, v}) {
 			count++
 		}
 	}
@@ -109,44 +107,44 @@ func (m Map[T0, T1]) IsEmpty() bool {
 	return len(m) == 0
 }
 
-func (m Map[T0, T1]) All(pred func(pair.Pair[T0, T1]) bool) bool {
+func (m Map[T0, T1]) All(pred func(Pair[T0, T1]) bool) bool {
 	for k, v := range m {
-		if !pred(pair.Pair[T0, T1]{k, v}) {
+		if !pred(Pair[T0, T1]{k, v}) {
 			return false
 		}
 	}
 	return true
 }
 
-func (m Map[T0, T1]) Any(pred func(pair.Pair[T0, T1]) bool) bool {
+func (m Map[T0, T1]) Any(pred func(Pair[T0, T1]) bool) bool {
 	for k, v := range m {
-		if pred(pair.Pair[T0, T1]{k, v}) {
+		if pred(Pair[T0, T1]{k, v}) {
 			return true
 		}
 	}
 	return false
 }
 
-func (m Map[T0, T1]) ToSlice() []pair.Pair[T0, T1] {
+func (m Map[T0, T1]) ToSlice() []Pair[T0, T1] {
 	if m == nil {
 		return nil
 	}
-	s := make([]pair.Pair[T0, T1], len(m))
+	s := make([]Pair[T0, T1], len(m))
 	i := 0
 	for k, v := range m {
-		s[i] = pair.Pair[T0, T1]{k, v}
+		s[i] = Pair[T0, T1]{k, v}
 		i++
 	}
 	return s
 }
 
-func (m Map[T0, T1]) Filter(pred func(pair.Pair[T0, T1]) bool) Map[T0, T1] {
+func (m Map[T0, T1]) Filter(pred func(Pair[T0, T1]) bool) Map[T0, T1] {
 	if m == nil {
 		return nil
 	}
 	m1 := Map[T0, T1]{}
 	for k, v := range m {
-		if pred(pair.Pair[T0, T1]{k, v}) {
+		if pred(Pair[T0, T1]{k, v}) {
 			m1[k] = v
 		}
 	}
@@ -166,13 +164,13 @@ func (m Map[T0, T1]) FilterKeys(pred func(T0) bool) Map[T0, T1] {
 	return m1
 }
 
-func (m Map[T0, T1]) FilterNot(pred func(pair.Pair[T0, T1]) bool) Map[T0, T1] {
+func (m Map[T0, T1]) FilterNot(pred func(Pair[T0, T1]) bool) Map[T0, T1] {
 	if m == nil {
 		return nil
 	}
 	m1 := Map[T0, T1]{}
 	for k, v := range m {
-		if !pred(pair.Pair[T0, T1]{k, v}) {
+		if !pred(Pair[T0, T1]{k, v}) {
 			m1[k] = v
 		}
 	}
@@ -192,9 +190,9 @@ func (m Map[T0, T1]) FilterValues(pred func(T1) bool) Map[T0, T1] {
 	return m1
 }
 
-func (m Map[T0, T1]) ForEach(f func(pair.Pair[T0, T1])) {
+func (m Map[T0, T1]) ForEach(f func(Pair[T0, T1])) {
 	for k, v := range m {
-		f(pair.Pair[T0, T1]{k, v})
+		f(Pair[T0, T1]{k, v})
 	}
 }
 
@@ -211,8 +209,8 @@ func (m Map[T0, T1]) IsNotEmpty() bool {
 
 // MaxWith returns an entry in the map with maximum value, using a comparator function.
 // Returns an error if the map is empty.
-func (m Map[T0, T1]) MaxWith(comparator func(pair.Pair[T0, T1], pair.Pair[T0, T1]) int) (pair.Pair[T0, T1], error) {
-	var max pair.Pair[T0, T1]
+func (m Map[T0, T1]) MaxWith(comparator func(Pair[T0, T1], Pair[T0, T1]) int) (Pair[T0, T1], error) {
+	var max Pair[T0, T1]
 
 	if len(m) == 0 {
 		return max, errors.New("empty or nil map")
@@ -221,11 +219,11 @@ func (m Map[T0, T1]) MaxWith(comparator func(pair.Pair[T0, T1], pair.Pair[T0, T1
 	first := true
 	for k, v := range m {
 		if first {
-			max = pair.Pair[T0, T1]{k, v}
+			max = Pair[T0, T1]{k, v}
 			first = false
 			continue
 		}
-		if pair := (pair.Pair[T0, T1]{k, v}); comparator(max, pair) < 0 {
+		if pair := (Pair[T0, T1]{k, v}); comparator(max, pair) < 0 {
 			max = pair
 		}
 	}
@@ -248,12 +246,12 @@ func (m Map[T0, T1]) MinusKeys(s []T0) Map[T0, T1] {
 	return m1
 }
 
-func (m Map[T0, T1]) MinWith(comparator func(pair.Pair[T0, T1], pair.Pair[T0, T1]) int) (pair.Pair[T0, T1], error) {
-	reverseComp := func(p1 pair.Pair[T0, T1], p2 pair.Pair[T0, T1]) int { return -comparator(p1, p2) }
+func (m Map[T0, T1]) MinWith(comparator func(Pair[T0, T1], Pair[T0, T1]) int) (Pair[T0, T1], error) {
+	reverseComp := func(p1 Pair[T0, T1], p2 Pair[T0, T1]) int { return -comparator(p1, p2) }
 	return m.MaxWith(reverseComp)
 }
 
-func (m Map[T0, T1]) PlusEntry(entry pair.Pair[T0, T1]) Map[T0, T1] {
+func (m Map[T0, T1]) PlusEntry(entry Pair[T0, T1]) Map[T0, T1] {
 	m1 := m.Copy()
 	if m1 == nil {
 		m1 = Map[T0, T1]{}
@@ -279,7 +277,7 @@ func (m Map[T0, T1]) PlusMap(other Map[T0, T1]) Map[T0, T1] {
 	return m1
 }
 
-func (m Map[T0, T1]) PlusSlice(s []pair.Pair[T0, T1]) Map[T0, T1] {
+func (m Map[T0, T1]) PlusSlice(s []Pair[T0, T1]) Map[T0, T1] {
 	var m1 Map[T0, T1]
 	switch {
 	case m == nil && s == nil:
@@ -305,46 +303,46 @@ func (m Map[T0, T1]) Add(k T0, v T1) Map[T0, T1] {
 	return m1
 }
 
-func MapFlatMap[T0 comparable, T1 any, T2 any](m Map[T0, T1], f func(pair.Pair[T0, T1]) []T2) []T2 {
+func MapFlatMap[T0 comparable, T1 any, T2 any](m Map[T0, T1], f func(Pair[T0, T1]) []T2) []T2 {
 	if m == nil {
 		return nil
 	}
 	r := make([]T2, 0, len(m)) // optimizing for speed vs space
 	for k, v := range m {
-		r = append(r, f(pair.Pair[T0, T1]{k, v})...)
+		r = append(r, f(Pair[T0, T1]{k, v})...)
 	}
 	return r
 }
 
-func MapMap[T0 comparable, T1 any, T2 any](m Map[T0, T1], f func(pair.Pair[T0, T1]) T2) []T2 {
+func MapMap[T0 comparable, T1 any, T2 any](m Map[T0, T1], f func(Pair[T0, T1]) T2) []T2 {
 	if m == nil {
 		return nil
 	}
 	r := make([]T2, 0, len(m)) // optimizing for speed vs space
 	for k, v := range m {
-		r = append(r, f(pair.Pair[T0, T1]{k, v}))
+		r = append(r, f(Pair[T0, T1]{k, v}))
 	}
 	return r
 }
 
-func MapMapValues[T0 comparable, T1 any, T2 any](m Map[T0, T1], f func(pair.Pair[T0, T1]) T2) map[T0]T2 {
+func MapMapValues[T0 comparable, T1 any, T2 any](m Map[T0, T1], f func(Pair[T0, T1]) T2) map[T0]T2 {
 	if m == nil {
 		return nil
 	}
 	r := make(map[T0]T2)
 	for k, v := range m {
-		r[k] = f(pair.Pair[T0, T1]{k, v})
+		r[k] = f(Pair[T0, T1]{k, v})
 	}
 	return r
 }
 
-func MapMapKeys[T0 comparable, T1 any, T2 comparable](m Map[T0, T1], f func(pair.Pair[T0, T1]) T2) map[T2]T1 {
+func MapMapKeys[T0 comparable, T1 any, T2 comparable](m Map[T0, T1], f func(Pair[T0, T1]) T2) map[T2]T1 {
 	if m == nil {
 		return nil
 	}
 	r := make(map[T2]T1)
 	for k, v := range m {
-		r[f(pair.Pair[T0, T1]{k, v})] = v
+		r[f(Pair[T0, T1]{k, v})] = v
 	}
 	return r
 }

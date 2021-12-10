@@ -4,13 +4,10 @@
  * that can be found in the LICENSE file.
  */
 
-package g2lc
+package glc
 
 import (
 	"errors"
-	"github.com/pvillela/go-light-collections/pkg/g2lc/m"
-	"github.com/pvillela/go-light-collections/pkg/g2lc/pair"
-	"github.com/pvillela/go-light-collections/pkg/g2lc/set"
 	"strconv"
 	"testing"
 
@@ -24,8 +21,8 @@ func xset_0_test[T any]() {}
 // Preliminaries
 
 // Map used as input to functions below.
-func sBase() set.Set[int] {
-	return set.Set[int]{1: true, 22: true, 333: true, 4444: true}
+func sBase() Set[int] {
+	return Set[int]{1: true, 22: true, 333: true, 4444: true}
 }
 
 func sliceBase() []int {
@@ -38,10 +35,10 @@ func sliceBase() []int {
 func TestSet_Copy(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 	}{
 		{"Copy: nonempty set", sBase()},
-		{"Copy: empty set", set.Set[int]{}},
+		{"Copy: empty set", Set[int]{}},
 		{"Copy: nil set", nil},
 	}
 
@@ -55,11 +52,11 @@ func TestSet_Copy(t *testing.T) {
 func TestSet_LengthSize(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		want     int
 	}{
 		{"Length and Size: nonempty set", sBase(), 4},
-		{"Length and Size: empty set", set.Set[int]{}, 0},
+		{"Length and Size: empty set", Set[int]{}, 0},
 		{"Length and Size: nil set", nil, 0},
 	}
 
@@ -78,14 +75,14 @@ func TestSet_All(t *testing.T) {
 
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		arg      func(int) bool
 		want     bool
 	}{
 		{"All: pred matches all", sBase(), pred1, true},
 		{"All: pred matches some", sBase(), pred2, false},
 		{"All: pred matches none", sBase(), pred3, false},
-		{"All: empty receiver", set.Set[int]{}, pred2, true},
+		{"All: empty receiver", Set[int]{}, pred2, true},
 		{"All: nil receiver", nil, pred2, true},
 	}
 
@@ -102,14 +99,14 @@ func TestSet_Any(t *testing.T) {
 
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		arg      func(int) bool
 		want     bool
 	}{
 		{"Any: pred matches all", sBase(), pred1, true},
 		{"Any: pred matches some", sBase(), pred2, true},
 		{"Any: pred matches none", sBase(), pred3, false},
-		{"Any: empty receiver", set.Set[int]{}, pred2, false},
+		{"Any: empty receiver", Set[int]{}, pred2, false},
 		{"Any: nil receiver", nil, pred2, false},
 	}
 
@@ -122,13 +119,13 @@ func TestSet_Any(t *testing.T) {
 func TestSet_Contains(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		arg      int
 		want     bool
 	}{
 		{"CotainsKey: present", sBase(), 22, true},
 		{"Contains: absent", sBase(), 0, false},
-		{"Contains: empty set", set.Set[int]{}, 22, false},
+		{"Contains: empty set", Set[int]{}, 22, false},
 		{"Contains: nil set", nil, 22, false},
 	}
 
@@ -141,25 +138,25 @@ func TestSet_Contains(t *testing.T) {
 func TestSet_ContainsSet(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
-		arg      set.Set[int]
+		receiver Set[int]
+		arg      Set[int]
 		want     bool
 	}{
 		{"ContainsSet: nonempty receiver, other subset", sBase(),
-			set.Set[int]{22: true, 333: true}, true},
+			Set[int]{22: true, 333: true}, true},
 		{"ContainsSet: nonempty receiver, other intersects", sBase(),
-			set.Set[int]{22: true, 25: true, 333: true}, false},
+			Set[int]{22: true, 25: true, 333: true}, false},
 		{"ContainsSet: nonempty receiver, other disjoint", sBase(),
-			set.Set[int]{11: true, 25: true, 33: true}, false},
-		{"ContainsSet: nonempty receiver, other empty", sBase(), set.Set[int]{}, true},
+			Set[int]{11: true, 25: true, 33: true}, false},
+		{"ContainsSet: nonempty receiver, other empty", sBase(), Set[int]{}, true},
 		{"ContainsSet: nonempty receiver, other nil", sBase(), nil, true},
-		{"ContainsSet: empty receiver, other nonempty", set.Set[int]{},
-			set.Set[int]{22: true, 333: true}, false},
-		{"ContainsSet: empty receiver, other empty", set.Set[int]{}, set.Set[int]{}, true},
-		{"ContainsSet: empty receiver, other nil", set.Set[int]{}, nil, true},
+		{"ContainsSet: empty receiver, other nonempty", Set[int]{},
+			Set[int]{22: true, 333: true}, false},
+		{"ContainsSet: empty receiver, other empty", Set[int]{}, Set[int]{}, true},
+		{"ContainsSet: empty receiver, other nil", Set[int]{}, nil, true},
 		{"ContainsSet: nil receiver, other nonempty", nil,
-			set.Set[int]{22: true, 333: true}, false},
-		{"ContainsSet: nil receiver, other empty", nil, set.Set[int]{}, true},
+			Set[int]{22: true, 333: true}, false},
+		{"ContainsSet: nil receiver, other empty", nil, Set[int]{}, true},
 		{"ContainsSet: nil receiver, other nil", nil, nil, true},
 	}
 
@@ -172,7 +169,7 @@ func TestSet_ContainsSet(t *testing.T) {
 func TestSet_ContainsSlice(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		arg      []int
 		want     bool
 	}{
@@ -184,10 +181,10 @@ func TestSet_ContainsSlice(t *testing.T) {
 			[]int{11, 25, 33}, false},
 		{"ContainsSlice: nonempty receiver, elems empty", sBase(), []int{}, true},
 		{"ContainsSlice: nonempty receiver, elems nil", sBase(), nil, true},
-		{"ContainsSlice: empty receiver, elems nonempty", set.Set[int]{},
+		{"ContainsSlice: empty receiver, elems nonempty", Set[int]{},
 			[]int{22, 333, 22}, false},
-		{"ContainsSlice: empty receiver, elems empty", set.Set[int]{}, []int{}, true},
-		{"ContainsSlice: empty receiver, elems nil", set.Set[int]{}, nil, true},
+		{"ContainsSlice: empty receiver, elems empty", Set[int]{}, []int{}, true},
+		{"ContainsSlice: empty receiver, elems nil", Set[int]{}, nil, true},
 		{"ContainsSlice: nil receiver, elems nonempty", nil,
 			[]int{22, 333, 22}, false},
 		{"ContainsSlice: nil receiver, elems empty", nil, []int{}, true},
@@ -207,14 +204,14 @@ func TestSet_Count(t *testing.T) {
 
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		arg      func(int) bool
 		want     int
 	}{
 		{"Count: pred matches all", sBase(), pred1, len(sBase())},
 		{"Count: pred matches some", sBase(), pred2, 2},
 		{"Count: pred matches none", sBase(), pred3, 0},
-		{"Count: empty receiver", set.Set[int]{}, pred2, 0},
+		{"Count: empty receiver", Set[int]{}, pred2, 0},
 		{"Count: nil receiver", nil, pred2, 0},
 	}
 
@@ -231,14 +228,14 @@ func TestSet_Filter(t *testing.T) {
 
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		arg      func(int) bool
-		want     set.Set[int]
+		want     Set[int]
 	}{
 		{"Filter: pred matches all", sBase(), pred1, sBase()},
-		{"Filter: pred matches some", sBase(), pred2, set.Set[int]{22: true, 4444: true}},
-		{"Filter: pred matches none", sBase(), pred3, set.Set[int]{}},
-		{"Filter: empty receiver", set.Set[int]{}, pred2, set.Set[int]{}},
+		{"Filter: pred matches some", sBase(), pred2, Set[int]{22: true, 4444: true}},
+		{"Filter: pred matches none", sBase(), pred3, Set[int]{}},
+		{"Filter: empty receiver", Set[int]{}, pred2, Set[int]{}},
 		{"Filter: nil receiver", nil, pred2, nil},
 	}
 
@@ -255,14 +252,14 @@ func TestSet_FilterNot(t *testing.T) {
 
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		arg      func(int) bool
-		want     set.Set[int]
+		want     Set[int]
 	}{
-		{"FilterNot: pred matches all", sBase(), pred1, set.Set[int]{}},
-		{"FilterNot: pred matches some", sBase(), pred2, set.Set[int]{22: true, 4444: true}},
+		{"FilterNot: pred matches all", sBase(), pred1, Set[int]{}},
+		{"FilterNot: pred matches some", sBase(), pred2, Set[int]{22: true, 4444: true}},
 		{"FilterNot: pred matches none", sBase(), pred3, sBase()},
-		{"FilterNot: empty receiver", set.Set[int]{}, pred2, set.Set[int]{}},
+		{"FilterNot: empty receiver", Set[int]{}, pred2, Set[int]{}},
 		{"FilterNot: nil receiver", nil, pred2, nil},
 	}
 
@@ -275,17 +272,17 @@ func TestSet_FilterNot(t *testing.T) {
 func TestSet_ForEach(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
-		want     set.Set[int]
+		receiver Set[int]
+		want     Set[int]
 	}{
 		{"ForEach: nonempty receiver", sBase(),
-			set.Set[int]{1: true, 22: true, 333: true, 4444: true}},
-		{"ForEach: empty receiver", set.Set[int]{}, set.Set[int]{}},
-		{"ForEach: nil receiver", nil, set.Set[int]{}},
+			Set[int]{1: true, 22: true, 333: true, 4444: true}},
+		{"ForEach: empty receiver", Set[int]{}, Set[int]{}},
+		{"ForEach: nil receiver", nil, Set[int]{}},
 	}
 
 	for _, cs := range cases {
-		got := set.Set[int]{}
+		got := Set[int]{}
 		f := func(a int) {
 			got[a] = true
 		}
@@ -298,25 +295,25 @@ func TestSet_ForEach(t *testing.T) {
 func TestSet_Intersect(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
-		arg      set.Set[int]
-		want     set.Set[int]
+		receiver Set[int]
+		arg      Set[int]
+		want     Set[int]
 	}{
 		{"Intersect: nonempty receiver, other subset", sBase(),
-			set.Set[int]{22: true, 333: true}, set.Set[int]{22: true, 333: true}},
+			Set[int]{22: true, 333: true}, Set[int]{22: true, 333: true}},
 		{"Intersect: nonempty receiver, other intersects", sBase(),
-			set.Set[int]{22: true, 25: true, 333: true}, set.Set[int]{22: true, 333: true}},
+			Set[int]{22: true, 25: true, 333: true}, Set[int]{22: true, 333: true}},
 		{"Intersect: nonempty receiver, other disjoint", sBase(),
-			set.Set[int]{11: true, 25: true, 33: true}, set.Set[int]{}},
-		{"Intersect: nonempty receiver, other empty", sBase(), set.Set[int]{}, set.Set[int]{}},
-		{"Intersect: nonempty receiver, other nil", sBase(), nil, set.Set[int]{}},
-		{"Intersect: empty receiver, other nonempty", set.Set[int]{},
-			set.Set[int]{22: true, 333: true}, set.Set[int]{}},
-		{"Intersect: empty receiver, other empty", set.Set[int]{}, set.Set[int]{}, set.Set[int]{}},
-		{"Intersect: empty receiver, other nil", set.Set[int]{}, nil, set.Set[int]{}},
+			Set[int]{11: true, 25: true, 33: true}, Set[int]{}},
+		{"Intersect: nonempty receiver, other empty", sBase(), Set[int]{}, Set[int]{}},
+		{"Intersect: nonempty receiver, other nil", sBase(), nil, Set[int]{}},
+		{"Intersect: empty receiver, other nonempty", Set[int]{},
+			Set[int]{22: true, 333: true}, Set[int]{}},
+		{"Intersect: empty receiver, other empty", Set[int]{}, Set[int]{}, Set[int]{}},
+		{"Intersect: empty receiver, other nil", Set[int]{}, nil, Set[int]{}},
 		{"Intersect: nil receiver, other nonempty", nil,
-			set.Set[int]{22: true, 333: true}, nil},
-		{"Intersect: nil receiver, other empty", nil, set.Set[int]{}, nil},
+			Set[int]{22: true, 333: true}, nil},
+		{"Intersect: nil receiver, other empty", nil, Set[int]{}, nil},
 		{"Intersect: nil receiver, other nil", nil, nil, nil},
 	}
 
@@ -329,11 +326,11 @@ func TestSet_Intersect(t *testing.T) {
 func TestSet_IsEmpty(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		want     bool
 	}{
 		{"IsEmpty: nonempty", sBase(), false},
-		{"IsEmpty: empty", set.Set[int]{}, true},
+		{"IsEmpty: empty", Set[int]{}, true},
 		{"IsEmpty: nil", nil, true},
 	}
 
@@ -346,11 +343,11 @@ func TestSet_IsEmpty(t *testing.T) {
 func TestSet_IsNotEmpty(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		want     bool
 	}{
 		{"IsNotEmpty: nonempty", sBase(), true},
-		{"IsNotEmpty: empty", set.Set[int]{}, false},
+		{"IsNotEmpty: empty", Set[int]{}, false},
 		{"IsNotEmpty: nil", nil, false},
 	}
 
@@ -366,13 +363,13 @@ func TestSet_MaxWith(t *testing.T) {
 
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		arg      func(int, int) int
 		want     int
 		werr     error
 	}{
 		{"MaxWith: nonempty receiver", sBase(), comp, 4444, nil},
-		{"MaxWith: empty receiver", set.Set[int]{}, comp, zero, errors.New("empty or nil set")},
+		{"MaxWith: empty receiver", Set[int]{}, comp, zero, errors.New("empty or nil set")},
 		{"MaxWith: nil receiver", nil, comp, zero, errors.New("empty or nil set")},
 	}
 
@@ -388,13 +385,13 @@ func TestSet_MaxWith(t *testing.T) {
 func TestSet_MinusElement(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		arg      int
-		want     set.Set[int]
+		want     Set[int]
 	}{
-		{"MinusElement: present", sBase(), 22, set.Set[int]{1: true, 333: true, 4444: true}},
+		{"MinusElement: present", sBase(), 22, Set[int]{1: true, 333: true, 4444: true}},
 		{"MinusElement: absent", sBase(), 9, sBase()},
-		{"MinusElement: empty set", set.Set[int]{}, 22, set.Set[int]{}},
+		{"MinusElement: empty set", Set[int]{}, 22, Set[int]{}},
 		{"MinusElement: nil set", nil, 22, nil},
 	}
 
@@ -407,16 +404,16 @@ func TestSet_MinusElement(t *testing.T) {
 func TestSet_MinusSet(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
-		arg      set.Set[int]
-		want     set.Set[int]
+		receiver Set[int]
+		arg      Set[int]
+		want     Set[int]
 	}{
-		{"MinusSet: subset", sBase(), set.Set[int]{22: true, 333: true}, set.Set[int]{1: true, 4444: true}},
-		{"MinusSet: intersects", sBase(), set.Set[int]{0: true, 22: true, 9: true, 333: true},
-			set.Set[int]{1: true, 4444: true}},
-		{"MinusSet: disjoint", sBase(), set.Set[int]{0: true, 9: true, 42: true}, sBase()},
-		{"MinusSet: empty slice", set.Set[int]{}, set.Set[int]{22: true, 333: true}, set.Set[int]{}},
-		{"MinusSet: nil slice", nil, set.Set[int]{22: true, 333: true}, nil},
+		{"MinusSet: subset", sBase(), Set[int]{22: true, 333: true}, Set[int]{1: true, 4444: true}},
+		{"MinusSet: intersects", sBase(), Set[int]{0: true, 22: true, 9: true, 333: true},
+			Set[int]{1: true, 4444: true}},
+		{"MinusSet: disjoint", sBase(), Set[int]{0: true, 9: true, 42: true}, sBase()},
+		{"MinusSet: empty slice", Set[int]{}, Set[int]{22: true, 333: true}, Set[int]{}},
+		{"MinusSet: nil slice", nil, Set[int]{22: true, 333: true}, nil},
 	}
 
 	for _, cs := range cases {
@@ -428,14 +425,14 @@ func TestSet_MinusSet(t *testing.T) {
 func TestSet_MinusSlice(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		arg      []int
-		want     set.Set[int]
+		want     Set[int]
 	}{
-		{"MinusSlice: subset", sBase(), []int{22, 333}, set.Set[int]{1: true, 4444: true}},
-		{"MinusSlice: intersects", sBase(), []int{0, 22, 9, 333}, set.Set[int]{1: true, 4444: true}},
+		{"MinusSlice: subset", sBase(), []int{22, 333}, Set[int]{1: true, 4444: true}},
+		{"MinusSlice: intersects", sBase(), []int{0, 22, 9, 333}, Set[int]{1: true, 4444: true}},
 		{"MinusSlice: disjoint", sBase(), []int{0, 9, 42}, sBase()},
-		{"MinusSlice: empty slice", set.Set[int]{}, []int{22, 333}, set.Set[int]{}},
+		{"MinusSlice: empty slice", Set[int]{}, []int{22, 333}, Set[int]{}},
 		{"MinusSlice: nil slice", nil, []int{22, 333}, nil},
 	}
 
@@ -451,13 +448,13 @@ func TestSet_MinWith(t *testing.T) {
 
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		arg      func(int, int) int
 		want     int
 		werr     error
 	}{
 		{"MinWith: nonempty receiver", sBase(), comp, 4444, nil},
-		{"MinWith: empty receiver", set.Set[int]{}, comp, zero, errors.New("empty or nil set")},
+		{"MinWith: empty receiver", Set[int]{}, comp, zero, errors.New("empty or nil set")},
 		{"MinWith: nil receiver", nil, comp, zero, errors.New("empty or nil set")},
 	}
 
@@ -477,17 +474,17 @@ func TestSet_Partition(t *testing.T) {
 
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		arg      func(int) bool
-		want1    set.Set[int]
-		want2    set.Set[int]
+		want1    Set[int]
+		want2    Set[int]
 	}{
-		{"Partition: match all", sBase(), pred1, sBase(), set.Set[int]{}},
+		{"Partition: match all", sBase(), pred1, sBase(), Set[int]{}},
 		{"Partition: match some", sBase(), pred2,
-			set.Set[int]{22: true, 4444: true}, set.Set[int]{1: true, 333: true}},
-		{"Partition: match none", sBase(), pred3, set.Set[int]{}, sBase()},
-		{"Partition: empty", set.Set[int]{}, pred1, set.Set[int]{}, set.Set[int]{}},
-		{"Partition: nil", nil, pred1, set.Set[int]{}, set.Set[int]{}},
+			Set[int]{22: true, 4444: true}, Set[int]{1: true, 333: true}},
+		{"Partition: match none", sBase(), pred3, Set[int]{}, sBase()},
+		{"Partition: empty", Set[int]{}, pred1, Set[int]{}, Set[int]{}},
+		{"Partition: nil", nil, pred1, Set[int]{}, Set[int]{}},
 	}
 
 	for _, cs := range cases {
@@ -500,14 +497,14 @@ func TestSet_Partition(t *testing.T) {
 func TestSet_PlusElement(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		arg      int
-		want     set.Set[int]
+		want     Set[int]
 	}{
-		{"PlusElement: nonempty, absent", set.Set[int]{1: true, 22: true, 4444: true}, 333, sBase()},
+		{"PlusElement: nonempty, absent", Set[int]{1: true, 22: true, 4444: true}, 333, sBase()},
 		{"PlusElement: nonempty, present", sBase(), 333, sBase()},
-		{"PlusElement: empty", set.Set[int]{}, 333, set.Set[int]{333: true}},
-		{"PlusElement: nil", nil, 333, set.Set[int]{333: true}},
+		{"PlusElement: empty", Set[int]{}, 333, Set[int]{333: true}},
+		{"PlusElement: nil", nil, 333, Set[int]{333: true}},
 	}
 
 	for _, cs := range cases {
@@ -519,19 +516,19 @@ func TestSet_PlusElement(t *testing.T) {
 func TestSet_PlusSet(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
-		arg      set.Set[int]
-		want     set.Set[int]
+		receiver Set[int]
+		arg      Set[int]
+		want     Set[int]
 	}{
-		{"PlusSet: nonempty + nonempty", sBase(), set.Set[int]{9: true, 333: true},
-			set.Set[int]{1: true, 9: true, 22: true, 333: true, 4444: true}},
-		{"PlusSet: nonempty + empty", sBase(), set.Set[int]{}, sBase()},
+		{"PlusSet: nonempty + nonempty", sBase(), Set[int]{9: true, 333: true},
+			Set[int]{1: true, 9: true, 22: true, 333: true, 4444: true}},
+		{"PlusSet: nonempty + empty", sBase(), Set[int]{}, sBase()},
 		{"PlusSet: nonempty + nil", sBase(), nil, sBase()},
-		{"PlusSet: empty + nonempty", set.Set[int]{}, sBase(), sBase()},
+		{"PlusSet: empty + nonempty", Set[int]{}, sBase(), sBase()},
 		{"PlusSet: nil + nonempty", nil, sBase(), sBase()},
-		{"PlusSet: empty + empty", set.Set[int]{}, set.Set[int]{}, set.Set[int]{}},
-		{"PlusSet: empty + nil", set.Set[int]{}, nil, set.Set[int]{}},
-		{"PlusSet: nil + empty", nil, set.Set[int]{}, set.Set[int]{}},
+		{"PlusSet: empty + empty", Set[int]{}, Set[int]{}, Set[int]{}},
+		{"PlusSet: empty + nil", Set[int]{}, nil, Set[int]{}},
+		{"PlusSet: nil + empty", nil, Set[int]{}, Set[int]{}},
 		{"PlusSet: nil + nil", nil, nil, nil},
 	}
 
@@ -544,19 +541,19 @@ func TestSet_PlusSet(t *testing.T) {
 func TestSet_PlusSlice(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		arg      []int
-		want     set.Set[int]
+		want     Set[int]
 	}{
 		{"PlusSlice: nonempty + nonempty", sBase(), []int{9, 333},
-			set.Set[int]{1: true, 9: true, 22: true, 333: true, 4444: true}},
+			Set[int]{1: true, 9: true, 22: true, 333: true, 4444: true}},
 		{"PlusSlice: nonempty + empty", sBase(), []int{}, sBase()},
 		{"PlusSlice: nonempty + nil", sBase(), nil, sBase()},
-		{"PlusSlice: empty + nonempty", set.Set[int]{}, sliceBase(), sBase()},
+		{"PlusSlice: empty + nonempty", Set[int]{}, sliceBase(), sBase()},
 		{"PlusSlice: nil + nonempty", nil, sliceBase(), sBase()},
-		{"PlusSlice: empty + empty", set.Set[int]{}, []int{}, set.Set[int]{}},
-		{"PlusSlice: empty + nil", set.Set[int]{}, nil, set.Set[int]{}},
-		{"PlusSlice: nil + empty", nil, []int{}, set.Set[int]{}},
+		{"PlusSlice: empty + empty", Set[int]{}, []int{}, Set[int]{}},
+		{"PlusSlice: empty + nil", Set[int]{}, nil, Set[int]{}},
+		{"PlusSlice: nil + empty", nil, []int{}, Set[int]{}},
 		{"PlusSlice: nil + nil", nil, nil, nil},
 	}
 
@@ -569,30 +566,30 @@ func TestSet_PlusSlice(t *testing.T) {
 func TestSet_ToSlice(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		want     []int
 	}{
 		{"ToSlice: nonempty", sBase(), sliceBase()},
-		{"ToSlice: empty", set.Set[int]{}, []int{}},
+		{"ToSlice: empty", Set[int]{}, []int{}},
 		{"ToSlice: nil", nil, nil},
 	}
 
 	for _, cs := range cases {
 		got := cs.receiver.ToSlice()
-		assert.Equal(t, set.Set[int]{}.PlusSlice(cs.want), set.Set[int]{}.PlusSlice(got), cs.msg)
+		assert.Equal(t, Set[int]{}.PlusSlice(cs.want), Set[int]{}.PlusSlice(got), cs.msg)
 	}
 }
 
 func TestSet_Put(t *testing.T) {
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		arg      int
-		want     set.Set[int]
+		want     Set[int]
 	}{
-		{"Put: nonempty absent", set.Set[int]{1: true, 22: true, 4444: true}, 333, sBase()},
+		{"Put: nonempty absent", Set[int]{1: true, 22: true, 4444: true}, 333, sBase()},
 		{"Put: nonempty present", sBase(), 333, sBase()},
-		{"Put: empty", set.Set[int]{}, 333, set.Set[int]{333: true}},
+		{"Put: empty", Set[int]{}, 333, Set[int]{333: true}},
 		{"Put: nil", nil, 333, nil},
 	}
 
@@ -621,19 +618,19 @@ func TestSet_FlatMap(t *testing.T) {
 
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		arg      func(int) map[string]bool
 		want     map[string]bool
 	}{
 		{"FlatMap: nonempty receiver", sBase(), f, map[string]bool{"1": true, "22": true, "23": true,
 			"333": true, "334": true, "335": true, "4444": true, "4445": true, "4446": true,
 			"4447": true}},
-		{"FlatMap: empty receiver", set.Set[int]{}, f, map[string]bool{}},
+		{"FlatMap: empty receiver", Set[int]{}, f, map[string]bool{}},
 		{"FlatMap: nil receiver", nil, f, nil},
 	}
 
 	for _, cs := range cases {
-		got := set.SetFlatMap(cs.receiver, cs.arg)
+		got := SetFlatMap(cs.receiver, cs.arg)
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
@@ -643,20 +640,20 @@ func TestSet_GroupBy(t *testing.T) {
 
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		arg      func(int) string
-		want     map[string]set.Set[int]
+		want     map[string]Set[int]
 	}{
-		{"GroupBy: nonempty receiver", sBase(), f, map[string]set.Set[int]{
+		{"GroupBy: nonempty receiver", sBase(), f, map[string]Set[int]{
 			"0": {22: true, 4444: true},
 			"1": {1: true, 333: true},
 		}},
-		{"GroupBy: empty receiver", set.Set[int]{}, f, map[string]set.Set[int]{}},
+		{"GroupBy: empty receiver", Set[int]{}, f, map[string]Set[int]{}},
 		{"GroupBy: nil receiver", nil, f, nil},
 	}
 
 	for _, cs := range cases {
-		got := set.SetGroupBy(cs.receiver, cs.arg)
+		got := SetGroupBy(cs.receiver, cs.arg)
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
@@ -666,37 +663,37 @@ func TestSet_Map(t *testing.T) {
 
 	cases := []struct {
 		msg      string
-		receiver set.Set[int]
+		receiver Set[int]
 		arg      func(int) string
 		want     map[string]bool
 	}{
 		{"Map: nonempty receiver", sBase(), f, map[string]bool{"2": true, "23": true, "334": true,
 			"4445": true}},
-		{"Map: empty receiver", set.Set[int]{}, f, map[string]bool{}},
+		{"Map: empty receiver", Set[int]{}, f, map[string]bool{}},
 		{"Map: nil receiver", nil, f, nil},
 	}
 
 	for _, cs := range cases {
-		got := set.SetMap(cs.receiver, cs.arg)
+		got := SetMap(cs.receiver, cs.arg)
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
 
 func TestSet_ToMap(t *testing.T) {
-	data := set.Set[pair.Pair[int, string]]{{22, "42"}: true, {1, "9"}: true}
+	data := Set[Pair[int, string]]{{22, "42"}: true, {1, "9"}: true}
 
 	cases := []struct {
 		msg      string
 		receiver Set[Pair[int, string]]
-		want     m.Map[int, string]
+		want     Map[int, string]
 	}{
-		{"ToMap: nonempty receiver", data, m.Map[int, string]{1: "9", 22: "42"}},
-		{"ToMap: empty receiver", Set[Pair[int, string]]{}, m.Map[int, string]{}},
+		{"ToMap: nonempty receiver", data, Map[int, string]{1: "9", 22: "42"}},
+		{"ToMap: empty receiver", Set[Pair[int, string]]{}, Map[int, string]{}},
 		{"ToMap: nil receiver", nil, nil},
 	}
 
 	for _, cs := range cases {
-		got := set.SetToMap(cs.receiver)
+		got := SetToMap(cs.receiver)
 		assert.Equal(t, cs.want, got, cs.msg)
 	}
 }
