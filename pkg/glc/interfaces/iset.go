@@ -11,12 +11,9 @@ import (
 )
 
 /////////////////////
-// This file is used to define the intended methods to be implemented by certain
-// c.SetX types and to check that the implementations conform to the intention.
-// Nothing here is exported.
+// This file is used to define the intended methods to be implemented by glc.Set.
 
-// ISet[T] defines the methods to be implemented by the concrete type c.Set[T] that only
-// depend on type c.T0.
+// ISet[T] defines the methods to be implemented by a Set collection.
 type ISet[T comparable] interface {
 	Copy() glc.Set[T]
 	Length() int

@@ -16,7 +16,8 @@ import (
 ////
 // Types
 
-// Slice[T0] is a type wrapper, implements List interface.
+// Slice[T0] is a type wrapper that implements a List collection as defined by
+// the interfaces.ISlice interface.
 type Slice[T0 any] []T0
 
 ////

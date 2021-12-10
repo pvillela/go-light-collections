@@ -11,11 +11,9 @@ import (
 )
 
 /////////////////////
-// This file is used to define the intended methods to be implemented by Map.
-// Nothing here is exported.
+// This file is used to define the intended methods to be implemented by glc.Map.
 
-// IMap[T0, T1] defines the methods to be implemented by the concrete type c.Map[T0, T1] that only
-// depend on types c.T0 and c.T1.
+// IMap[T0, T1] defines the methods to be implemented by a Map collection.
 type IMap[T0 comparable, T1 any] interface {
 	Copy() glc.Map[T0, T1]
 	Entries() []glc.Pair[T0, T1]

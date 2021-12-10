@@ -11,12 +11,9 @@ import (
 )
 
 /////////////////////
-// This file is used to define the intended methods to be implemented by certain
-// SliceX types and to check that the implementations conform to the intention.
-// Nothing here is exported.
+// This file is used to define the intended methods to be implemented by glc.Slice.
 
-// ISlice[T any] defines the methods to be implemented by the concrete type c.Slice[T any] that only
-// depend on type c.T0.
+// ISlice[T any] defines the methods to be implemented by List collection.
 type ISlice[T any] interface {
 	Copy() glc.Slice[T]
 	Length() int

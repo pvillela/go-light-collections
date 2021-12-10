@@ -10,7 +10,8 @@ import (
 	"errors"
 )
 
-// Map[T0, T1] is a type wrapper, implements IMap interfaces.
+// Map[T0, T1] is a type wrapper that implements a Map collection as defined by
+// the interfaces.IMap interface.
 type Map[T0 comparable, T1 any] map[T0]T1
 
 func (m Map[T0, T1]) Copy() Map[T0, T1] {

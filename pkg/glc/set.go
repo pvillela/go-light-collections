@@ -8,13 +8,15 @@ package glc
 
 import (
 	"errors"
+
 	"github.com/pvillela/go-light-collections/legacy/pkg/util/util"
 )
 
 ////
 // Type
 
-// Set[T0] is a type wrapper, implements Set interface.
+// Set[T0] is a type wrapper that implements a Set collection as defined by
+// the interfaces.ISet interface.
 type Set[T0 comparable] map[T0]bool
 
 ////
