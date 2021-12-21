@@ -6,7 +6,7 @@ Lightweight, efficient, and functionally rich implementation of List, Map, and S
 
 ## glc package
 
-The g2lc package contains an implementation of this framework using Go generics.
+The glc package contains an implementation of this framework using Go generics.
 
 ## Legacy
 
