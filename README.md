@@ -2,8 +2,6 @@
 
 Lightweight, efficient, and functionally rich implementation of List, Map, and Set for Golang, inspired by the Kotlin standard library.  The implementation uses Go's native slice and map as underlying data structures.
 
-
-
 ## glc package
 
 The glc package contains an implementation of this framework using Go generics.
